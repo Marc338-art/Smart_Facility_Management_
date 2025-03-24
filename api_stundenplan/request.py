@@ -13,11 +13,11 @@ HEADERS = {
 }
 
 
-def turn_on_switch(entity_id, temperature=27):
-    url = f"{HOME_ASSISTANT_URL}/api/services/climate/set_temperature"
+def change_temperature(entity_id, value=17):
+    url = f"{HOME_ASSISTANT_URL}/api/services/input_number/set_value"
     data = {
         "entity_id": entity_id,
-        "temperature": temperature
+        "value": value
     }
     
     response = requests.post(url, json=data, headers=HEADERS)
@@ -28,4 +28,4 @@ def turn_on_switch(entity_id, temperature=27):
         print(f"Error {response.status_code}: {response.text}")
 
 # Example usage
-turn_on_switch("climate.hmip_etrv_cl_0035a0c9aa764b")
+change_temperature("input_number.heating_temperature")#akl
