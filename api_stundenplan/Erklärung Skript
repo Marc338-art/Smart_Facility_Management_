@@ -1,0 +1,8 @@
+Das Skript greift auf die Heizung zu und ändert die Temperatur. Es soll so geändert werden, dass es nur den Heizwert ändert, auf den alle Heizungen zugregeifen.
+
+Das Skript läuft im Moment noch nich im Git-Reposatory ordener. Es muss kopiert und seperat in VS-Code gestartet werden.
+
+Es soll am Ende seperat in einer virtuellen Umgebung auf dem Raspi laufen, in der dann auch die libraries eingebunden sind.
+
+es soll aber auch im Reposatory ausgeführt werden können. dazu muss auf jeden Fall die libraries im Ordner installiert werden, in der auch das Programm liegt.
+Vielleicht kann man auch eine venv im reposatory erzeugen.
