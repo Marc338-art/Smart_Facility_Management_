@@ -1,22 +1,14 @@
 # Anforderungen
 
-Diese Dokument enthält die Highlevel Anforderungen an das Maze Projekt. Es beschreibt funktionale und nicht funktionale Anforderungen.
+Diese Dokument enthält die Anforderungen an das Python Projekt zum senden der http-Anfragen. Es beschreibt funktionale und nicht funktionale Anforderungen.
 
-## Tool Dokumentation
-Das Tracing Tool kann auf der Konsole oder über das CMake Target ausgeführt werden. Auf der Konsole ist `make trace` einzugeben.
-
-Die Format Dokumentation findet sich hier:
-* https://github.com/itsallcode/openfasttrace/blob/main/doc/user_guide.md
-
-## Rahmenbedingungen:
-### Die Codequalität muss regelmäßig geprüft werden.
-`req~codequality~1`
+## Anforderungen Python-Skript:
+### Das Python-Skript muss automatisch auf dem Raspberry Pi laufen.
+`req~auto_start~1`
 Status: proposed
 
 Description:
-Die Qualität des Programmcodes muss überprüft werden. Dazu sind
-automatisierte Maßnahmen zu ergreifen.
-
+Sobald der Raspberry am Strom und eingeschaltet ist, soll das Skript automatisch vom Betriebssystem gestartet werden.
 Needs: doc
 
 ### Die Software muss automatisiert getestet werden.
@@ -37,7 +29,7 @@ Anforderungen stellen die Grundlage für das Vertragsverhältnis dar. Entspreche
 
 Needs: doc
 
-## Highlevel Anforderungen:
+## Anforderungen automation.yaml:
 
 ### Das Labyrinth muss ein Recheck abbilden.
 `req~labyrinth-rechteck~1`
