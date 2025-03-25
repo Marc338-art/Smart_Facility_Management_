@@ -75,7 +75,12 @@ Status: proposed
 Description: 
 Es muss möglich sein die Temperatur des Raumes über einen Heizungsregler im Raum einzustellen. Die einstellung über den Regler muss höchste Priorität haben und die Temperaturwerte vom Python-Algorithmus überscheiben. Auch bei offenem Fenster soll die Temperatur verändert werden können, aber erst beim schließen des Fenster auch an die Termostate gesendet werden.
 
+### Die Automation muss auf einstellungen vom Layout reagieren
+`req~labyrinth-breite~1`
+Status: proposed
 
+Description: 
+!!hier noch notieren!!
 Needs: arch
 
 ### backup falls die Stundenplan anbindung nicht funktioniert
@@ -83,98 +88,5 @@ Needs: arch
 Status: proposed
 
 Description:
-Die Länge des Labyrinths muss bekannt sein.
-Die Länge legt die Größe des Labyrinths in vertikaler Richtung fest.
-Die Länge begrenzt den Bereich, in dem der Spieler sich in vertikaler Richtung bewegen kann.
-
-Needs: arch
-
-### Der Spieler muss im Labyrinth bleiben.
-`req~spieler-innerhalb-labyrinth~1`
-Status: proposed
-
-Description:
-Der Spieler darf das Labyrinth nicht verlassen.
-Die Position des Spielers muss immer innerhalb der Außenmauern des Labyrinths sein.
-Verlässt der Spieler das Labyrinth, kann er es nicht mehr erfolgreich durchlaufen.
-
-Needs: arch
-
-### Der Eingang des Labyrinths muss ermittelt werden.
-`req~labyrinth-eingang~1`
-Status: proposed
-
-Description:
-Der Eingang des Labyrinths muss bekannt sein.
-Der Eingang ist gleichzeitig die Startposition des Spielers.
-Die Kenntnis über den Eingang ist notwendig, um jede weitere Position des Spielers zu ermitteln.
-
-Needs: arch
-
-### Der Ausgang des Labyrinths muss ermittelt werden.
-`req~labyrinth-ausgang~1`
-Status: proposed
-
-Description:
-Der Ausgang des Labyrinths muss bekannt sein.
-Der Ausgang des Labyrinths stellt gleichzeitig das Ziel des Spielers dar.
-Erreicht der Spieler den Ausgang, wurde das Labyrinth erfolgreich durchlaufen.
-Die Kenntnis über den Ausgang ist notwendig, um das Programm im richtigen Moment zu beenden.
-
-Needs: arch
-
-### Die aktuelle Position des Spielers muss ermittelt werden.
-`req~aktuelle-position-spieler~1`
-Status: proposed
-
-Description:
-Die aktuelle Position des Spielers muss bekannt sein.
-Die aktuelle Position hängt von der Startposition sowie allen vorausgegangenen Schritten ab.
-Der nächste Schritt hängt von der aktuellen Position ab.
-Die aktuelle Position muss nach jedem Schritt neu ermittelt werden.
-
-Needs: arch
-
-### Die direkt Umgebung des Spielers muss ermittelt werden.
-`req~umgebung-spieler~1`
-Status: proposed
-
-Description:
-Die Umgebung des Spielers muss bekannt sein.
-Die direkte Umgebung besteht aus mindestens einem Feld in jede Richtung, also aus acht Feldern.
-Ist die direkte Umgebung nicht bekannt, ist es nicht möglich zu entscheiden, wo der Spieler sinnvoller Weise als nächstes hingeht.
-
-Needs: arch
-
-### Wände müssen unüberwindbar für den Spieler sein.
-`req~waende-unueberwindbar~1`
-Status: proposed
-
-Description:
-Der Spieler darf nicht durch Wände gehen oder sie überspringen.
-Die Wände schränken die Bewegung des Spielers ein.
-Die Unüberwindbarkeit der Wände stellt sicher, dass der Spieler das Labyrinth nicht verlässt.
-
-Needs: arch
-
-### Der Spieler muss sich nach unten bewegen.
-`req~spieler-bewegung-unten~1`
-Status: proposed
-
-Description:
-Der Spieler muss sich nach unten bewegen.
-Der Schritt nach unten ist notwendig, um das Ziel zu erreichen.
-Die Bewegung nach unten hängt von der aktuellen Position, der direkten Umgebung des Spielers und der ausgewählten Lösungsstrategie ab.
-
-Needs: arch
-
-### Der Lösungsalgorithmus muss sich beenden wenn der Spieler das Ziel erreicht.
-`req~loesungsalgorithmus-beendet~1`
-Status: proposed
-
-Description:
-Der Lösungsalgorithmus muss sich beenden, sobald der Spieler das Ziel erreicht.
-Stimmt die aktuelle Position mit dem Ausgang des Labyrinths überein, wurde das Labyrinth erfolgreich durchlaufen.
-Das Beenden des Lösungsalgorythmus verhindert die endlose Laufzeit des Programms.
-
+Falls es probleme mit dem Zugriff auf die Stundenplan API gibt, muss eine Defaault Automation laufen. In der Dafault Automation kann man die heizung mit den Reglern steuern.
 Needs: arch
