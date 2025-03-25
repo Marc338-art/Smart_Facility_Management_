@@ -59,18 +59,16 @@ Needs: doc
 
 ## Anforderungen automation.yaml:
 
-### Das Labyrinth muss ein Recheck abbilden.
+### Die Automation muss auf den Fenstersensor reagieren.
 `req~labyrinth-rechteck~1`
 Status: proposed
 
 Description:
-Das Labyrinth für dieses Programm ist rechteckig.
-Es begrenzt den Bereich in dem der Spieler sich bewegen kann auftreten kann.
-Die Einschraenkung auf ein Rechteck erleichtert die spaetere Verarbeitung erheblich.
+
 
 Needs: arch
 
-### Die Breite des Labyrinths muss ermittelt werden.
+### Die Automation muss auf die heizunsteuerung reagieren
 `req~labyrinth-breite~1`
 Status: proposed
 
