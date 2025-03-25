@@ -9,23 +9,33 @@ Status: proposed
 
 Description:
 Sobald der Raspberry am Strom und eingeschaltet ist, soll das Skript automatisch vom Betriebssystem gestartet werden.
+
 Needs: doc
 
-### Die Software muss automatisiert getestet werden.
+### Der Code muss einen request an die Stundenplan-API senden.
 `req~tests~1`
 Status: proposed
 
 Description:
-Fehler sind in Software häufig vorkommendes Problem. Entsprechend sind alle Artefakte automatisiert zu testen. Dabei ist eine vollständige Codeabdeckung zu erreichen (C0 = 100%).
+Es soll eine request an die Stundenplan-URL gesendet werden. Im Header muss ein Token sein um ein Zugriff zu ermöglichen. Außerdem soll als Content-Type "aplication/json" ausgewählt werden und als weiterer Parameter das aktuelle Datum gesendet werden.
 
 Needs: doc
 
-### Der Auftragnehmer muss dem Auftraggeber nachweisen, dass alle Anforderungen erfüllt und getestet wurden.
+### Der Code muss die Angeforderten Daten temporär speichern.
 `req~requirements~1`
 Status: proposed
 
 Description:
-Anforderungen stellen die Grundlage für das Vertragsverhältnis dar. Entsprechend ist für eine erfolgreiche Abnahme ein Nachweis zu erbringen, dass alle Anforderungen erfüllt wurden.
+Der http-request liefert ein JSON-File zurück. Dieser enthält für jeden Raum ein Array mit den Stunden und der Information, ob der Raum für die jeweilige Stunde belegt ist.
+
+Needs: doc
+
+### Der Code muss die Stunden mit einem passenden Uhrzeit-Array abgleichen.
+`req~requirements~1`
+Status: proposed
+
+Description:
+Es muss ein Array erstellt werde, die Schulstunden (1-16) mit der Uhrzeit verknüpft.
 
 Needs: doc
 
