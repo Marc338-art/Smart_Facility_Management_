@@ -64,7 +64,7 @@ Needs: doc
 Status: proposed
 
 Description:
-
+Sobald der Fenstersensor des jeweiligen Raumes aufgeht (positive Flanke) soll der Sollwert des Heizreglers auf 17 Grad gestellt werden. Solange das Fenster offen ist, darf die Temperatur nicht umgestellt werden. Wenn das Fenster wieder geschlossen wird, soll die Temperatur auf die heating_temperature aus der configuration.yaml gestellt werden.
 
 Needs: arch
 
