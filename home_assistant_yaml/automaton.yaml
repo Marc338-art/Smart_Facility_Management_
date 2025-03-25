@@ -206,3 +206,59 @@
       entity_id: climate.hmip_etrv_cl_0035a0c9aa764b
       data:
         temperature: 17  # Die Temperatur auf 17 Grad setzen (Heizung ausschalten)
+
+
+
+
+
+
+
+
+## unten- komplette automation mit Stundenplan einbindung und allen sensore (für Raim 1)##
+
+
+- id: "1234"
+  alias: Steuerung Raum C009
+  triggers:
+    - platform: state
+      entity_id: binary_sensor.hmip_swdm_2_0034a2698f4da2
+      to: "on" # Wenn der Türkontakt geöffnet wird
+    - platform: state
+      entity_id: binary_sensor.hmip_swdm_2_0034a2698f4da2
+      to: "off" # Wenn der Türkontakt geschlossen wird
+    - entity_id: climate.hmip_wth_b_2_0034626995f2d1
+      trigger: state
+
+  actions:
+    - choose:
+        - conditions: # wenn das Fenster auf ist, soll die Heizung ausgeschalztet werden (später soll auch eine variable die duch das python programm drin ist sagen ob fenster auf ist, je nachdem wie sich die temperatur verändert oder der CO2 gehalt)
+            - condition: state
+              entity_id: binary_sensor.hmip_swdm_2_0034a2698f4da2
+              state: "on"
+          sequence:
+            - variables:
+                previous_temperature: "{{ state_attr('climate.hmip_wth_b_2_0034626995f2d1', 'temperature') }}"
+            - action: climate.set_temperature
+              data:
+                temperature: 17 # Setze Temperatur auf 17, wenn Tür geöffnet
+              target:
+                entity_id:
+                  - climate.hmip_etrv_cl_0035a0c9aa764b
+                  - climate.hmip_etrv_cl_00359f29a70925
+                  - climate.hmip_etrv_cl_0035a0c9aa75fc
+                  - climate.hmip_etrv_cl_0035a0c9aa75eb
+
+        - conditions:
+            - condition: state
+              entity_id: binary_sensor.hmip_swdm_2_0034a2698f4da2
+              state: "off"
+          sequence:
+            - action: climate.set_temperature
+              data:
+                temperature: "{{ state_attr('climate.hmip_wth_b_2_0034626995f2d1', 'temperature') }}" # es soll nur für z.B 2 Stunden die neu eingestellte temperatur sein und dann die aus der Datenbank ausgelsen werden
+              target:
+                entity_id:
+                  - climate.hmip_etrv_cl_0035a0c9aa764b
+                  - climate.hmip_etrv_cl_00359f29a70925
+                  - climate.hmip_etrv_cl_0035a0c9aa75fc
+                  - climate.hmip_etrv_cl_0035a0c9aa75eb

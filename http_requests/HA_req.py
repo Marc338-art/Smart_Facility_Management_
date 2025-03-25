@@ -13,7 +13,7 @@ HEADERS = {
 }
 
 
-def change_temperature(entity_id, value=17):
+def change_temperature(entity_id, value=19):
     url = f"{HOME_ASSISTANT_URL}/api/services/input_number/set_value"
     data = {
         "entity_id": entity_id,
