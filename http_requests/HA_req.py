@@ -28,4 +28,4 @@ def change_temperature(entity_id, value=17):
         print(f"Error {response.status_code}: {response.text}")
 
 # Example usage
-change_temperature("input_number.heating_temperature")#akl
+#change_temperature("input_number.heating_temperature")#akl
