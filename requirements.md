@@ -39,6 +39,24 @@ Es muss ein Array erstellt werde, die Schulstunden (1-16) mit der Uhrzeit verkn�
 
 Needs: doc
 
+### Der Code muss eine Funktion zum senden von anweisung an Home-Assistant enthalten.
+`req~requirements~1`
+Status: proposed
+
+Description:
+Mit der funktion soll ein http-request an Home-Assistant geschickt werden. Der Request, soll die Daten eines Temperatur-Wertes in der configuration.yaml in Home Assistant auf 21 Grad setzen, wenn der Raum belegt ist. Wenn der Raum nicht belegt ist, soll die Heiztemperatur auf 17 Grad gestellt werden.
+
+Needs: doc
+
+### Der Code soll 15 Minuten vor jeder Unterrichtsstunde prüfen ob der Raum belegt ist.
+`req~requirements~1`
+Status: proposed
+
+Description:
+Es soll 15 Minuten vor jeder Unterrichtsstunde geprüft werden, ob der Raum belegt ist oder nicht je nach Ergebnis soll die Funktion zum setzten der Temperatur mit dem passenden Parameter übergeben werden.
+
+Needs: doc
+
 ## Anforderungen automation.yaml:
 
 ### Das Labyrinth muss ein Recheck abbilden.
