@@ -68,18 +68,17 @@ Sobald der Fenstersensor des jeweiligen Raumes aufgeht (positive Flanke) soll de
 
 Needs: arch
 
-### Die Automation muss auf die heizunsteuerung reagieren
+### Die Automation muss auf die Heizunsteuerung reagieren
 `req~labyrinth-breite~1`
 Status: proposed
 
-Description:
-Die Breite des Labyrinths muss bekannt sein.
-Die Breite legt die Größe des Labyrinths in horizontaler Richtung fest.
-Die Breite begrenzt den Bereich, in dem der Spieler sich in horizontaler Richtung bewegen kann.
+Description: 
+Es muss möglich sein die Temperatur des Raumes über einen Heizungsregler im Raum einzustellen. Die einstellung über den Regler muss höchste Priorität haben und die Temperaturwerte vom Python-Algorithmus überscheiben. Auch bei offenem Fenster soll die Temperatur verändert werden können, aber erst beim schließen des Fenster auch an die Termostate gesendet werden.
+
 
 Needs: arch
 
-### Die Länge des Labyrinths muss ermittelt werden.
+### backup falls die Stundenplan anbindung nicht funktioniert
 `req~labyrinth-laenge~1`
 Status: proposed
 
