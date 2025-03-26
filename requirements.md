@@ -57,6 +57,16 @@ Es soll 15 Minuten vor jeder Unterrichtsstunde geprüft werden, ob der Raum bele
 
 Needs: doc
 
+
+### Fehlermeldungen bei request sollen abgefangen werden
+`req~requirements~1`
+Status: proposed
+
+Description:
+Beim Aufruf der request-Methode kann es zu Fehlern kommen. Diese Fehler sollen mit Hilfe von try-except-Blöcken abgefangen werden, sodass das Programm nicht abrupt abgebrochen wird. Falls die Anfrage fehlschlägt, soll sie automatisch erneut ausgeführt werden.
+
+Needs: doc
+
 ## Anforderungen automation.yaml:
 
 ### Die Automation muss auf den Fenstersensor reagieren.
