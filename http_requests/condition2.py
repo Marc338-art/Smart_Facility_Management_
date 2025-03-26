@@ -1,12 +1,14 @@
 # hier werden alle Funktionen von zustand 2 implementiert
-from .HA_req import*
-
+from . import HA_req
+from datetime import time
 def update_act_lesson():
-    if(array_examplehours[next_lesson+1]==1):  ## wenn alle Stunden belegt ist, geht er bis zur letzten und es wird erst nach der letzten in Zustand 1 gewechseltS
-        next_lesson+=1
+    if(HA_req.array_examplehours[HA_req.next_lesson+1]==1):  ## wenn alle Stunden belegt sind, geht er bis zur letzten und es wird erst nach der letzten in Zustand 1 gewechseltS
+        HA_req.next_lesson+=1
+        print(HA_req.next_lesson)
 
-    elif(get_current_time()>LESSON_HOURS[act_lesson]["ende"]):
-        conditionFlag=1 # wenn die nächste Sutnde nicht belegt ist, soll in Zustand 1 gwechselt werden, sobald die Urhzeit zuende ist
+    #elif(HA_req.get_current_time()>HA_req.LESSON_HOURS[HA_req.next_lesson]["ende"]):
+    elif(HA_req.get_current_time()>time(9, 0)):
+        HA_req.conditionFlag=1 # wenn die nächste Sutnde nicht belegt ist, soll in Zustand 1 gwechselt werden, sobald die Urhzeit zuende ist
         return
 
 

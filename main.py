@@ -1,22 +1,37 @@
 # main.py
 #from http_requests.HA_req import get_current_lesson# Dein Modul, das die Funktion enthält
+import sched
+import time
+import http_requests
+from http_requests import HA_req
+# Erstelle eine Instanz des schedulers
+scheduler = sched.scheduler(time.time, time.sleep)
 
-import http_requests # wenn man es so macht kann man keine methoden mit gleichem name in dem packet haben
-def main():
-     
-     if(http_requests.conditionFlag==1): #Zustand 1
-        stunde=http_requests.get_current_lesson()
-
+def main(): 
+   
+    print(HA_req.conditionFlag)
+    # Hier definierst du deine Logik, die alle 20 Sekunden ausgeführt werden soll
+    if(HA_req.conditionFlag == 1):  # Zustand 1
+        stunde = http_requests.get_current_lesson()
         http_requests.check_()
         http_requests.get_movement_sensor()
-        print("Stunde: "+ str(stunde)) #Zugriff auf den ersten Teil der Liste 
-     elif(http_requests.conditionFlag==2):
-         # hier wir alles aus Zustand 2 aufgerufen
-         print("zustand 2")
+        print("Stunde: " + str(stunde))  # Zugriff auf den ersten Teil der Liste
+    elif(HA_req.conditionFlag == 2):
+        # Hier wird alles aus Zustand 2 aufgerufen
+        http_requests.update_act_lesson()
+        print("Zustand 2")
 
+def schedule_task():
+    # Plane die nächste Ausführung der main-Funktion in 20 Sekunden
+    scheduler.enter(10, 1, schedule_task)  # Wiederhole alle 5 Sekunden
+    main()  # Führe die main-Funktion aus
 
-
-## je nach Zustand die methoder aufrufen
-    
 if __name__ == "__main__":
-    main()  # Start der Hauptanwendung
+    # Starte den Scheduler und plane die erste Aufgabe
+    schedule_task()
+    # Starte die Ausführung des Schedulers
+    scheduler.run()
+
+
+
+## in die main muss ein try and except rein, da nicht jeder http ewquest funktioniert

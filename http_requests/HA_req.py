@@ -5,11 +5,12 @@ from .lesson_hours import *
 from datetime import time
 import time as t
 
+
 conditionFlag=1 #default Zustand ist 1
 next_lesson = None
 HOME_ASSISTANT_URL = "http://homeassistant.local:8123"
 
-array_examplehours=[1,1,0,0,0,1,1,1,1,1,1,1,1,1,1] # nur zum test. Am ende ist dass das ergebniss aus der get_timetable Funktion
+array_examplehours=[1,1,0,0,0,1,1,1,1,1,0,1,0,1,1,0] # nur zum test. Am ende ist dass das ergebniss aus der get_timetable Funktion (die letzte null als puffer damit es in Zustand 0 geht)
 
     # Long-Lived Access Token
 TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhODU2YTc1MjhmZGQ0NzdmOTEwZDZhMmM0YmM3ZjRmYiIsImlhdCI6MTc0MDEzMjEyMywiZXhwIjoyMDU1NDkyMTIzfQ.5MjPlnG806hSVln2OUW-LyqP0InyHfPdisiEAd26vTc"
@@ -22,7 +23,7 @@ def get_current_time():
 
 
 def get_current_lesson():
-    current = get_current_time()
+    current = get_current_time() # hier muss man noch 30 Minuten addieren, damit es früher ausgelöst wird
     for stunde in LESSON_HOURS:
         if stunde["start"] <= current < stunde["ende"]:
             return stunde["stunde"]
