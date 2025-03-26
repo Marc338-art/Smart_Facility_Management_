@@ -73,7 +73,7 @@ Needs: arch
 Status: proposed
 
 Description: 
-Es muss möglich sein die Temperatur des Raumes über einen Heizungsregler im Raum einzustellen. Die einstellung über den Regler muss höchste Priorität haben und die Temperaturwerte vom Python-Algorithmus überscheiben. Auch bei offenem Fenster soll die Temperatur verändert werden können, aber erst beim schließen des Fenster auch an die Termostate gesendet werden.
+Es muss möglich sein die Temperatur des Raumes über einen Heizungsregler im Raum einzustellen. Die einstellung über den Regler muss höchste Priorität haben und die Temperaturwerte vom Python-Algorithmus überscheiben. Auch bei offenem Fenster soll die Temperatur verändert werden können, aber erst beim schließen des Fenster auch an die Termostate gesendet werden(1 stunde aktiv oder bis die Stunde zuende ist)
 
 ### Die Automation muss auf einstellungen vom Layout reagieren
 `req~labyrinth-breite~1`
