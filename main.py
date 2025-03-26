@@ -12,10 +12,10 @@ def main():
     print(HA_req.conditionFlag)
     # Hier definierst du deine Logik, die alle 20 Sekunden ausgeführt werden soll
     if(HA_req.conditionFlag == 1):  # Zustand 1
-        stunde = http_requests.get_current_lesson()
+        #stunde = http_requests.get_current_lesson()
         http_requests.check_()
         http_requests.get_movement_sensor()
-        print("Stunde: " + str(stunde))  # Zugriff auf den ersten Teil der Liste
+        #print("Stunde: " + str(stunde))  # Zugriff auf den ersten Teil der Liste
     elif(HA_req.conditionFlag == 2):
         # Hier wird alles aus Zustand 2 aufgerufen
         http_requests.update_act_lesson()

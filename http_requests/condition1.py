@@ -11,16 +11,18 @@ def check_():
     # man kann die aktuelle Stunde als Zahlenwert in den Arrray der Räume packen (array[akt_stunde])
     current_lesson = HA_req.get_current_lesson()
     if( current_lesson==None):
-        HA_req.change_temperature(HA_req.ROOMS["C009"]) # erstelle ein array mit allen räumen und der heating temperature für jeden Raumn
+        HA_req.change_temperature(HA_req.ROOMS["C009"]) # am besten die Temperatur nur bei veränderung ändern
         return
     else:
-        if(HA_req.array_examplehours[HA_req.get_current_lesson()]==1):
+        if(HA_req.array_examplehours[current_lesson-1]==1): # minus 1, da es keine Stunde 0 gibt
             HA_req.change_temperature(HA_req.ROOMS["C009"],21) #statt 21 eine constante übergeben
             print(HA_req.conditionFlag)
 
+            HA_req.next_lesson=current_lesson
+
             HA_req.conditionFlag=2 # soll gesetzt werden raum belegt ist und geheizt wird
             
-            HA_req.next_lesson=current_lesson
+            
         else:
             HA_req.change_temperature(HA_req.ROOMS["C009"])
 

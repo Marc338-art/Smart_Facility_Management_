@@ -26,6 +26,7 @@ def get_current_lesson():
     current = get_current_time() # hier muss man noch 30 Minuten addieren, damit es früher ausgelöst wird
     for stunde in LESSON_HOURS:
         if stunde["start"] <= current < stunde["ende"]:
+            
             return stunde["stunde"]
     return None  # Falls keine Stunde passt
 

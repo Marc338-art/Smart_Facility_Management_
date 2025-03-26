@@ -6,8 +6,8 @@ def update_act_lesson():
         HA_req.next_lesson+=1
         print(HA_req.next_lesson)
 
-    #elif(HA_req.get_current_time()>HA_req.LESSON_HOURS[HA_req.next_lesson]["ende"]):
-    elif(HA_req.get_current_time()>time(9, 0)):
+    elif(HA_req.get_current_time()>HA_req.LESSON_HOURS[HA_req.next_lesson]["ende"]):
+   
         HA_req.conditionFlag=1 # wenn die nächste Sutnde nicht belegt ist, soll in Zustand 1 gwechselt werden, sobald die Urhzeit zuende ist
         return
 
