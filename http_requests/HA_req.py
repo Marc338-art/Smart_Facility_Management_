@@ -1,7 +1,19 @@
+# hier sind allgemein benöbitgte Funktionen definiert
+
 import requests
 from .lesson_hours import *
 from datetime import time
 import time as t
+
+conditionFlag=1 #default Zustand ist 1
+next_lesson = None
+HOME_ASSISTANT_URL = "http://homeassistant.local:8123"
+
+array_examplehours=[1,1,0,0,0,1,1,1,1,1,1,1,1,1,1] # nur zum test. Am ende ist dass das ergebniss aus der get_timetable Funktion
+
+    # Long-Lived Access Token
+TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhODU2YTc1MjhmZGQ0NzdmOTEwZDZhMmM0YmM3ZjRmYiIsImlhdCI6MTc0MDEzMjEyMywiZXhwIjoyMDU1NDkyMTIzfQ.5MjPlnG806hSVln2OUW-LyqP0InyHfPdisiEAd26vTc"
+
 
 
 def get_current_time():
@@ -17,37 +29,12 @@ def get_current_lesson():
     return None  # Falls keine Stunde passt
 
 
-def get_timetable():
-    #hier soll der http-Request zur Stundenplan API gemacht werden
-    return None
 
-def check_():
-    # hier wird get_current_lesson aufgerufen. der Stunde wir dann mit dem Knüft und der stunde verknüpft.
-    
-    array_examplehours=[1,1,0,0,0,1,1,1,1,1,1,1,1,1] # nur zum test. Am ende ist dass das ergebniss aus der get_timetable Funktion
-
-    # man kann die aktuelle Stunde als Zahlenwert in den Arrray der Räume packen (array[akt_stunde])
-    current_lesson = get_current_lesson()
-    if( current_lesson==None):
-        change_temperature(ROOMS["C009"]) # erstelle ein array mit allen räumen und der heating temperature für jeden Raumn
-        return
-    else:
-        if(array_examplehours[get_current_lesson()]==1):
-            change_temperature(ROOMS["C009"],21) #statt 21 eine constante übergeben
-        else:
-            change_temperature(ROOMS["C009"])
-
-            ## hier soll eine Flag gestzt werden, um in den Zustand 2 zu kommen.
-     
 
 def change_temperature(entity_id, value=17):
 
     # Home Assistant URL (change to your setup)
-    HOME_ASSISTANT_URL = "http://homeassistant.local:8123"
-
-    # Long-Lived Access Token
-    TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhODU2YTc1MjhmZGQ0NzdmOTEwZDZhMmM0YmM3ZjRmYiIsImlhdCI6MTc0MDEzMjEyMywiZXhwIjoyMDU1NDkyMTIzfQ.5MjPlnG806hSVln2OUW-LyqP0InyHfPdisiEAd26vTc"
-
+    
     # Headers for authentication
     HEADERS = {
         "Authorization": f"Bearer {TOKEN}",
@@ -69,3 +56,37 @@ def change_temperature(entity_id, value=17):
 
 # Example usage
 #change_temperature("input_number.heating_temperature")#akl
+
+
+def get_movement_sensor():
+    SENSOR_ENTITY_ID = "binary_sensor.hmip_smi55_2_0031a2698ec1ed_bewegung"
+    last_trigger_time = None  # Zeit des letzten Auslösens
+
+   
+        # Anfrage an die Home Assistant API, um den aktuellen Zustand des Bewegungssensors zu erhalten
+    headers = {
+            "Authorization": f"Bearer {TOKEN}",
+            "Content-Type": "application/json"
+        }
+
+        # Sende die Anfrage und hole die Sensor-Daten
+    response = requests.get(f"{HOME_ASSISTANT_URL}/api/states/{SENSOR_ENTITY_ID}", headers=headers)
+        
+    if response.status_code == 200:
+            state = response.json()['state']  # Der Zustand des Sensors (z.B. 'on' oder 'off')
+
+            # Prüfen, ob der Sensor "on" (Bewegung erkannt) ist
+            if state == 'on':
+                current_time = t.time()  # Aktuelle Zeit in Sekunden seit dem 1. Januar 1970
+                if last_trigger_time is None or current_time - last_trigger_time > 1800:  # 30 Minuten in Sekunden
+                    last_trigger_time = current_time  # Setze die Zeit des letzten Auslösens
+
+                    print(f"Bewegung erkannt! Die 30 Minuten werden nun neu gestartet.")
+            else:
+                print("Keine Bewegung erkannt.")
+    else:
+            print(f"Fehler beim Abrufen des Sensorstatus: {response.status_code}")
+
+
+
+        
