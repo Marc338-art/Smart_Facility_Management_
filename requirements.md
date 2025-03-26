@@ -8,7 +8,7 @@ Diese Dokument enthält die Anforderungen an das Python Projekt zum senden der h
 Status: proposed
 
 Description:
-Sobald der Raspberry am Strom und eingeschaltet ist, soll das Skript automatisch vom Betriebssystem gestartet werden.
+Sobald der Raspberry am Strom und eingeschaltet ist, soll das Skript automatisch vom Betriebssystem gestartet werden. Außerdem soll das skript jede nacht um 0 Uhr neu gestartet werden
 
 Needs: doc
 
