@@ -14,18 +14,19 @@ scheduler = sched.scheduler(time.time, time.sleep)
 
 
 def main(): 
-   
+    
     print("Zustand"+str(HA_req.conditionFlag))
     # Hier definierst du deine Logik, die alle 20 Sekunden ausgeführt werden soll
     if(HA_req.conditionFlag == 1):  # Zustand 1
-        #stunde = http_requests.get_current_lesson()
-        http_requests.check_()
-        #http_requests.get_movement_sensor()
-        #print("Stunde: " + str(stunde))  # Zugriff auf den ersten Teil der Liste
+        
+        #http_requests.check_()
+        http_requests.check_movement_Zustand1()
+        
+        
     elif(HA_req.conditionFlag == 2):
         # Hier wird alles aus Zustand 2 aufgerufen
-        http_requests.update_act_lesson()
-        
+        #http_requests.update_act_lesson()
+        http_requests.check_movement_Zustand1()
 
 def schedule_task():
     # Plane die nächste Ausführung der main-Funktion in 20 Sekunden

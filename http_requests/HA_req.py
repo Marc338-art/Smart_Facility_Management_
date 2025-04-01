@@ -66,7 +66,7 @@ def change_temperature(entity_id, value=17):
 
 def get_movement_sensor():
     SENSOR_ENTITY_ID = "binary_sensor.hmip_smi55_2_0031a2698ec1ed_bewegung"
-    last_trigger_time = None  # Zeit des letzten Auslösens
+    
 
    
         # Anfrage an die Home Assistant API, um den aktuellen Zustand des Bewegungssensors zu erhalten
@@ -80,19 +80,26 @@ def get_movement_sensor():
         
     if response.status_code == 200:
             state = response.json()['state']  # Der Zustand des Sensors (z.B. 'on' oder 'off')
-
-            # Prüfen, ob der Sensor "on" (Bewegung erkannt) ist
-            if state == 'on':
-                current_time = t.time()  # Aktuelle Zeit in Sekunden seit dem 1. Januar 1970
-                if last_trigger_time is None or current_time - last_trigger_time > 1800:  # 30 Minuten in Sekunden
-                    last_trigger_time = current_time  # Setze die Zeit des letzten Auslösens
-
-                    print(f"Bewegung erkannt! Die 30 Minuten werden nun neu gestartet.")
-            else:
-                print("Keine Bewegung erkannt.")
+            return state
+                 
     else:
             print(f"Fehler beim Abrufen des Sensorstatus: {response.status_code}")
 
 
 
-        
+
+ 
+def activate_script():
+     
+    headers = {
+        "Authorization": f"Bearer {TOKEN}",
+        "Content-Type": "application/json"
+    }
+    SCRIPT_NAME = "heating"
+ 
+    url = f"{HOME_ASSISTANT_URL}/api/services/script/turn_on"
+ 
+    data = {"entity_id": f"script.{SCRIPT_NAME}"}
+ 
+    response = requests.post(url, headers=headers, json=data)
+    print(response.status_code, response.text)

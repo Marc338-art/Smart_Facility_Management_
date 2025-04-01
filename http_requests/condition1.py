@@ -4,7 +4,7 @@ from . import HA_req
 
 
 
-
+acttime=0
 
 
 def get_timetable():
@@ -40,10 +40,17 @@ def check_movement_Zustand1():
     # hier soll geprüft werden ob eine Bewegung  ist, obwohl de Raum micht belegt ist.
     # Es soll aber nicht bei einer Kurzen bewegung getriggetr werden, sondern  nur bei längeren
     # z.b 2 Positive Flanken des Bewegungssensors
+    global acttime
 
+    c_time=HA_req.t.time()
+    move_act=HA_req.get_movement_sensor()
     movement_list=[]
-
-    if(HA_req.get_movement_sensor()!=None): # überpfüfung soll für 10 Minuten durchgefüht werden, wenn es zweimal eine Bewegunng gibt, soll geheizt werden
+    print(c_time)
+    print(acttime)
+    if(move_act is not None and acttime<=c_time-45 ): # überpfüfung soll für 10 Minuten durchgefüht werden, wenn es zweimal eine Bewegunng gibt, soll geheizt werden
+        acttime=HA_req.t.time()
+        movement_list.append(HA_req.get_movement_sensor())
+        print("bewegung erkannt")
         return
 
     # es soll aber nur für 30 Minuten geheizt werden
