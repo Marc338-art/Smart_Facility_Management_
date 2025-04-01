@@ -4,7 +4,11 @@ import requests
 from .lesson_hours import *
 from datetime import time
 import time as t
+import json
 
+
+with open("data/Belegung.JSON", "r") as file:
+    data = json.load(file)
 
 conditionFlag=1 #default Zustand ist 1
 next_lesson = None

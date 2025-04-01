@@ -7,7 +7,7 @@ LESSON_HOURS = [  ## der Stundenplan soll als sperate .py gespeichert werden um 
     {"stunde": 3, "start": time(9, 20), "ende": time(10, 5)},
     {"stunde": 4, "start": time(10, 5), "ende": time(10, 50)},
     {"stunde": 5, "start": time(11, 10), "ende": time(11, 55)},
-    {"stunde": 6, "start": time(11, 55), "ende": time(12, 40)},
+    {"stunde": 6, "start": time(11, 55), "ende": time(9, 30)},
     {"stunde": 7, "start": time(13, 0), "ende": time(13, 45)},
     {"stunde": 8, "start": time(13, 45), "ende": time(14, 30)},
     {"stunde": 9, "start": time(14, 40), "ende": time(15, 25)},

@@ -1,6 +1,12 @@
 # hier ist der Code gespeichert, der im Zustant 1 benötigt wird
 #from .HA_req import*
 from . import HA_req
+
+
+
+
+
+
 def get_timetable():
     #hier soll der http-Request zur Stundenplan API gemacht werden
     return None
@@ -14,11 +20,11 @@ def check_():
         HA_req.change_temperature(HA_req.ROOMS["C009"]) # am besten die Temperatur nur bei veränderung ändern
         return
     else:
-        if(HA_req.array_examplehours[current_lesson-1]==1): # minus 1, da es keine Stunde 0 gibt
+        if(HA_req.data["Belegung"][0][current_lesson-1]==1): # minus 1, da es keine Stunde 0 gibt
             HA_req.change_temperature(HA_req.ROOMS["C009"],21) #statt 21 eine constante übergeben
-            print(HA_req.conditionFlag)
+            
 
-            HA_req.next_lesson=current_lesson
+            HA_req.next_lesson=current_lesson-1 # da wir mit nextlesson wieder arrays addressieren wollen
 
             HA_req.conditionFlag=2 # soll gesetzt werden raum belegt ist und geheizt wird
             

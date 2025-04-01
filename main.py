@@ -4,22 +4,28 @@ import sched
 import time
 import http_requests
 from http_requests import HA_req
+
+
+
+
 # Erstelle eine Instanz des schedulers
 scheduler = sched.scheduler(time.time, time.sleep)
 
+
+
 def main(): 
    
-    print(HA_req.conditionFlag)
+    print("Zustand"+str(HA_req.conditionFlag))
     # Hier definierst du deine Logik, die alle 20 Sekunden ausgeführt werden soll
     if(HA_req.conditionFlag == 1):  # Zustand 1
         #stunde = http_requests.get_current_lesson()
         http_requests.check_()
-        http_requests.get_movement_sensor()
+        #http_requests.get_movement_sensor()
         #print("Stunde: " + str(stunde))  # Zugriff auf den ersten Teil der Liste
     elif(HA_req.conditionFlag == 2):
         # Hier wird alles aus Zustand 2 aufgerufen
         http_requests.update_act_lesson()
-        print("Zustand 2")
+        
 
 def schedule_task():
     # Plane die nächste Ausführung der main-Funktion in 20 Sekunden
