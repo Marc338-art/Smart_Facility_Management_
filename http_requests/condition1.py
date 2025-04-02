@@ -52,7 +52,7 @@ def check_movement_Zustand1():
     print(move_act)
     #print(c_time)
     print(acttime)
-    if(move_act == "on" and acttime<=c_time-5*60 ): # alle 5 Minuten Sensor auslesen
+    if(move_act == "on" and acttime<=c_time-10*60 ): # alle 10 Minuten Sensor auslesen
         acttime=HA_req.t.time()
         movement_list.append(move_act)
         print("bewegung erkannt")
@@ -61,7 +61,7 @@ def check_movement_Zustand1():
         print("Aktiviere skript")
         movement_list.clear()
     # es soll aber nur für 30 Minuten geheizt werden
-    elif(len(movement_list)==1 and acttime<=c_time-15*60): # wenn innerhalb von 15 Minuten keine 2 bewegungne waren Array zurücksetzetn
+    elif(len(movement_list)==1 and acttime<=c_time-20*60): # wenn innerhalb von 15 Minuten keine 2 bewegungne waren Array zurücksetzetn
         print("Keine 2. bewegung, setze skript zurück")
         movement_list.clear()
     return

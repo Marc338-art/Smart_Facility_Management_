@@ -20,8 +20,8 @@ def main():
     if(HA_req.conditionFlag == 1):  # Zustand 1
         
         #http_requests.check_()
-        http_requests.check_movement_Zustand1()
-        
+        #http_requests.check_movement_Zustand1()
+        http_requests.check_movement_Zustand_2()
         
     elif(HA_req.conditionFlag == 2):
         # Hier wird alles aus Zustand 2 aufgerufen
