@@ -26,7 +26,7 @@ def main():
     elif(HA_req.conditionFlag == 2):
         # Hier wird alles aus Zustand 2 aufgerufen
         #http_requests.update_act_lesson()
-        http_requests.check_movement_Zustand1()
+        return
 
 def schedule_task():
     # Plane die nächste Ausführung der main-Funktion in 20 Sekunden

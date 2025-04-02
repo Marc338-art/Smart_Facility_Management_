@@ -5,8 +5,8 @@ from . import HA_req
 
 
 acttime=0
-
-
+movement_list=[]
+move_act="off"
 def get_timetable():
     #hier soll der http-Request zur Stundenplan API gemacht werden
     return None
@@ -20,7 +20,7 @@ def check_():
         HA_req.change_temperature(HA_req.ROOMS["C009"]) # am besten die Temperatur nur bei veränderung ändern
         return
     else:
-        if(HA_req.data["Belegung"][0][current_lesson-1]==1): # minus 1, da es keine Stunde 0 gibt
+        if(HA_req.data_JSON["Belegung"]["A001"][0][current_lesson-1]==1): # minus 1, da es keine Stunde 0 gibt
             HA_req.change_temperature(HA_req.ROOMS["C009"],21) #statt 21 eine constante übergeben
             
 
@@ -41,17 +41,32 @@ def check_movement_Zustand1():
     # Es soll aber nicht bei einer Kurzen bewegung getriggetr werden, sondern  nur bei längeren
     # z.b 2 Positive Flanken des Bewegungssensors
     global acttime
-
+    global movement_list
+    global move_act
     c_time=HA_req.t.time()
-    move_act=HA_req.get_movement_sensor()
-    movement_list=[]
-    print(c_time)
+
+    try:
+        move_act=HA_req.get_movement_sensor()
+    except:
+        print("Exception")
+    print(move_act)
+    #print(c_time)
     print(acttime)
-    if(move_act is not None and acttime<=c_time-45 ): # überpfüfung soll für 10 Minuten durchgefüht werden, wenn es zweimal eine Bewegunng gibt, soll geheizt werden
+    if(move_act == "on" and acttime<=c_time-5*60 ): # alle 5 Minuten Sensor auslesen
         acttime=HA_req.t.time()
-        movement_list.append(HA_req.get_movement_sensor())
+        movement_list.append(move_act)
         print("bewegung erkannt")
         return
-
+    if(len(movement_list)==2):
+        print("Aktiviere skript")
+        movement_list.clear()
     # es soll aber nur für 30 Minuten geheizt werden
+    elif(len(movement_list)==1 and acttime<=c_time-15*60): # wenn innerhalb von 15 Minuten keine 2 bewegungne waren Array zurücksetzetn
+        print("Keine 2. bewegung, setze skript zurück")
+        movement_list.clear()
     return
+
+
+
+
+# Bewegungsmelder schaltet circa 4:30 min nach der leten erkannten Bew

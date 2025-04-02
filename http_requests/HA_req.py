@@ -7,14 +7,14 @@ import time as t
 import json
 
 
-with open("data/Belegung.JSON", "r") as file:
-    data = json.load(file)
+with open("data\Belegung neu.JSON", "r") as file:
+    data_JSON = json.load(file)
 
 conditionFlag=1 #default Zustand ist 1
 next_lesson = None
 HOME_ASSISTANT_URL = "http://homeassistant.local:8123"
 
-array_examplehours=[1,1,0,0,0,1,1,1,1,1,0,1,0,1,1,0] # nur zum test. Am ende ist dass das ergebniss aus der get_timetable Funktion (die letzte null als puffer damit es in Zustand 0 geht)
+
 
     # Long-Lived Access Token
 TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhODU2YTc1MjhmZGQ0NzdmOTEwZDZhMmM0YmM3ZjRmYiIsImlhdCI6MTc0MDEzMjEyMywiZXhwIjoyMDU1NDkyMTIzfQ.5MjPlnG806hSVln2OUW-LyqP0InyHfPdisiEAd26vTc"
@@ -67,7 +67,7 @@ def change_temperature(entity_id, value=17):
 def get_movement_sensor():
     SENSOR_ENTITY_ID = "binary_sensor.hmip_smi55_2_0031a2698ec1ed_bewegung"
     
-
+    
    
         # Anfrage an die Home Assistant API, um den aktuellen Zustand des Bewegungssensors zu erhalten
     headers = {
@@ -97,7 +97,7 @@ def activate_script():
     }
     SCRIPT_NAME = "heating"
  
-    url = f"{HOME_ASSISTANT_URL}/api/services/script/turn_on"
+    url = f"172.30.10.212:8123/api/services/script/turn_on"
  
     data = {"entity_id": f"script.{SCRIPT_NAME}"}
  

@@ -2,7 +2,7 @@
 from . import HA_req
 from datetime import time
 def update_act_lesson():
-    if(HA_req.data["Belegung"][0][HA_req.next_lesson]==1):  ## wenn alle Stunden belegt sind, geht er bis zur letzten und es wird erst nach der letzten in Zustand 1 gewechseltS
+    if(HA_req.data_JSON["Belegung"]["A001"][0][HA_req.next_lesson]==1):  ## wenn alle Stunden belegt sind, geht er bis zur letzten und es wird erst nach der letzten in Zustand 1 gewechseltS
         HA_req.next_lesson+=1
 
     elif(HA_req.get_current_time()>HA_req.LESSON_HOURS[HA_req.next_lesson-1]["ende"]): # hier darf next_lesson nicht eine array index, sonder die wirkliche stunde
