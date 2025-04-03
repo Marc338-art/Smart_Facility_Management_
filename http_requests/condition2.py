@@ -43,7 +43,7 @@ def check_movement_Zustand_2( cooldown=10, check_interval=30):
     global move_act2
     current_time = HA_req.t.time()
     try:
-        move_act2=HA_req.get_movement_sensor()
+        move_act2=HA_req.get_movement_sensor("binary_sensor.hmip_smi55_2_0031a2698ec1ed_bewegung")
     except:
         print("Exception")
 

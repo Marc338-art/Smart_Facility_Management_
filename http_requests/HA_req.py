@@ -1,105 +1,71 @@
-# hier sind allgemein benöbitgte Funktionen definiert
-
 import requests
-from .lesson_hours import *
-from datetime import time
-import time as t
 import json
+import time as t
+from datetime import time
+from .lesson_hours import *
 
+# Home Assistant Konfiguration
+HOME_ASSISTANT_URL = "http://homeassistant.local:8123"
+TOKEN = (
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhODU2YTc1MjhmZGQ0NzdmOTEwZDZhMmM0YmM3ZjRmYiIsImlhdCI6MTc0MDEzMjEyMywiZXhwIjoyMDU1NDkyMTIzfQ."
+    "5MjPlnG806hSVln2OUW-LyqP0InyHfPdisiEAd26vTc"
+)
+HEADERS = {
+    "Authorization": f"Bearer {TOKEN}",
+    "Content-Type": "application/json"
+}
 
-with open("data\Belegung neu.JSON", "r") as file:
+# JSON-Datei laden
+with open("data/Belegung neu.JSON", "r") as file:       ## load JSON soll eine Funktion werden
     data_JSON = json.load(file)
 
-conditionFlag=1 #default Zustand ist 1
+# Standardwerte
+conditionFlag = 1  # Default-Zustand ist 1
 next_lesson = None
-HOME_ASSISTANT_URL = "http://homeassistant.local:8123"
-
-
-
-    # Long-Lived Access Token
-TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhODU2YTc1MjhmZGQ0NzdmOTEwZDZhMmM0YmM3ZjRmYiIsImlhdCI6MTc0MDEzMjEyMywiZXhwIjoyMDU1NDkyMTIzfQ.5MjPlnG806hSVln2OUW-LyqP0InyHfPdisiEAd26vTc"
-
-
 
 def get_current_time():
+    """Gibt die aktuelle Uhrzeit zurück."""
     now = t.localtime()
     return time(now.tm_hour, now.tm_min)
 
-
 def get_current_lesson():
-    current = get_current_time() # hier muss man noch 30 Minuten addieren, damit es früher ausgelöst wird
+    """Gibt die aktuelle Unterrichtsstunde zurück."""
+    current = get_current_time()
     for stunde in LESSON_HOURS:
         if stunde["start"] <= current < stunde["ende"]:
-            
             return stunde["stunde"]
-    return None  # Falls keine Stunde passt
-
-
-
+    return None
 
 def change_temperature(entity_id, value=17):
-
-    # Home Assistant URL (change to your setup)
-    
-    # Headers for authentication
-    HEADERS = {
-        "Authorization": f"Bearer {TOKEN}",
-        "Content-Type": "application/json"
-    }
-
+    """Ändert die Temperatur eines Home Assistant Entities."""
     url = f"{HOME_ASSISTANT_URL}/api/services/input_number/set_value"
-    data = {
-        "entity_id": entity_id,
-        "value": value
-    }
-    
+    data = {"entity_id": entity_id, "value": value}
     response = requests.post(url, json=data, headers=HEADERS)
     
     if response.status_code == 200:
-        print(f"{entity_id} turned on successfully!")
+        print(f"{entity_id} Temperatur erfolgreich gesetzt!")
     else:
-        print(f"Error {response.status_code}: {response.text}")
+        print(f"Fehler {response.status_code}: {response.text}")
 
-# Example usage
-#change_temperature("input_number.heating_temperature")#akl
+def get_movement_sensor(entity_id):
+    """Überprüft den Zustand des Bewegungssensors."""
+    url = f"{HOME_ASSISTANT_URL}/api/states/{entity_id}"
+    try:
+        response = requests.get(url, headers=HEADERS, timeout=10)
+        response.raise_for_status()  # Wirft eine Exception bei einem HTTP Fehler
+        return response.json()['state']  # 'on' oder 'off'
+    except requests.exceptions.RequestException as e:
+        print(f"Fehler beim Abrufen des Sensorstatus: {response.status_code}")
+        return None
 
-
-def get_movement_sensor():
-    SENSOR_ENTITY_ID = "binary_sensor.hmip_smi55_2_0031a2698ec1ed_bewegung"
+def activate_script(script_name):
+    """Aktiviert ein Home Assistant Script."""
     
-    
-   
-        # Anfrage an die Home Assistant API, um den aktuellen Zustand des Bewegungssensors zu erhalten
-    headers = {
-            "Authorization": f"Bearer {TOKEN}",
-            "Content-Type": "application/json"
-        }
-
-        # Sende die Anfrage und hole die Sensor-Daten
-    response = requests.get(f"{HOME_ASSISTANT_URL}/api/states/{SENSOR_ENTITY_ID}", headers=headers)
-        
-    if response.status_code == 200:
-            state = response.json()['state']  # Der Zustand des Sensors (z.B. 'on' oder 'off')
-            return state
-                 
-    else:
-            print(f"Fehler beim Abrufen des Sensorstatus: {response.status_code}")
-
-
-
-
- 
-def activate_script():
-     
-    headers = {
-        "Authorization": f"Bearer {TOKEN}",
-        "Content-Type": "application/json"
-    }
-    SCRIPT_NAME = "heating"
- 
-    url = f"172.30.10.212:8123/api/services/script/turn_on"
- 
-    data = {"entity_id": f"script.{SCRIPT_NAME}"}
- 
-    response = requests.post(url, headers=headers, json=data)
-    print(response.status_code, response.text)
+    url = f"{HOME_ASSISTANT_URL}/api/services/script/turn_on"
+    data = {"entity_id": f"script.{script_name}"}
+    try:
+        response = requests.post(url, headers=HEADERS, json=data, timeout=10)
+        response.raise_for_status()  # Wirft eine Exception bei einem HTTP Fehler
+        print(response.status_code, response.text)
+    except requests.exceptions.RequestException as e:
+        print(f"Fehler beim Aktivieren des Scripts: {e}")

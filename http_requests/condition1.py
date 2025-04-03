@@ -46,7 +46,7 @@ def check_movement_Zustand1():
     c_time=HA_req.t.time()
 
     try:
-        move_act=HA_req.get_movement_sensor()
+        move_act=HA_req.get_movement_sensor("binary_sensor.hmip_smi55_2_0031a2698ec1ed_bewegung")
     except:
         print("Exception")
     print(move_act)
