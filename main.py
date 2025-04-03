@@ -19,8 +19,8 @@ def main():
     # Hier definierst du deine Logik, die alle 20 Sekunden ausgeführt werden soll
     if(HA_req.conditionFlag == 1):  # Zustand 1
         
-        #http_requests.check_()
-        #http_requests.check_movement_Zustand1()
+        http_requests.check_()
+        http_requests.check_movement_Zustand1("binary_sensor.hmip_smi55_2_0031a2698ec1ed_bewegung")
         http_requests.check_movement_Zustand_2()
         
     elif(HA_req.conditionFlag == 2):

@@ -30,7 +30,7 @@ def check_movement_Zustand_2():
 
 # Globale Variablen für die Zeitstempel
 last_active_time = 0
-last_check_time = HA_req.t.time()
+last_check_time = HA_req.t.time()  
 move_act2="off"
 def check_movement_Zustand_2( cooldown=10, check_interval=30):
     """
