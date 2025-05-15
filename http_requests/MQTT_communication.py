@@ -29,11 +29,11 @@ condition=2
 def start_thread():
     print("Thread wird gestartet")
     if condition==1:
-        abfrage_thread = threading.Thread(target=check_list_thread, daemon=True)
+        abfrage_thread = threading.Thread(target=check_condition1_thread, daemon=True)
         abfrage_thread.start()
 
     elif  condition==2:
-        abfrage_thread = threading.Thread(target=check_list_thread, daemon=True)
+        abfrage_thread = threading.Thread(target=check_condition2_thread, daemon=True)
         abfrage_thread.start()
 
 def check_condition1_thread():
@@ -59,26 +59,30 @@ def check_condition1_thread():
         print("Thread läuft noch")
 
 def check_condition2_thread():
- 
-    
-    current_time = time.time()
-    try:
-        res=get_movement_sensor("binary_sensor.hmip_smi_00091d8994556f_bewegung")
-    except:
-        print("Exception")
+    last_active_time = 0
+    last_check_time = time.time()  
+    while True:
+        current_time = time.time()
+        try:
+            res=get_movement_sensor("binary_sensor.hmip_smi_00091d8994556f_bewegung")
+        except:
+            print("Exception")
 
-    if res == "on" and (last_active_time <= current_time - 12):
-        last_active_time = current_time  # Aktualisiere die letzte Aktivität
-        print("Bewegung erkannt, Timer zurückgesetzt.")
+        if res == "on" and (last_active_time <= current_time - 12):
+            last_active_time = current_time  # Aktualisiere die letzte Aktivität
+            print("Bewegung erkannt, Timer zurückgesetzt.")
+            break
 
-    if  last_check_time <= current_time - 2*60:
-        if last_active_time >= last_check_time:
-            print("Bewegung innerhalb der letzten 30 Minuten erkannt.")
-        else:
-            print("Keine Bewegung innerhalb der letzten 30 Minuten erkannt.")
-            # Hier kann der Zustand weiter verarbeitet werden
-        last_check_time = current_time  # Setze den Überprüfungszeitpunkt neu
-    return
+        if  last_check_time <= current_time - 2*30:
+            if last_active_time >= last_check_time:
+                print("Bewegung innerhalb der letzten 30 Minuten erkannt.")
+            else:
+                print("Keine Bewegung innerhalb der letzten 30 Minuten erkannt.")
+                break
+                # Hier kann der Zustand weiter verarbeitet werden
+            last_check_time = current_time  # Setze den Überprüfungszeitpunkt neu
+        print("thread aktiv")
+        time.sleep(5)
 
 def tuerkontakt_aktion():
     print("Führe Türkontakt-Aktion aus!")
