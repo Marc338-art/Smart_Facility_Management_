@@ -31,15 +31,17 @@ condition=2
 # Beispiel-Funktionen, die je nach Payload ausgeführt werden
 def start_thread():
     print("Thread wird gestartet")
+    room_nr="c"
     if condition==1:
-        abfrage_thread = threading.Thread(target=check_condition1_thread, daemon=True)
+        
+        abfrage_thread = threading.Thread(target=check_condition1_thread,args=room_nr, daemon=True)
         abfrage_thread.start()
 
     elif  condition==2:
-        abfrage_thread = threading.Thread(target=check_condition2_thread, daemon=True)
+        abfrage_thread = threading.Thread(target=check_condition2_thread,args=room_nr, daemon=True)
         abfrage_thread.start()
 
-def check_condition1_thread():
+def check_condition1_thread(room_nr):
     acttime = datetime.now()
     
     while True:
@@ -61,7 +63,7 @@ def check_condition1_thread():
         time.sleep(5)
         print("Thread läuft noch")
 
-def check_condition2_thread():
+def check_condition2_thread(room_nr):
     last_active_time = 0
     last_check_time = time.time()  
     while True:
@@ -71,7 +73,7 @@ def check_condition2_thread():
         except:
             print("Exception")
 
-        if res == "on" and (last_active_time <= current_time - 12):
+        if res == "on" and (last_active_time <= current_time - 42):
             last_active_time = current_time  # Aktualisiere die letzte Aktivität
             print("Bewegung erkannt, Timer zurückgesetzt.")
             break
