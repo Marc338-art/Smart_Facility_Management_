@@ -13,18 +13,6 @@ def update_act_lesson():
     
     print("act_lesoson"+str(HA_req.next_lesson))
 
-def check_movement_Zustand_2():
-    
-    # es soll der Zustand des Bewegungssensors abgefragt werden. Es soll geprüft werden, ob er innerhalb von 30 Minuten mindestens einaml aktiv war.
-    # sobald er einmal aktiv war soll die 30 Minuten erneut ablaufen und geprüft werden ob er in den 30 Minuten erneut triggert
-
-    # man muss die Positiven flanken des Sensors prüfen, da er länger das Singal bewegung erkannt hält
-
-    conditionFlag=1 # wenn nach 30 minuten keiner im raum ist, soll geprüft werden ob in 30 minuten die nächste stunde beginnt die belegt ist
-    # man muss für den Fall aber als Parameter übergeben, dass es nicht in der aktuellen Stunde erneut geprüft wird 
-    # (es muss also nur geprüft werden ob die aktuelle Stunde +30 min größer als das Ende der aktuellen Stunde ist)
-    
-    return
 
 
 
@@ -43,7 +31,7 @@ def check_movement_Zustand_2( cooldown=10, check_interval=30):
     global move_act2
     current_time = HA_req.t.time()
     try:
-        move_act2=HA_req.get_movement_sensor("binary_sensor.hmip_smi55_2_0031a2698ec1ed_bewegung")
+        move_act2=HA_req.get_movement_sensor("binary_sensor.hmip_smi_00091d8994556f_bewegung")
     except:
         print("Exception")
 

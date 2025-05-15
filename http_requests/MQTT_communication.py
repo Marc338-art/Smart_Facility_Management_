@@ -24,18 +24,24 @@ HEADERS = {
 
 motion_status = None  # Variable, um den Status des Bewegungssensors zu speichern
 motion_status_received = threading.Event()  # Event, um die Antwort zu synchronisieren
-
+condition=2
 # Beispiel-Funktionen, die je nach Payload ausgeführt werden
 def start_thread():
     print("Thread wird gestartet")
-    abfrage_thread = threading.Thread(target=check_list_thread, daemon=True)
-    abfrage_thread.start()
+    if condition==1:
+        abfrage_thread = threading.Thread(target=check_list_thread, daemon=True)
+        abfrage_thread.start()
 
-def check_list_thread():
+    elif  condition==2:
+        abfrage_thread = threading.Thread(target=check_list_thread, daemon=True)
+        abfrage_thread.start()
+
+def check_condition1_thread():
     acttime = datetime.now()
     
     while True:
         # Überprüfe alle 30 Sekunden, ob 12 Minuten vergangen sind
+        
         if datetime.now() - timedelta(seconds=40) > acttime:
 
             res=get_movement_sensor("binary_sensor.hmip_smi_00091d8994556f_bewegung")
@@ -52,7 +58,27 @@ def check_list_thread():
         time.sleep(5)
         print("Thread läuft noch")
 
+def check_condition2_thread():
+ 
+    
+    current_time = time.time()
+    try:
+        res=get_movement_sensor("binary_sensor.hmip_smi_00091d8994556f_bewegung")
+    except:
+        print("Exception")
 
+    if res == "on" and (last_active_time <= current_time - 12):
+        last_active_time = current_time  # Aktualisiere die letzte Aktivität
+        print("Bewegung erkannt, Timer zurückgesetzt.")
+
+    if  last_check_time <= current_time - 2*60:
+        if last_active_time >= last_check_time:
+            print("Bewegung innerhalb der letzten 30 Minuten erkannt.")
+        else:
+            print("Keine Bewegung innerhalb der letzten 30 Minuten erkannt.")
+            # Hier kann der Zustand weiter verarbeitet werden
+        last_check_time = current_time  # Setze den Überprüfungszeitpunkt neu
+    return
 
 def tuerkontakt_aktion():
     print("Führe Türkontakt-Aktion aus!")
