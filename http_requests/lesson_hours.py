@@ -26,7 +26,7 @@ LESSON_HOURS = [  ## der Stundenplan soll als sperate .py gespeichert werden um 
 ## hier sollen alle Räume und Heizvariablen ergänzt werden
 
 ROOMS ={
-    'C005': "input_number.heating_temperature_C005",
-    'C009': "input_number.heating_temperature_C009"
+    'C005': "input_number.heating_temperature_c005",
+    'C009': "input_number.heating_temperature_c009"
 
 }

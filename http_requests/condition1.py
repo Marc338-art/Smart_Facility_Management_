@@ -25,11 +25,11 @@ def check_():
         current_lesson = HA_req.get_current_lesson()
     
         if current_lesson is None:
-            HA_req.change_temperature(HA_req.ROOMS["C009"])  # Temperatur nur bei Änderung setzen
+            HA_req.change_temperature(HA_req.ROOMS["C005"])  # Temperatur nur bei Änderung setzen
             return
         
         if HA_req.data_JSON["Belegung"]["A001"][0][current_lesson - 1] == 1:  # -1, da keine Stunde 0 existiert
-            HA_req.change_temperature(HA_req.ROOMS["C009"], 21)  # Statt 21 könnte eine Konstante genutzt werden
+            HA_req.change_temperature(HA_req.ROOMS["C005"], 21)  # Statt 21 könnte eine Konstante genutzt werden
             
             # Setze next_lesson für spätere Verwendung
             HA_req.next_lesson = current_lesson - 1  
@@ -37,7 +37,7 @@ def check_():
             # Zustand setzen: Raum ist belegt und wird geheizt
             HA_req.conditionFlag = 2
         else:
-            HA_req.change_temperature(HA_req.ROOMS["C009"])  # Standardtemperatur setzen
+            HA_req.change_temperature(HA_req.ROOMS["C005"])  # Standardtemperatur setzen
     
     except Exception as e:
         print(f"Fehler in check_(): {e}")
