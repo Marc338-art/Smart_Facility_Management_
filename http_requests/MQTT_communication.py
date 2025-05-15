@@ -3,6 +3,7 @@ import paho.mqtt.client as mqtt
 import threading
 import time
 from datetime import datetime, timedelta
+import sched
 # MQTT-Konfiguration
 MQTT_BROKER = "172.30.10.212"
 MQTT_PORT = 1883
@@ -10,6 +11,8 @@ MQTT_TOPIC = "ha_main"
 MQTT_USER = "mqtt-user"  # dein Benutzername aus HA
 MQTT_PASS = "12345678"  # dein Passwort
 
+
+scheduler = sched.scheduler(time.time, time.sleep)
 
 HOME_ASSISTANT_URL = "http://172.30.10.212:8123"
 TOKEN = (
@@ -152,10 +155,20 @@ def get_movement_sensor(entity_id):
         print(f"Fehler beim Abrufen des Sensorstatus: {response.status_code}")
         return None
 
+def schedule_task():
+    scheduler.run()
+    # Plane die nächste Ausführung der main-Funktion in 20 Sekunden
+    scheduler.enter(5, 1, schedule_task)  # Wiederhole alle 5 Sekunden
+    print("Hier muss dannn die check function rein")
+
 
 
 if __name__ == "__main__":
-    start_mqtt()
+    mqtt_thread = threading.Thread(target=start_mqtt, daemon=True)
+    mqtt_thread.start()
 
-
+    # Starte den Scheduler in einem eigenen Thread
+    schedule_task()
+    # Starte die Ausführung des Schedulers
+    scheduler.run()
 

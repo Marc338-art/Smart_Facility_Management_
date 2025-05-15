@@ -30,8 +30,8 @@ def main():
 
 def schedule_task():
     # Plane die nächste Ausführung der main-Funktion in 20 Sekunden
-    scheduler.enter(10, 1, schedule_task)  # Wiederhole alle 5 Sekunden
-    main()  # Führe die main-Funktion aus
+    scheduler.enter(10, 1, schedule_task)  
+    print("Hier muss dannn die check function rein")
 
 if __name__ == "__main__":
     # Starte den Scheduler und plane die erste Aufgabe
