@@ -4,6 +4,8 @@ import threading
 import time
 from datetime import datetime, timedelta
 import sched
+
+import re
 # MQTT-Konfiguration
 MQTT_BROKER = "172.30.10.212"
 MQTT_PORT = 1883
@@ -27,29 +29,32 @@ HEADERS = {
 
 motion_status = None  # Variable, um den Status des Bewegungssensors zu speichern
 motion_status_received = threading.Event()  # Event, um die Antwort zu synchronisieren
-condition=2
+condition=1
 # Beispiel-Funktionen, die je nach Payload ausgeführt werden
-def start_thread():
-    print("Thread wird gestartet")
-    room_nr="c"
+def start_thread(raum_nr):
+    print(f"Thread gestartet für Raum: {raum_nr}")
+    room_nr=raum_nr
     if condition==1:
         
-        abfrage_thread = threading.Thread(target=check_condition1_thread,args=room_nr, daemon=True)
+        abfrage_thread = threading.Thread(target=check_condition1_thread, args=(room_nr,), daemon=True)
+
         abfrage_thread.start()
 
     elif  condition==2:
-        abfrage_thread = threading.Thread(target=check_condition2_thread,args=room_nr, daemon=True)
+        abfrage_thread = threading.Thread(target=check_condition2_thread, args=(room_nr,), daemon=True)
+
         abfrage_thread.start()
 
 def check_condition1_thread(room_nr):
     acttime = datetime.now()
     
+    print(f"binary_sensor.{room_nr}")
     while True:
         # Überprüfe alle 30 Sekunden, ob 12 Minuten vergangen sind
         
         if datetime.now() - timedelta(seconds=40) > acttime:
 
-            res=get_movement_sensor("binary_sensor.hmip_smi_00091d8994556f_bewegung")
+            res=get_movement_sensor(f"binary_sensor.{room_nr}")
             if res =="on":
                 print(res)
                 break
@@ -66,6 +71,7 @@ def check_condition1_thread(room_nr):
 def check_condition2_thread(room_nr):
     last_active_time = 0
     last_check_time = time.time()  
+    
     while True:
         current_time = time.time()
         try:
@@ -73,7 +79,7 @@ def check_condition2_thread(room_nr):
         except:
             print("Exception")
 
-        if res == "on" and (last_active_time <= current_time - 42):
+        if res == "on" and (last_active_time <= current_time - 12):
             last_active_time = current_time  # Aktualisiere die letzte Aktivität
             print("Bewegung erkannt, Timer zurückgesetzt.")
             break
@@ -89,23 +95,19 @@ def check_condition2_thread(room_nr):
         print("thread aktiv")
         time.sleep(5)
 
-def tuerkontakt_aktion():
-    print("Führe Türkontakt-Aktion aus!")
 
-def wandthermostat_aktion():
-    print("Führe Wandthermostat-Aktion aus!")
 
 # Hauptfunktion, die abhängig vom Payload aufruft
 def main(payload):
     print(f"Empfangener Payload: {payload}")
-    
-    if payload == "binary_sensor.hmip_swdm_2_0034a2698f4da2":
-        tuerkontakt_aktion()
-        start_thread()
-    elif payload == "climate.wandthermostat":
-        wandthermostat_aktion()
-    elif payload == "binary_sensor.hmip_smi_00091d8994556f_bewegung":
-        start_thread()
+    match = re.match(r"Fensterkontakt_(c\d+)_", payload)
+    if match:
+        raum_nr = match.group(1)  # z. B. "c009"
+        start_thread(raum_nr)
+    if payload == "Fensterkontakt_c009_":
+
+        #start_thread()
+        return
     else:
         print("Unbekannter Payload!")
 
