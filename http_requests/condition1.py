@@ -87,43 +87,27 @@ def check_timetable():
 # ✅ 1. KeyPhrase holen
     url = base_url + "/RESTHeatRaumStundenplan.php?Raum=A0%&Datum=2025-04-02"
     response = HA_req.requests.get(url, auth=(user, password), verify=False)
-    current_lesson =HA_req.get_current_lesson() # gibt nur einen Wert wenn keine pause ist. (einbauen das geprüft wird falls None)
+    current_lesson =HA_req.get_current_lesson() # gibt nur einen Wert wenn keine pause ist. (einbauen das geprüft wird falls None) ## es soll aber immer 30 Minuten vorher geschaut werden, welche Stunde in 30 Minuten ist
     data = response.json()
     belegung = data.get("Belegung", {})
     print (current_lesson)
-    '''for room in lh.rooms:
-        if room["state"] == 1 and room["name"] in belegung:
-            print(room["name"])
-            print(belegung[room["name"]])
-            room["state"] = 2
-            for index, h in enumerate(belegung[room["name"]]):
-                if h==1 and index>current_lesson:
-                    print(index+1) # printet die Stunden in denen es eine 1 ist.
-                    try:
-                        stunden_ende = HA_req.LESSON_HOURS[index]["ende"]
-                        room["end_time"]=stunden_ende
-                        print(f"Ende der Stunde {index + 1}: {stunden_ende.strftime('%H:%M')}")
-                    except IndexError:
-                        print(f"Kein Eintrag in LESSON_HOURS für Index {index}")
-        elif room["state"] == 2 and room["name"] in belegung:
-            if HA_req.get_current_time()>room["end_time"]: 
-                # soll den Temperatur wert zurücksetzen
-                print("hallo")'''
+
     for room_name, room_data in lh.rooms_dict.items():
-        if room_data["state"] == 1 and room_name in belegung:
-            print(room_name)
-            print(belegung[room_name])
+        if room_data["state"] == 1 and room_name in belegung and belegung[room_name][current_lesson]==0 :    ## Funktion fragt stundenplan ab und schaut ob die aktuelle stunde Blegt ist oder nicht. falls ja, schaut sie bis der Raum belegt ist und bestimmt einen Endzeitpunkt. Soll
             room_data["state"] = 2
 
-            for index, h in enumerate(belegung[room_name]):
-                if h == 1 and index > current_lesson:
-                    print(index + 1)
+            for index in range(current_lesson + 1, len(belegung[room_name])):
+                h = belegung[room_name][index]
+                if h == 0:
+                    print(f"Raum frei ab Stunde {index }")
                     try:
-                        stunden_ende = HA_req.LESSON_HOURS[index]["ende"]
+                        stunden_ende = HA_req.LESSON_HOURS[index-2]["ende"]
                         room_data["end_time"] = stunden_ende
-                        print(f"Ende der Stunde {index + 1}: {stunden_ende.strftime('%H:%M')}")
+                        print(f"Ende der Stunde {index }: {stunden_ende.strftime('%H:%M')}")
                     except IndexError:
                         print(f"Kein Eintrag in LESSON_HOURS für Index {index}")
+                    break  # Nur den nächsten freien Slot finden
+
 
         elif room_data["state"] == 2 and room_name in belegung:
             if room_data["end_time"] and HA_req.get_current_time() > room_data["end_time"]:
