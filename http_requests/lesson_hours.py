@@ -40,5 +40,7 @@ rooms = [
     "Room_37", "Room_38", "Room_39", "Room_40"
 ]
  
- 
-rooms = [{"name": name, "state": 1} for name in rooms]
+default_end_time = time(20, 30) 
+rooms_dict = {name: {"state": 1, "end_time": default_end_time} for name in rooms}
+rooms = [{"name": name, "state": 1, "end_time": default_end_time} for name in rooms]
+

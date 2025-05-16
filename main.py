@@ -34,7 +34,8 @@ condition=1
 def start_thread(raum_nr):
     print(f"Thread gestartet für Raum: {raum_nr}")
     room_nr=raum_nr
-    if condition==1:
+    
+    if http.rooms_dict["A023"]["state"]==1:  # später statt A023 die raumnummer
         
         abfrage_thread = threading.Thread(target=check_condition1_thread, args=(room_nr,), daemon=True)
 
@@ -153,6 +154,7 @@ def schedule_task():
     scheduler.run()
     # Plane die nächste Ausführung der main-Funktion in 20 Sekunden
     scheduler.enter(20, 1, schedule_task)  # Wiederhole alle 5 Sekunden
+    print(http.rooms)
     http.check_timetable()
 
 
