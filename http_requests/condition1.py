@@ -90,8 +90,18 @@ def check_timetable():
     current_lesson = HA_req.get_current_lesson()
     data = response.json()
     belegung = data.get("Belegung", {})
+    print (current_lesson)
     for room in lh.rooms:
         if room["state"] == 1 and room["name"] in belegung:
             print(room["name"])
+            print(belegung[room["name"]])
             room["state"] = 2
-    
+            for index, h in enumerate(belegung[room["name"]]):
+                if h==1 and index>current_lesson:
+                    print(index+1) # printet die Stunden in denen es eine 1 ist.
+                    try:
+                        stunden_ende = HA_req.LESSON_HOURS[index]["ende"]
+                        print(f"Ende der Stunde {index + 1}: {stunden_ende.strftime('%H:%M')}")
+                    except IndexError:
+                        print(f"Kein Eintrag in LESSON_HOURS für Index {index}")
+            
