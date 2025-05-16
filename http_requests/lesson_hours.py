@@ -25,51 +25,20 @@ LESSON_HOURS = [  ## der Stundenplan soll als sperate .py gespeichert werden um 
 
 ## hier sollen alle Räume und Heizvariablen ergänzt werden
 
-ROOMS ={
+ROOMS1 ={
     'C005': "input_number.heating_temperature_c005",
     'C009': "input_number.heating_temperature_c009"
 
 }
 
 rooms = [
-    {"name": "Room_01", "state": 1},
-    {"name": "Room_02", "state": 2},
-    {"name": "Room_03", "state": 1},
-    {"name": "Room_04", "state": 2},
-    {"name": "Room_05", "state": 1},
-    {"name": "Room_06", "state": 2},
-    {"name": "Room_07", "state": 1},
-    {"name": "Room_08", "state": 2},
-    {"name": "Room_09", "state": 1},
-    {"name": "Room_10", "state": 2},
-    {"name": "Room_11", "state": 1},
-    {"name": "Room_12", "state": 2},
-    {"name": "Room_13", "state": 1},
-    {"name": "Room_14", "state": 2},
-    {"name": "Room_15", "state": 1},
-    {"name": "Room_16", "state": 2},
-    {"name": "Room_17", "state": 1},
-    {"name": "Room_18", "state": 2},
-    {"name": "Room_19", "state": 1},
-    {"name": "Room_20", "state": 2},
-    {"name": "Room_21", "state": 1},
-    {"name": "Room_22", "state": 2},
-    {"name": "Room_23", "state": 1},
-    {"name": "Room_24", "state": 2},
-    {"name": "Room_25", "state": 1},
-    {"name": "Room_26", "state": 2},
-    {"name": "Room_27", "state": 1},
-    {"name": "Room_28", "state": 2},
-    {"name": "Room_29", "state": 1},
-    {"name": "Room_30", "state": 2},
-    {"name": "Room_31", "state": 1},
-    {"name": "Room_32", "state": 2},
-    {"name": "Room_33", "state": 1},
-    {"name": "Room_34", "state": 2},
-    {"name": "Room_35", "state": 1},
-    {"name": "Room_36", "state": 2},
-    {"name": "Room_37", "state": 1},
-    {"name": "Room_38", "state": 2},
-    {"name": "Room_39", "state": 1},
-    {"name": "Room_40", "state": 2},
+    "A023", "Room_02", "Room_03", "A024", "A028", "A025", "Room_07", "Room_08",
+    "Room_09", "Room_10", "Room_11", "Room_12", "Room_13", "Room_14", "Room_15",
+    "Room_16", "Room_17", "Room_18", "Room_19", "Room_20", "Room_21", "Room_22",
+    "Room_23", "Room_24", "Room_25", "Room_26", "Room_27", "Room_28", "Room_29",
+    "Room_30", "Room_31", "Room_32", "Room_33", "Room_34", "Room_35", "Room_36",
+    "Room_37", "Room_38", "Room_39", "Room_40"
 ]
+ 
+ 
+rooms = [{"name": name, "state": 1} for name in rooms]

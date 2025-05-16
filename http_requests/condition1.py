@@ -4,7 +4,7 @@
 # Falls der Raum nicht belegt ist, aber Bewegung erkannt wird, kann temporär geheizt werden.
 
 from . import HA_req
-
+from . import lesson_hours as lh
 # Globale Variablen
 acttime = 0
 movement_list = []
@@ -75,3 +75,23 @@ def check_movement_Zustand1(entity_id):
         print(f"Fehler in check_movement_Zustand1(): {e}")
 
     return
+
+
+def check_timetable():
+    user = "smanemann@bbs2wob-lis.de"
+    password = "Wob2HeatTestInitial"
+    thesecret = "hPRbaYgljaZCfdTXdGik"
+    
+    base_url = "https://www.Virtueller-Stundenplan.de/Reservierung/"
+ 
+# ✅ 1. KeyPhrase holen
+    url = base_url + "/RESTHeatRaumStundenplan.php?Raum=A0%&Datum=2025-04-02"
+    response = HA_req.requests.get(url, auth=(user, password), verify=False)
+    current_lesson = HA_req.get_current_lesson()
+    data = response.json()
+    belegung = data.get("Belegung", {})
+    for room in lh.rooms:
+        if room["state"] == 1 and room["name"] in belegung:
+            print(room["name"])
+            room["state"] = 2
+    

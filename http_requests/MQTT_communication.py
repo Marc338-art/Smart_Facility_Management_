@@ -54,13 +54,14 @@ def check_condition1_thread(room_nr):
         
         if datetime.now() - timedelta(seconds=40) > acttime:
 
-            res=get_movement_sensor(f"binary_sensor.{room_nr}")
+            res=get_movement_sensor(f"binary_sensor.hmip_smi_00091d8994556f_bewegung")
             if res =="on":
                 print(res)
                 break
 
             elif res =="off":
                 print(res)
+                change_temperature("input_number.heating_temperature_c005",17)
                 break
 
             print("Zeit abgelaufen")
@@ -75,7 +76,7 @@ def check_condition2_thread(room_nr):
     while True:
         current_time = time.time()
         try:
-            res=get_movement_sensor("binary_sensor.hmip_smi_00091d8994556f_bewegung")
+            res=get_movement_sensor(f"binary_sensor.hmip_smi_00091d8994556f_bewegung")
         except:
             print("Exception")
 
@@ -162,9 +163,19 @@ def get_movement_sensor(entity_id):
 def schedule_task():
     scheduler.run()
     # Plane die nächste Ausführung der main-Funktion in 20 Sekunden
-    scheduler.enter(5, 1, schedule_task)  # Wiederhole alle 5 Sekunden
+    scheduler.enter(20, 1, schedule_task)  # Wiederhole alle 5 Sekunden
     print("Hier muss dannn die check function rein")
 
+def change_temperature(entity_id, value=17):
+    """Ändert die Temperatur eines Home Assistant Entities."""
+    url = f"{HOME_ASSISTANT_URL}/api/services/input_number/set_value"
+    data = {"entity_id": entity_id, "value": value}
+    response = requests.post(url, json=data, headers=HEADERS)
+    
+    if response.status_code == 200:
+        print(f"{entity_id} Temperatur erfolgreich gesetzt!")
+    else:
+        print(f"Fehler {response.status_code}: {response.text}")
 
 
 if __name__ == "__main__":
