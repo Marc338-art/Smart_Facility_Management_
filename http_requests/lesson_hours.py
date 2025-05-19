@@ -31,7 +31,7 @@ ROOMS1 ={
 }
 
 rooms = [
-    "A023", "Room_02", "Room_03", "A024", "A028", "A025", "Room_07", "Room_08",
+    "A023", "Room_02", "rewr", "C002", "C003.1", "C004", "C005", "C009",
     "Room_09", "Room_10", "Room_11", "Room_12", "Room_13", "Room_14", "Room_15",
     "Room_16", "Room_17", "Room_18", "Room_19", "Room_20", "Room_21", "Room_22",
     "Room_23", "Room_24", "Room_25", "Room_26", "Room_27", "Room_28", "Room_29",

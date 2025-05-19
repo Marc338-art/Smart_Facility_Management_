@@ -262,3 +262,61 @@
                   - climate.hmip_etrv_cl_00359f29a70925
                   - climate.hmip_etrv_cl_0035a0c9aa75fc
                   - climate.hmip_etrv_cl_0035a0c9aa75eb
+
+
+
+
+
+
+- id: "876213876321"
+  alias: "Heiztemperatur per MQTT senden"
+  description: Sendet den aktuellen Wert von input_number.heating_temperature_c005 über MQTT
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.hmip_smi_00091d8994556f_bewegung
+      from: "off"  # Nur wenn der Zustand von "off" nach "on" wechselt
+      to: "on"  # Nur wenn der Zustand zu "on" wechselt
+    - platform: state
+      entity_id:
+        - binary_sensor.c009
+        - climate.wandthermostat
+  condition: []
+  action:
+    - service: mqtt.publish
+      data:
+        topic: "ha_main"
+        payload: "{{ state_attr(trigger.entity_id, 'friendly_name') }}"
+        retain: false
+  mode: single
+
+
+
+- alias: Temperatur auf alle Geräte in Gruppen C009 und Modellhaus anwenden
+  trigger:
+    - platform: time_pattern
+      seconds: "/10"
+
+  variables:
+    climate_entities_c009: "{{ expand('group.c009') | map(attribute='entity_id') | list }}"
+    climate_entities_modellhaus: "{{ expand('group.modellhaus') | map(attribute='entity_id') | list }}"
+    temperatur_c009: "{{ states('input_number.heating_temperature_c002_2') | float }}"
+    temperatur_modellhaus: "{{ states('input_number.heating_temperature_c002_2') | float }}"
+
+  action:
+    - repeat:
+        for_each: "{{ climate_entities_c009 }}"
+        sequence:
+          - service: climate.set_temperature
+            target:
+              entity_id: "{{ repeat.item }}"
+            data:
+              temperature: "{{ temperatur_c009 }}"
+              
+    - repeat:
+        for_each: "{{ climate_entities_modellhaus }}"
+        sequence:
+          - service: climate.set_temperature
+            target:
+              entity_id: "{{ repeat.item }}"
+            data:
+              temperature: "{{ temperatur_modellhaus }}"

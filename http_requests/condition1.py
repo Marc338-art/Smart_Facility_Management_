@@ -85,7 +85,7 @@ def check_timetable():
     base_url = "https://www.Virtueller-Stundenplan.de/Reservierung/"
  
 # ✅ 1. KeyPhrase holen
-    url = base_url + "/RESTHeatRaumStundenplan.php?Raum=A0%&Datum=2025-04-02"
+    url = base_url + "/RESTHeatRaumStundenplan.php?Raum=C0%&Datum=2025-04-02"
     response = HA_req.requests.get(url, auth=(user, password), verify=False)
     current_lesson =HA_req.get_current_lesson() # gibt nur einen Wert wenn keine pause ist. (einbauen das geprüft wird falls None) ## es soll aber immer 30 Minuten vorher geschaut werden, welche Stunde in 30 Minuten ist
     data = response.json()
@@ -93,9 +93,15 @@ def check_timetable():
     print (current_lesson)
 
     for room_name, room_data in lh.rooms_dict.items():
-        if room_data["state"] == 1 and room_name in belegung and belegung[room_name][current_lesson]==0 :    ## Funktion fragt stundenplan ab und schaut ob die aktuelle stunde Blegt ist oder nicht. falls ja, schaut sie bis der Raum belegt ist und bestimmt einen Endzeitpunkt. Soll
+        if room_data["state"] == 1 and room_name in belegung and belegung[room_name][current_lesson]==1 :    ## Funktion fragt stundenplan ab und schaut ob die aktuelle stunde Blegt ist oder nicht. falls ja, schaut sie bis der Raum belegt ist und bestimmt einen Endzeitpunkt. Soll
             room_data["state"] = 2
-
+            room_name_s=room_name.lower()
+            r_s=room_name_s.replace(".", "_")
+            print(r_s)
+            try:
+                HA_req.change_temperature(f"input_number.heating_temperature_{r_s}",24)
+            except :
+                print("mistake")
             for index in range(current_lesson + 1, len(belegung[room_name])):
                 h = belegung[room_name][index]
                 if h == 0:
