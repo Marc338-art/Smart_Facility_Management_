@@ -104,7 +104,7 @@ def check_condition2_thread(room_nr):
                 print("Keine Bewegung innerhalb der letzten 30 Minuten erkannt.")
                 http.change_temperature(f"input_number.heating_temperature_{room_nr}",17)
                 http.rooms_dict[room_nr]["thread_active"]=False
-                # soll auch den Zustand auf zwei setzen
+                # soll auch den Zustand auf 1 setzen
                 break
                 # Hier kann der Zustand weiter verarbeitet werden
             last_check_time = current_time  # Setze den Überprüfungszeitpunkt neu
