@@ -64,7 +64,7 @@ def check_condition1_thread(room_nr):
                 print(res)
                 http.rooms_dict[room_nr]["thread_active"]=False
                 http.change_temperature(f"input_number.heating_temperature_{room_nr}",21)
-                # Zustand ua f2 ändern
+                http.rooms_dict[room_nr]["state"]=2
                 break
 
             elif res =="off":
