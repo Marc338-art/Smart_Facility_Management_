@@ -96,6 +96,7 @@ def check_timetable():
         try:
             if room_data["state"] == 1 and room_name in belegung and belegung[room_name][current_lesson]==1 :    ## Funktion fragt stundenplan ab und schaut ob die aktuelle stunde Blegt ist oder nicht. falls ja, schaut sie bis der Raum belegt ist und bestimmt einen Endzeitpunkt. Soll
                 room_data["state"] = 2
+                # nur hier muss die funktion check_condition2_thread() aufgerufen werden
                 room_name_s=room_name.lower()
                 r_s=room_name_s.replace(".", "_")
                 print(r_s)
