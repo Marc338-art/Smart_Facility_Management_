@@ -29,40 +29,48 @@ HEADERS = {
 
 motion_status = None  # Variable, um den Status des Bewegungssensors zu speichern
 motion_status_received = threading.Event()  # Event, um die Antwort zu synchronisieren
-condition=1
+condition=2
 # Beispiel-Funktionen, die je nach Payload ausgeführt werden
 def start_thread(raum_nr):
+
     print(f"Thread gestartet für Raum: {raum_nr}")
     room_nr=raum_nr
-    
-    if http.rooms_dict["A023"]["state"]==1:  # später statt A023 die raumnummer
+    room_nrs=room_nr.lower()
+    if http.rooms_dict[raum_nr]["thread_active"]:
+        print(f"Thread für Raum {raum_nr} ist bereits aktiv.")
+        return
+    if http.rooms_dict[raum_nr]["state"]==1:  
         
         abfrage_thread = threading.Thread(target=check_condition1_thread, args=(room_nr,), daemon=True)
-
+        http.rooms_dict[room_nr]["thread_active"]=True
         abfrage_thread.start()
 
-    elif  condition==2:
+    elif  http.rooms_dict[raum_nr]["state"]==2:
         abfrage_thread = threading.Thread(target=check_condition2_thread, args=(room_nr,), daemon=True)
-
+        http.rooms_dict[room_nr]["thread_active"]=True
         abfrage_thread.start()
 
 def check_condition1_thread(room_nr):
     acttime = datetime.now()
-    
+
     print(f"binary_sensor.{room_nr}")
     while True:
         # Überprüfe alle 30 Sekunden, ob 12 Minuten vergangen sind
         
-        if datetime.now() - timedelta(seconds=40) > acttime:
+        if datetime.now() - timedelta(minutes=10) > acttime:
 
-            res=http.get_movement_sensor(f"binary_sensor.hmip_smi_00091d8994556f_bewegung")
+            res=http.get_movement_sensor(f"binary_sensor.bewegungssensor_{room_nr}")
             if res =="on":
                 print(res)
+                http.rooms_dict[room_nr]["thread_active"]=False
+                http.change_temperature(f"input_number.heating_temperature_{room_nr}",21)
+                # Zustand ua f2 ändern
                 break
 
             elif res =="off":
                 print(res)
-                http.change_temperature("input_number.heating_temperature_c005",17)
+                http.change_temperature(f"input_number.heating_temperature_{room_nr}",17)
+                http.rooms_dict[room_nr]["thread_active"]=False
                 break
 
             print("Zeit abgelaufen")
@@ -77,20 +85,25 @@ def check_condition2_thread(room_nr):
     while True:
         current_time = time.time()
         try:
-            res=http.get_movement_sensor(f"binary_sensor.hmip_smi_00091d8994556f_bewegung")
+            res=http.get_movement_sensor(f"binary_sensor.bewegungssensor_{room_nr}")
         except:
             print("Exception")
 
-        if res == "on" and (last_active_time <= current_time - 12):
+        if res == "on" and (last_active_time <= current_time - 60):
             last_active_time = current_time  # Aktualisiere die letzte Aktivität
-            print("Bewegung erkannt, Timer zurückgesetzt.")
-            break
+            print("Bewegung erkannt")
+            
+            
 
-        if  last_check_time <= current_time - 2*30:
+        if  last_check_time <= current_time - 2*60:
             if last_active_time >= last_check_time:
                 print("Bewegung innerhalb der letzten 30 Minuten erkannt.")
+                http.rooms_dict[room_nr]["thread_active"]=False
+                break
             else:
                 print("Keine Bewegung innerhalb der letzten 30 Minuten erkannt.")
+                http.change_temperature(f"input_number.heating_temperature_{room_nr}",17)
+                http.rooms_dict[room_nr]["thread_active"]=False
                 break
                 # Hier kann der Zustand weiter verarbeitet werden
             last_check_time = current_time  # Setze den Überprüfungszeitpunkt neu
@@ -99,17 +112,16 @@ def check_condition2_thread(room_nr):
 
 
 
+
 # Hauptfunktion, die abhängig vom Payload aufruft
 def main(payload):
     print(f"Empfangener Payload: {payload}")
-    match = re.match(r"Fensterkontakt_(c\d+)_", payload)
+    match = re.match(r"Bewegungssensor_([A-Z]\d{3})_", payload)
+    
     if match:
+        print("Raumnummerübertragen")
         raum_nr = match.group(1)  # z. B. "c009"
         start_thread(raum_nr)
-    if payload == "Fensterkontakt_c009_":
-
-        #start_thread()
-        return
     else:
         print("Unbekannter Payload!")
 
@@ -149,7 +161,7 @@ def start_mqtt():
     client.connect(MQTT_BROKER, MQTT_PORT, 60)
     client.loop_forever()
 
-
+ 
 def schedule_task():
     scheduler.run()
     # Plane die nächste Ausführung der main-Funktion in 20 Sekunden
@@ -167,4 +179,9 @@ if __name__ == "__main__":
     schedule_task()
     # Starte die Ausführung des Schedulers
     scheduler.run()
+
+    '''while True:
+        for i in range (1,1000):
+            if i==3000:
+                print(i)'''
 

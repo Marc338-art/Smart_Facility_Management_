@@ -93,32 +93,37 @@ def check_timetable():
     print (current_lesson)
 
     for room_name, room_data in lh.rooms_dict.items():
-        if room_data["state"] == 1 and room_name in belegung and belegung[room_name][current_lesson]==1 :    ## Funktion fragt stundenplan ab und schaut ob die aktuelle stunde Blegt ist oder nicht. falls ja, schaut sie bis der Raum belegt ist und bestimmt einen Endzeitpunkt. Soll
-            room_data["state"] = 2
-            room_name_s=room_name.lower()
-            r_s=room_name_s.replace(".", "_")
-            print(r_s)
-            try:
-                HA_req.change_temperature(f"input_number.heating_temperature_{r_s}",24)
-            except :
-                print("mistake")
-            for index in range(current_lesson + 1, len(belegung[room_name])):
-                h = belegung[room_name][index]
-                if h == 0:
-                    print(f"Raum frei ab Stunde {index }")
-                    try:
-                        stunden_ende = HA_req.LESSON_HOURS[index-2]["ende"]
-                        room_data["end_time"] = stunden_ende
-                        print(f"Ende der Stunde {index }: {stunden_ende.strftime('%H:%M')}")
-                    except IndexError:
-                        print(f"Kein Eintrag in LESSON_HOURS für Index {index}")
-                    break  # Nur den nächsten freien Slot finden
+        try:
+            if room_data["state"] == 1 and room_name in belegung and belegung[room_name][current_lesson]==1 :    ## Funktion fragt stundenplan ab und schaut ob die aktuelle stunde Blegt ist oder nicht. falls ja, schaut sie bis der Raum belegt ist und bestimmt einen Endzeitpunkt. Soll
+                room_data["state"] = 2
+                room_name_s=room_name.lower()
+                r_s=room_name_s.replace(".", "_")
+                print(r_s)
+                try:
+                    HA_req.change_temperature(f"input_number.heating_temperature_{r_s}",24)
+                except :
+                    print("mistake")
+                for index in range(current_lesson + 1, len(belegung[room_name])):
+                    h = belegung[room_name][index]
+                    if h == 0:
+                        print(f"Raum frei ab Stunde {index }")
+                        try:
+                            stunden_ende = HA_req.LESSON_HOURS[index-2]["ende"]
+                            room_data["end_time"] = stunden_ende
+                            print(f"Ende der Stunde {index }: {stunden_ende.strftime('%H:%M')}")
+                        except IndexError:
+                            print(f"Kein Eintrag in LESSON_HOURS für Index {index}")
+                        break  # Nur den nächsten freien Slot finden
+        except:
+            print("aktuell keine sutnde")                   
 
-
-        elif room_data["state"] == 2 and room_name in belegung:
+        if room_data["state"] == 2 and room_name in belegung:
             if room_data["end_time"] and HA_req.get_current_time() > room_data["end_time"]:
                 # Temperatur zurücksetzen
                 print(f"Temperatur in {room_name} wird zurückgesetzt (Zeit ist abgelaufen).")
                 # Hier kannst du z. B. einen Service aufrufen:
-                # set_temperature(room_name, default_temp)
+                try:
+                    HA_req.change_temperature(f"input_number.heating_temperature_{r_s}",17)
+                except :
+                    print("mistake")
     print(lh.rooms_dict)

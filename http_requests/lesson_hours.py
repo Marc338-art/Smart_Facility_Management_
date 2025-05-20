@@ -40,6 +40,13 @@ rooms = [
 ]
  
 default_end_time = time(20, 30) 
-rooms_dict = {name: {"state": 1, "end_time": default_end_time} for name in rooms}
+rooms_dict = {
+    name: {
+        "state": 1,
+        "end_time": default_end_time,
+        "thread_active": False  # Neue Variable für Thread-Zustand
+    }
+    for name in rooms
+}
 rooms = [{"name": name, "state": 1, "end_time": default_end_time} for name in rooms]
 
