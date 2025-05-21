@@ -5,10 +5,17 @@ default_config:
 frontend:
   themes: !include_dir_merge_named themes
 
+
 automation: !include automations.yaml
 automation ow_automation: !include Modell_Haus_Automation.yaml
-script: !include scripts.yaml
+#script: !include scripts.yaml
 scene: !include scenes.yaml
+
+group: !include group.yaml
+
+lovelace:
+  dashboards: !include dashboards.yaml
+
 
 pyscript:
   allow_all_imports: true
@@ -42,13 +49,87 @@ influxdb:
   
   
 input_number:
-  heating_temperature:
-    name: Heiztemperatur
-    initial: 13
+  heating_temperature_c002:
+    name: HeiztemperaturC002
+    initial: 17
+    min: 10
+    max: 30
+    step: 0.5
+  heating_temperature_c003_1:
+    name: HeiztemperaturC003.1
+    initial: 17
+    min: 10
+    max: 30
+    step: 0.5
+  heating_temperature_c004:
+    name: HeiztemperaturC004
+    initial: 17
+    min: 10
+    max: 30
+    step: 0.5
+  heating_temperature_c005:
+    name: HeiztemperaturC005
+    initial: 17
+    min: 10
+    max: 30
+    step: 0.5
+    
+  heating_temperature_c009:
+    name: HeiztemperaturC009
+    initial: 17
     min: 10
     max: 30
     step: 0.5
 
+  
+
 browser_mod:
 
 
+
+script:
+  heating:
+    alias: 'Heizung für 30 Minuten'
+    description: 'Setzt die Temperatur der Modellhaus-Thermostate auf die aktuelle Temperatur des Wandthermostats und hält diese für 30 Minuten'
+    mode: restart  # wichtig, damit neue Aufrufe alte abbrechen
+    fields:
+      temperature:
+        description: 'Zieltemperatur für die Thermostate im Modellhaus'
+        example: '21.5'
+    variables:
+      climate_entities_modellhaus: "{{ expand('group.modellhaus') | map(attribute='entity_id') | list }}"
+    sequence:
+      - repeat:
+          for_each: "{{ climate_entities_modellhaus }}"
+          sequence:
+            - service: climate.set_temperature
+              target:
+                entity_id: "{{ repeat.item }}"
+              data:
+                temperature: "{{ temperature | float }}"
+      - delay: '00:01:00'
+      - repeat:
+          for_each: "{{ climate_entities_modellhaus }}"
+          sequence:
+            - service: climate.set_temperature
+              target:
+                entity_id: "{{ repeat.item }}"
+              data:
+                temperature: "{{ states('input_number.heating_temperature_c005') | float }}"
+
+
+
+
+
+modbus: !include modbus.yaml
+
+template:
+  - sensor:
+      - name: "UMG800 Power Sum"
+        unit_of_measurement: "W"
+        state: >-
+          {% set l1 = states('sensor.umg800_power_l1') | float(0) %}
+          {% set l2 = states('sensor.umg800_power_l2') | float(0) %}
+          {% set l3 = states('sensor.umg800_power_l3') | float(0) %}
+          {{ (l1 + l2 + l3) }}
+          

@@ -29,7 +29,7 @@ HEADERS = {
 
 motion_status = None  # Variable, um den Status des Bewegungssensors zu speichern
 motion_status_received = threading.Event()  # Event, um die Antwort zu synchronisieren
-condition=2
+
 # Beispiel-Funktionen, die je nach Payload ausgeführt werden
 def start_thread(raum_nr):
 
@@ -41,20 +41,20 @@ def start_thread(raum_nr):
         return
     if http.rooms_dict[raum_nr]["state"]==1:  
         
-        abfrage_thread = threading.Thread(target=check_condition1_thread, args=(room_nr,), daemon=True)
+        abfrage_thread1 = threading.Thread(target=check_condition1_thread, args=(room_nr,), daemon=True)
         http.rooms_dict[room_nr]["thread_active"]=True
-        abfrage_thread.start()
+        abfrage_thread1.start()
 
-    elif  http.rooms_dict[raum_nr]["state"]==2:
+    '''elif  http.rooms_dict[raum_nr]["state"]==2:
         abfrage_thread = threading.Thread(target=check_condition2_thread, args=(room_nr,), daemon=True)
         http.rooms_dict[room_nr]["thread_active"]=True
-        abfrage_thread.start()
+        abfrage_thread.start()'''
 
 def check_condition1_thread(room_nr):
     acttime = datetime.now()
-
+    
     print(f"binary_sensor.{room_nr}")
-    while True:
+    while http.rooms_dict[room_nr]["state"]==1:
         # Überprüfe alle 30 Sekunden, ob 12 Minuten vergangen sind
         
         if datetime.now() - timedelta(minutes=10) > acttime:
@@ -96,6 +96,7 @@ def check_condition2_thread(room_nr):
             
 
         if  last_check_time <= current_time - 2*60:
+            room_nr=room_nr.upper()
             if last_active_time >= last_check_time:
                 print("Bewegung innerhalb der letzten 30 Minuten erkannt.")
                 http.rooms_dict[room_nr]["thread_active"]=False
@@ -104,10 +105,10 @@ def check_condition2_thread(room_nr):
                 print("Keine Bewegung innerhalb der letzten 30 Minuten erkannt.")
                 http.change_temperature(f"input_number.heating_temperature_{room_nr}",17)
                 http.rooms_dict[room_nr]["thread_active"]=False
-                # soll auch den Zustand auf 1 setzen
+                http.rooms_dict[room_nr]["state"]=1
                 break
                 # Hier kann der Zustand weiter verarbeitet werden
-            last_check_time = current_time  # Setze den Überprüfungszeitpunkt neu
+            
         print("thread aktiv")
         time.sleep(5)
 
@@ -166,7 +167,7 @@ def start_mqtt():
 def schedule_task():
     scheduler.run()
     # Plane die nächste Ausführung der main-Funktion in 20 Sekunden
-    scheduler.enter(20, 1, schedule_task)  # Wiederhole alle 5 Sekunden
+    scheduler.enter(5*60, 1, schedule_task)  # Wiederhole alle 5 Sekunden
     print(http.rooms)
     http.check_timetable()
 
