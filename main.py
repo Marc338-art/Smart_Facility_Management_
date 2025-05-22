@@ -55,7 +55,7 @@ def check_condition1_thread(room_nr):
     
     print(f"binary_sensor.{room_nr}")
     while http.rooms_dict[room_nr]["state"]==1:
-        # Überprüfe alle 30 Sekunden, ob 12 Minuten vergangen sind
+        
         
         if datetime.now() - timedelta(minutes=10) > acttime:
 
@@ -89,13 +89,13 @@ def check_condition2_thread(room_nr):
         except:
             print("Exception")
 
-        if res == "on" and (last_active_time <= current_time - 60):
+        if res == "on" and (last_active_time <= current_time - 8*60): # nach 8 minuten wird geprüft 
             last_active_time = current_time  # Aktualisiere die letzte Aktivität
             print("Bewegung erkannt")
             
             
 
-        if  last_check_time <= current_time - 2*60:
+        if  last_check_time <= current_time - 30*60:
             room_nr=room_nr.upper()
             if last_active_time >= last_check_time:
                 print("Bewegung innerhalb der letzten 30 Minuten erkannt.")
