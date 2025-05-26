@@ -7,7 +7,7 @@ import sched
 import http_requests as http
 import re
 # MQTT-Konfiguration
-MQTT_BROKER = "172.30.10.212"
+MQTT_BROKER = "172.30.100.216"
 MQTT_PORT = 1883
 MQTT_TOPIC = "ha_main"
 MQTT_USER = "mqtt-user"  # dein Benutzername aus HA
