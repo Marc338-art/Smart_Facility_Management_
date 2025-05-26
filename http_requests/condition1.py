@@ -6,7 +6,7 @@
 from . import HA_req
 from . import lesson_hours as lh
 import main as sat
-import http_requests as http
+#import http_requests as http
 # Globale Variablen
 acttime = 0
 movement_list = []

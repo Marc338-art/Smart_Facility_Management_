@@ -15,9 +15,6 @@ HEADERS = {
 }
 
 
-# JSON-Datei laden
-with open("data/Belegung neu.JSON", "r") as file:       ## load JSON soll eine Funktion werden
-    data_JSON = json.load(file)
 
 # Standardwerte
 conditionFlag = 1  # Default-Zustand ist 1
@@ -58,14 +55,4 @@ def get_movement_sensor(entity_id):
         print(f"Fehler beim Abrufen des Sensorstatus: {response.status_code}")
         return None
 
-def activate_script(script_name):
-    """Aktiviert ein Home Assistant Script."""
-    
-    url = f"{HOME_ASSISTANT_URL}/api/services/script/turn_on"
-    data = {"entity_id": f"script.{script_name}"}
-    try:
-        response = requests.post(url, headers=HEADERS, json=data, timeout=10)
-        response.raise_for_status()  # Wirft eine Exception bei einem HTTP Fehler
-        print(response.status_code, response.text)
-    except requests.exceptions.RequestException as e:
-        print(f"Fehler beim Aktivieren des Scripts: {e}")
+

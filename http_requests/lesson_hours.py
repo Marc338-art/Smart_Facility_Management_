@@ -22,14 +22,6 @@ LESSON_HOURS = [  ## der Stundenplan soll als sperate .py gespeichert werden um 
 
 ## was ist wenn es in der Pause ist(dann soll die Heizun nicht ausgeschaltet werden)
 
-
-## hier sollen alle Räume und Heizvariablen ergänzt werden   (Wahrscheinlich nicht mehr nötig)
-ROOMS1 ={
-    'C005': "input_number.heating_temperature_c005",
-    'C009': "input_number.heating_temperature_c009"
-
-}
-
 rooms = [
     "A023", "Room_02", "rewr", "C002", "C003.1", "C004", "C005", "C009",
     "Room_09", "Room_10", "Room_11", "Room_12", "Room_13", "Room_14", "Room_15",

@@ -4,22 +4,20 @@ import threading
 import time
 from datetime import datetime, timedelta
 import sched
-
 import re
+
 # MQTT-Konfiguration
-MQTT_BROKER = "172.30.10.212"
+MQTT_BROKER = "172.30.100.216"
 MQTT_PORT = 1883
 MQTT_TOPIC = "ha_main"
 MQTT_USER = "mqtt-user"  # dein Benutzername aus HA
 MQTT_PASS = "12345678"  # dein Passwort
 
 
-scheduler = sched.scheduler(time.time, time.sleep)
 
-HOME_ASSISTANT_URL = "http://172.30.10.212:8123"
+HOME_ASSISTANT_URL = "http://172.30.100.216:8123"
 TOKEN = (
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhODU2YTc1MjhmZGQ0NzdmOTEwZDZhMmM0YmM3ZjRmYiIsImlhdCI6MTc0MDEzMjEyMywiZXhwIjoyMDU1NDkyMTIzfQ."
-    "5MjPlnG806hSVln2OUW-LyqP0InyHfPdisiEAd26vTc"
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjMzRjYzM4Y2M4Zjc0Y2VjYTY2ZWE1YTdlYmY5ZTAzMyIsImlhdCI6MTc0ODI0ODU1MiwiZXhwIjoyMDYzNjA4NTUyfQ.76QdyxQOibfPOg-6cFvMSpEWr-nwAl67pzBhzm2zNV8"
 )
 HEADERS = {
     "Authorization": f"Bearer {TOKEN}",
@@ -29,39 +27,44 @@ HEADERS = {
 
 motion_status = None  # Variable, um den Status des Bewegungssensors zu speichern
 motion_status_received = threading.Event()  # Event, um die Antwort zu synchronisieren
-condition=1
+
 # Beispiel-Funktionen, die je nach Payload ausgeführt werden
 def start_thread(raum_nr):
+
     print(f"Thread gestartet für Raum: {raum_nr}")
     room_nr=raum_nr
-    if condition==1:
+    room_nrs=room_nr.lower()
+    if http.rooms_dict[raum_nr]["thread_active"]:
+        print(f"Thread für Raum {raum_nr} ist bereits aktiv.")
+        return
+    if http.rooms_dict[raum_nr]["state"]==1:  
         
-        abfrage_thread = threading.Thread(target=check_condition1_thread, args=(room_nr,), daemon=True)
+        abfrage_thread1 = threading.Thread(target=check_condition1_thread, args=(room_nr,), daemon=True)
+        http.rooms_dict[room_nr]["thread_active"]=True
+        abfrage_thread1.start()
 
-        abfrage_thread.start()
-
-    elif  condition==2:
-        abfrage_thread = threading.Thread(target=check_condition2_thread, args=(room_nr,), daemon=True)
-
-        abfrage_thread.start()
 
 def check_condition1_thread(room_nr):
     acttime = datetime.now()
     
     print(f"binary_sensor.{room_nr}")
-    while True:
-        # Überprüfe alle 30 Sekunden, ob 12 Minuten vergangen sind
+    while http.rooms_dict[room_nr]["state"]==1:
         
-        if datetime.now() - timedelta(seconds=40) > acttime:
+        
+        if datetime.now() - timedelta(minutes=10) > acttime:
 
-            res=get_movement_sensor(f"binary_sensor.hmip_smi_00091d8994556f_bewegung")
+            res=http.get_movement_sensor(f"binary_sensor.bewegungssensor_{room_nr}")
             if res =="on":
                 print(res)
+                http.rooms_dict[room_nr]["thread_active"]=False
+                http.change_temperature(f"input_number.heating_temperature_{room_nr}",21)
+                http.rooms_dict[room_nr]["state"]=2
                 break
 
             elif res =="off":
                 print(res)
-                change_temperature("input_number.heating_temperature_c005",17)
+                http.change_temperature(f"input_number.heating_temperature_{room_nr}",17)
+                http.rooms_dict[room_nr]["thread_active"]=False
                 break
 
             print("Zeit abgelaufen")
@@ -76,39 +79,46 @@ def check_condition2_thread(room_nr):
     while True:
         current_time = time.time()
         try:
-            res=get_movement_sensor(f"binary_sensor.hmip_smi_00091d8994556f_bewegung")
+            res=http.get_movement_sensor(f"binary_sensor.bewegungssensor_{room_nr}")
+
+            if res == "on" and (last_active_time <= current_time - 8*60): # nach 8 minuten wird geprüft 
+                last_active_time = current_time  # Aktualisiere die letzte Aktivität
+                print("Bewegung erkannt")
+
         except:
             print("Exception")
+            
+            
 
-        if res == "on" and (last_active_time <= current_time - 12):
-            last_active_time = current_time  # Aktualisiere die letzte Aktivität
-            print("Bewegung erkannt, Timer zurückgesetzt.")
-            break
-
-        if  last_check_time <= current_time - 2*30:
+        if  last_check_time <= current_time - 30*60:
+            room_nr=room_nr.upper()
             if last_active_time >= last_check_time:
                 print("Bewegung innerhalb der letzten 30 Minuten erkannt.")
+                http.rooms_dict[room_nr]["thread_active"]=False
+                break
             else:
                 print("Keine Bewegung innerhalb der letzten 30 Minuten erkannt.")
+                http.change_temperature(f"input_number.heating_temperature_{room_nr}",17)
+                http.rooms_dict[room_nr]["thread_active"]=False
+                http.rooms_dict[room_nr]["state"]=1
                 break
                 # Hier kann der Zustand weiter verarbeitet werden
-            last_check_time = current_time  # Setze den Überprüfungszeitpunkt neu
+            
         print("thread aktiv")
         time.sleep(5)
+
 
 
 
 # Hauptfunktion, die abhängig vom Payload aufruft
 def main(payload):
     print(f"Empfangener Payload: {payload}")
-    match = re.match(r"Fensterkontakt_(c\d+)_", payload)
+    match = re.match(r"Bewegungssensor_([A-Z]\d{3})_", payload)
+    
     if match:
+        print("Raumnummerübertragen")
         raum_nr = match.group(1)  # z. B. "c009"
         start_thread(raum_nr)
-    if payload == "Fensterkontakt_c009_":
-
-        #start_thread()
-        return
     else:
         print("Unbekannter Payload!")
 
@@ -147,43 +157,3 @@ def start_mqtt():
 
     client.connect(MQTT_BROKER, MQTT_PORT, 60)
     client.loop_forever()
-
-
-def get_movement_sensor(entity_id):
-    """Überprüft den Zustand des Bewegungssensors."""
-    url = f"{HOME_ASSISTANT_URL}/api/states/{entity_id}"
-    try:
-        response = requests.get(url, headers=HEADERS, timeout=10)
-        response.raise_for_status()  # Wirft eine Exception bei einem HTTP Fehler
-        return response.json()['state']  # 'on' oder 'off'
-    except requests.exceptions.RequestException as e:
-        print(f"Fehler beim Abrufen des Sensorstatus: {response.status_code}")
-        return None
-
-def schedule_task():
-    scheduler.run()
-    # Plane die nächste Ausführung der main-Funktion in 20 Sekunden
-    scheduler.enter(20, 1, schedule_task)  # Wiederhole alle 5 Sekunden
-    print("Hier muss dannn die check function rein")
-
-def change_temperature(entity_id, value=17):
-    """Ändert die Temperatur eines Home Assistant Entities."""
-    url = f"{HOME_ASSISTANT_URL}/api/services/input_number/set_value"
-    data = {"entity_id": entity_id, "value": value}
-    response = requests.post(url, json=data, headers=HEADERS)
-    
-    if response.status_code == 200:
-        print(f"{entity_id} Temperatur erfolgreich gesetzt!")
-    else:
-        print(f"Fehler {response.status_code}: {response.text}")
-
-
-if __name__ == "__main__":
-    mqtt_thread = threading.Thread(target=start_mqtt, daemon=True)
-    mqtt_thread.start()
-
-    # Starte den Scheduler in einem eigenen Thread
-    schedule_task()
-    # Starte die Ausführung des Schedulers
-    scheduler.run()
-
