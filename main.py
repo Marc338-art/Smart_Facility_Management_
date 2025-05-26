@@ -16,7 +16,7 @@ MQTT_PASS = "12345678"  # dein Passwort
 
 scheduler = sched.scheduler(time.time, time.sleep)
 
-HOME_ASSISTANT_URL = "http://172.30.10.212:8123"
+HOME_ASSISTANT_URL = "http://172.30.100.216:8123"
 TOKEN = (
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhODU2YTc1MjhmZGQ0NzdmOTEwZDZhMmM0YmM3ZjRmYiIsImlhdCI6MTc0MDEzMjEyMywiZXhwIjoyMDU1NDkyMTIzfQ."
     "5MjPlnG806hSVln2OUW-LyqP0InyHfPdisiEAd26vTc"
