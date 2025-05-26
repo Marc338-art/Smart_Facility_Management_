@@ -5,7 +5,7 @@ import time
 from datetime import datetime, timedelta
 import sched
 import re
-
+from.lesson_hours import e
 # MQTT-Konfiguration
 MQTT_BROKER = "172.30.100.216"
 MQTT_PORT = 1883
