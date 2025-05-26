@@ -86,12 +86,13 @@ def check_condition2_thread(room_nr):
         current_time = time.time()
         try:
             res=http.get_movement_sensor(f"binary_sensor.bewegungssensor_{room_nr}")
-        except:
-            print("Exception")
 
         if res == "on" and (last_active_time <= current_time - 8*60): # nach 8 minuten wird geprüft 
             last_active_time = current_time  # Aktualisiere die letzte Aktivität
             print("Bewegung erkannt")
+
+        except:
+            print("Exception")
             
             
 
