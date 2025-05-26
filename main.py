@@ -1,10 +1,7 @@
 
-import paho.mqtt.client as mqtt
 import threading
 import time
 import sched
-
-
 import http_requests.MQTT_communication as mqtt_com
 import http_requests.condition1 as req
 

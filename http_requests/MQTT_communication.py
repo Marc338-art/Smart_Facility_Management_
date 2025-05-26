@@ -3,9 +3,11 @@ import paho.mqtt.client as mqtt
 import threading
 import time
 from datetime import datetime, timedelta
+from .lesson_hours import *
+from .HA_req import *
 import sched
 import re
-from.lesson_hours import e
+
 # MQTT-Konfiguration
 MQTT_BROKER = "172.30.100.216"
 MQTT_PORT = 1883
@@ -34,13 +36,13 @@ def start_thread(raum_nr):
     print(f"Thread gestartet für Raum: {raum_nr}")
     room_nr=raum_nr
     room_nrs=room_nr.lower()
-    if http.rooms_dict[raum_nr]["thread_active"]:
+    if rooms_dict[raum_nr]["thread_active"]:
         print(f"Thread für Raum {raum_nr} ist bereits aktiv.")
         return
-    if http.rooms_dict[raum_nr]["state"]==1:  
+    if rooms_dict[raum_nr]["state"]==1:  
         
         abfrage_thread1 = threading.Thread(target=check_condition1_thread, args=(room_nr,), daemon=True)
-        http.rooms_dict[room_nr]["thread_active"]=True
+        rooms_dict[room_nr]["thread_active"]=True
         abfrage_thread1.start()
 
 
@@ -48,23 +50,24 @@ def check_condition1_thread(room_nr):
     acttime = datetime.now()
     
     print(f"binary_sensor.{room_nr}")
-    while http.rooms_dict[room_nr]["state"]==1:
+    while rooms_dict[room_nr]["state"]==1:
         
         
         if datetime.now() - timedelta(minutes=10) > acttime:
 
-            res=http.get_movement_sensor(f"binary_sensor.bewegungssensor_{room_nr}")
+            res=get_movement_sensor(f"binary_sensor.bewegungssensor_{room_nr}")
             if res =="on":
                 print(res)
-                http.rooms_dict[room_nr]["thread_active"]=False
-                http.change_temperature(f"input_number.heating_temperature_{room_nr}",21)
-                http.rooms_dict[room_nr]["state"]=2
+                rooms_dict[room_nr]["thread_active"]=False
+                change_temperature(f"input_number.heating_temperature_{room_nr}",21)
+                rooms_dict[room_nr]["state"]=2
+                # hier soll noch das Ende der aktuellen Stunde rein, da dann aufgehört werden soll zu heizen
                 break
 
             elif res =="off":
                 print(res)
-                http.change_temperature(f"input_number.heating_temperature_{room_nr}",17)
-                http.rooms_dict[room_nr]["thread_active"]=False
+                change_temperature(f"input_number.heating_temperature_{room_nr}",17)
+                rooms_dict[room_nr]["thread_active"]=False
                 break
 
             print("Zeit abgelaufen")
@@ -79,7 +82,7 @@ def check_condition2_thread(room_nr):
     while True:
         current_time = time.time()
         try:
-            res=http.get_movement_sensor(f"binary_sensor.bewegungssensor_{room_nr}")
+            res=get_movement_sensor(f"binary_sensor.bewegungssensor_{room_nr}")
 
             if res == "on" and (last_active_time <= current_time - 8*60): # nach 8 minuten wird geprüft 
                 last_active_time = current_time  # Aktualisiere die letzte Aktivität
