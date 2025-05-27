@@ -2,7 +2,7 @@
 # Dieser Code steuert die Heizungsregelung basierend auf Stundenplan- und Bewegungssensordaten.
 # Wenn eine Unterrichtsstunde erkannt wird, wird die Temperatur angepasst.
 # Falls der Raum nicht belegt ist, aber Bewegung erkannt wird, kann temporär geheizt werden.
-from config import USER, PASSWORD, BASE_URL, THESECRET
+from config import USERNAME, PASSWORD, BASE_URL, THESECRET
 from . import HA_req
 from . import lesson_hours as lh
 import main as sat
@@ -17,11 +17,11 @@ move_act = "off"
 
 def check_timetable():
     print("BASE_URL:", repr(BASE_URL))
-    print("USER:", repr(USER))
+    print("USERNAME:", repr(USERNAME))
     print("PASSWORD:", repr(PASSWORD))
 # ✅ 1. KeyPhrase holen
     url = BASE_URL + "RESTHeatRaumStundenplan.php?Raum=C0%&Datum=2025-04-02"
-    response = HA_req.requests.get(url, auth=(USER, PASSWORD), verify=False)
+    response = HA_req.requests.get(url, auth=(USERNAME, PASSWORD), verify=False)
     current_lesson =HA_req.get_current_lesson() # gibt nur einen Wert wenn keine pause ist. (einbauen das geprüft wird falls None) ## es soll aber immer 30 Minuten vorher geschaut werden, welche Stunde in 30 Minuten ist
     data = response.json()
     belegung = data.get("Belegung", {})
