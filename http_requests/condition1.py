@@ -34,7 +34,7 @@ def check_timetable():
                 raum_name=room_name.lower() # doppelt sich mit der lower funktion unten
                 room_data["state"] = 2
                 abfrage_thread2 = sat.threading.Thread(target=sat.check_condition2_thread, args=(raum_name,), daemon=True)
-                http.rooms_dict[room_name]["thread_active"] = True
+                rooms_dict[room_name]["thread_active"] = True
                 abfrage_thread2.start()
               
                 # hier soll thread 1 gestoppt werden, wenn er noch aktiv ist
