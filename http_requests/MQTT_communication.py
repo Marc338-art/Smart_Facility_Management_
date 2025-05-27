@@ -7,20 +7,12 @@ from .lesson_hours import *
 from .HA_req import *
 import sched
 import re
-from config import MQTT_USER, MQTT_PASS, MQTT_TOKEN
-
-# MQTT-Konfiguration
-MQTT_BROKER = "172.30.100.216"
-MQTT_PORT = 1883
-MQTT_TOPIC = "ha_main"
+from config import MQTT_USER, MQTT_PASS, TOKEN, HOME_ASSISTANT_URL, MQTT_BROKER, MQTT_PORT, MQTT_TOPIC
 
 
-
-
-HOME_ASSISTANT_URL = "http://172.30.100.216:8123"
 
 HEADERS = {
-    "Authorization": f"Bearer {MQTT_TOKEN}",
+    "Authorization": f"Bearer {TOKEN}",
     "Content-Type": "application/json"
 }
 
