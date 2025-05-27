@@ -7,9 +7,9 @@ from .lesson_hours import *
 from .HA_req import *
 import sched
 import re
-from config import MQTT_USER, MQTT_PASS, TOKEN, HOME_ASSISTANT_URL, MQTT_BROKER, MQTT_PORT, MQTT_TOPIC
+from config import MQTT_USER, MQTT_PASS, TOKEN, HOME_ASSISTANT_URL, MQTT_BROKER, MQTT_TOPIC
 
-
+MQTT_PORT = 1883
 
 HEADERS = {
     "Authorization": f"Bearer {TOKEN}",
