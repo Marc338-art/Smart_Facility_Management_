@@ -6,6 +6,8 @@ from config import USER, PASSWORD, BASE_URL, THESECRET
 from . import HA_req
 from . import lesson_hours as lh
 import main as sat
+import threading as thr
+from .MQTT_communication import *
 #import http_requests as http
 # Globale Variablen
 acttime = 0
@@ -24,21 +26,18 @@ def check_timetable():
     print (current_lesson)
 
     for room_name, room_data in lh.rooms_dict.items():
-        
-        room_name_s=room_name.lower()
-        r_s=room_name_s.replace(".", "_")
         try:
-            
             if room_data["state"] == 1 and room_name in belegung and belegung[room_name][current_lesson]==1 :    ## Funktion fragt stundenplan ab und schaut ob die aktuelle stunde Blegt ist oder nicht. falls ja, schaut sie bis der Raum belegt ist und bestimmt einen Endzeitpunkt. Soll
                 raum_name=room_name.lower() # doppelt sich mit der lower funktion unten
                 room_data["state"] = 2
-                abfrage_thread2 = sat.threading.Thread(target=sat.check_condition2_thread, args=(raum_name,), daemon=True)
-                http.rooms_dict[room_name]["thread_active"] = True
+                abfrage_thread2 = thr.Thread(target=check_condition2_thread, args=(raum_name,), daemon=True)
+                rooms_dict[room_name]["thread_active"] = True
                 abfrage_thread2.start()
               
                 # hier soll thread 1 gestoppt werden, wenn er noch aktiv ist
 
-              
+                room_name_s=room_name.lower()
+                r_s=room_name_s.replace(".", "_")
                 print(r_s)
                 try:
                     HA_req.change_temperature(f"input_number.heating_temperature_{r_s}",24)
@@ -62,9 +61,10 @@ def check_timetable():
             if room_data["end_time"] and HA_req.get_current_time() > room_data["end_time"]:
                 # Temperatur zurücksetzen
                 print(f"Temperatur in {room_name} wird zurückgesetzt (Zeit ist abgelaufen).")
-                # Hier kannst du z. B. einen Service aufrufen:
+                # Hier kannst du z. B. einen Service aufrufen:
                 try:
                     HA_req.change_temperature(f"input_number.heating_temperature_{r_s}",17)
                 except :
                     print("mistake")
     print(lh.rooms_dict)
+
