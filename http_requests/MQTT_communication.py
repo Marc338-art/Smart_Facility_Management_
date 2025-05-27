@@ -1,7 +1,7 @@
 import requests
 import paho.mqtt.client as mqtt
 import threading
-import time
+import time as t
 from datetime import datetime, timedelta
 from .lesson_hours import *
 from .HA_req import *
@@ -72,15 +72,15 @@ def check_condition1_thread(room_nr):
 
             print("Zeit abgelaufen")
             
-        time.sleep(5)
+        t.sleep(5)
         print("Thread läuft noch")
 
 def check_condition2_thread(room_nr):
     last_active_time = 0
-    last_check_time = time.time()  
+    last_check_time = t.time()  
     
     while True:
-        current_time = time.time()
+        current_time = t.time()
         try:
             res=get_movement_sensor(f"binary_sensor.bewegungssensor_{room_nr}")
 
@@ -108,7 +108,7 @@ def check_condition2_thread(room_nr):
                 # Hier kann der Zustand weiter verarbeitet werden
             
         print("thread aktiv")
-        time.sleep(5)
+        t.sleep(5)
 
 
 
