@@ -12,7 +12,7 @@ MQTT_PORT = os.getenv("MQTT_PORT")
 MQTT_TOPIC = os.getenv("MQTT_TOPIC")
 
 # Stundenplan Abfrage
-USER = os.getenv("USER")
+USERNAME = os.getenv("USERNAME")
 PASSWORD = os.getenv("PASSWORD")
 THESECRET = os.getenv("THESECRET")
 BASE_URL = os.getenv("BASE_URL")
