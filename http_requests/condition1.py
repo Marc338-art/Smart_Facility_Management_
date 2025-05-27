@@ -6,6 +6,7 @@
 from . import HA_req
 from . import lesson_hours as lh
 import main as sat
+import threading as thr
 #import http_requests as http
 # Globale Variablen
 acttime = 0
@@ -33,7 +34,7 @@ def check_timetable():
             if room_data["state"] == 1 and room_name in belegung and belegung[room_name][current_lesson]==1 :    ## Funktion fragt stundenplan ab und schaut ob die aktuelle stunde Blegt ist oder nicht. falls ja, schaut sie bis der Raum belegt ist und bestimmt einen Endzeitpunkt. Soll
                 raum_name=room_name.lower() # doppelt sich mit der lower funktion unten
                 room_data["state"] = 2
-                abfrage_thread2 = sat.threading.Thread(target=sat.check_condition2_thread, args=(raum_name,), daemon=True)
+                abfrage_thread2 = thr.threading.Thread(target=thr.check_condition2_thread, args=(raum_name,), daemon=True)
                 rooms_dict[room_name]["thread_active"] = True
                 abfrage_thread2.start()
               
