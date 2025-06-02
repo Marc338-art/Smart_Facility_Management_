@@ -11,8 +11,8 @@ def schedule_task():
     # Plane die nächste Ausführung der main-Funktion in 20 Sekunden
     scheduler.enter(5*60, 1, schedule_task)  # Wiederhole alle 5 Sekunden
     
-    req.check_timetable()
-
+    #req.check_timetable()
+    print("Scheduler Example")
 
 
 if __name__ == "__main__":
