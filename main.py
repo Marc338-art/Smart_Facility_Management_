@@ -15,13 +15,13 @@ def schedule_task():
 
 
 if __name__ == "__main__":
-    mqtt_thread = threading.Thread(target=mqtt_com.start_mqtt, daemon=True)
-    mqtt_thread.start()
-
+    #mqtt_thread = threading.Thread(target=mqtt_com.start_mqtt, daemon=True)
+    #mqtt_thread.start()
+    start_mqtt()
     # Starte den Scheduler in einem eigenen Thread
-    schedule_task()
+    #schedule_task()
     # Starte die Ausführung des Schedulers
-    scheduler.run()
+    #scheduler.run()
 
 
 
