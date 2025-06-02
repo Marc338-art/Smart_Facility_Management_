@@ -5,6 +5,7 @@ import time as t
 from datetime import datetime, timedelta
 from .lesson_hours import *
 from .HA_req import *
+from .condition1 import *
 import sched
 import re
 from config import MQTT_USER, MQTT_PASS, TOKEN, HOME_ASSISTANT_URL, MQTT_BROKER, MQTT_TOPIC
@@ -134,13 +135,12 @@ def on_message(client, userdata, msg):
     print(f"MQTT Nachricht empfangen: {msg.topic} → {payload}")
     
     # Wenn die Antwort auf den Bewegungssensor empfangen wird
-    if msg.topic == "home/response/motion_status":
-        motion_status = payload  # Den erhaltenen Status speichern
-        print(f"Status des Bewegungssensors empfangen: {motion_status}")
-        motion_status_received.set()  # Signalisiere, dass die Antwort angekommen ist
+    if msg.topic == "ha_main":
+        main(payload)
+        #motion_status_received.set()  # Signalisiere, dass die Antwort angekommen ist
     elif msg.topic== MQTT_TOPIC2:
-        # hier soll die timetable funktion rein
-    main(payload)
+        check_timetable()
+    
 
 # Startet den MQTT-Client und verbindet sich mit dem Broker
 def start_mqtt():
