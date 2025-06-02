@@ -179,10 +179,11 @@ def check_timetable():
     print("BASE_URL:", repr(BASE_URL))
     print("USERNAME:", repr(USERNAME))
     print("PASSWORD:", repr(PASSWORD))
+    base_url1 = "https://www.Virtueller-Stundenplan.de/Reservierung/"
 # ✅ 1. KeyPhrase holen
     today = datetime.today().strftime("%Y-%m-%d")
     print("Heutiges Datum:", today)
-    url = BASE_URL + f"RESTHeatRaumStundenplan.php?Raum=C%&Datum={today}"
+    url = base_url1 + f"RESTHeatRaumStundenplan.php?Raum=C%&Datum={today}"
     #url = BASE_URL + "RESTHeatRaumStundenplan.php?Raum=C0%&Datum=2025-04-02"
     response = HA_req.requests.get(url, auth=(USERNAME, PASSWORD), verify=False)
     current_lesson =HA_req.get_current_lesson() # gibt nur einen Wert wenn keine pause ist. (einbauen das geprüft wird falls None) ## es soll aber immer 30 Minuten vorher geschaut werden, welche Stunde in 30 Minuten ist
