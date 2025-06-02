@@ -87,13 +87,13 @@ def check_condition2_thread(room_nr):
             room_nr=room_nr.upper()
             if last_active_time >= last_check_time:
                 print("Bewegung innerhalb der letzten 30 Minuten erkannt.")
-                http.rooms_dict[room_nr]["thread_active"]=False
+                rooms_dict[room_nr]["thread_active"]=False
                 break
             else:
                 print("Keine Bewegung innerhalb der letzten 30 Minuten erkannt.")
-                http.change_temperature(f"input_number.heating_temperature_{room_nr}",17)
-                http.rooms_dict[room_nr]["thread_active"]=False
-                http.rooms_dict[room_nr]["state"]=1
+                change_temperature(f"input_number.heating_temperature_{room_nr}",17)
+                rooms_dict[room_nr]["thread_active"]=False
+                rooms_dict[room_nr]["state"]=1
                 break
                 # Hier kann der Zustand weiter verarbeitet werden
             
