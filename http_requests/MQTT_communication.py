@@ -5,7 +5,7 @@ import time as t
 from datetime import datetime, timedelta
 from .lesson_hours import *
 from .HA_req import *
-from .condition1 import *
+from . impport condition1 as c1
 import sched
 import re
 from config import MQTT_USER, MQTT_PASS, TOKEN, HOME_ASSISTANT_URL, MQTT_BROKER, MQTT_TOPIC
@@ -139,7 +139,7 @@ def on_message(client, userdata, msg):
         main(payload)
         #motion_status_received.set()  # Signalisiere, dass die Antwort angekommen ist
     elif msg.topic== MQTT_TOPIC2:
-        ##
+        c1.check_timetable()
         
     
 
