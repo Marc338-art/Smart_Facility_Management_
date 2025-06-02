@@ -235,5 +235,5 @@ def check_timetable():
                     change_temperature(f"input_number.heating_temperature_{r_s}",17)
                 except :
                     print("mistake")
-    print(lh.rooms_dict)
+    
 
