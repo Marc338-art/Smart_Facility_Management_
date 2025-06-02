@@ -11,6 +11,7 @@ from config import MQTT_USER, MQTT_PASS, TOKEN, HOME_ASSISTANT_URL, MQTT_BROKER,
 
 MQTT_PORT = 1883
 
+MQTT_TOPIC2="stundenplan_belegung"
 HEADERS = {
     "Authorization": f"Bearer {TOKEN}",
     "Content-Type": "application/json"
@@ -121,6 +122,7 @@ def on_connect(client, userdata, flags, rc):
     if rc == 0:
         # Abonniere beide relevanten Topics
         client.subscribe(MQTT_TOPIC)  # Abonniere ha_main Topic
+        client.subscribe(MQTT_TOPIC2)  # Abonniere ha_main Topic
     
     else:
         print("Fehler beim Verbinden – Code:", rc)
@@ -136,7 +138,8 @@ def on_message(client, userdata, msg):
         motion_status = payload  # Den erhaltenen Status speichern
         print(f"Status des Bewegungssensors empfangen: {motion_status}")
         motion_status_received.set()  # Signalisiere, dass die Antwort angekommen ist
-
+    elif msg.topic== MQTT_TOPIC2:
+        # hier soll die timetable funktion rein
     main(payload)
 
 # Startet den MQTT-Client und verbindet sich mit dem Broker
