@@ -207,7 +207,7 @@ def check_timetable():
                 r_s=room_name_s.replace(".", "_")
                 print(r_s)
                 try:
-                    HA_req.change_temperature(f"input_number.heating_temperature_{r_s}",24)
+                    change_temperature(f"input_number.heating_temperature_{r_s}",24)
                     print(r_s)
                 except :
                     print("mistake")
