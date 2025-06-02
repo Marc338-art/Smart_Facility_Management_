@@ -23,12 +23,13 @@ LESSON_HOURS = [  ## der Stundenplan soll als sperate .py gespeichert werden um 
 ## was ist wenn es in der Pause ist(dann soll die Heizun nicht ausgeschaltet werden)
 
 rooms = [
-    "A023", "Room_02", "rewr", "C002", "C003.1", "C004", "C005", "C009",
-    "Room_09", "Room_10", "Room_11", "Room_12", "Room_13", "Room_14", "Room_15",
-    "Room_16", "Room_17", "Room_18", "Room_19", "Room_20", "Room_21", "Room_22",
-    "Room_23", "Room_24", "Room_25", "Room_26", "Room_27", "Room_28", "Room_29",
-    "Room_30", "Room_31", "Room_32", "Room_33", "Room_34", "Room_35", "Room_36",
-    "Room_37", "Room_38", "Room_39", "Room_40"
+    "C001","C002","C003.1", "C003.2", "C003.3", "C003.4", "C003.5", "C004", "C005", "C006.1",
+    "C006.2", "C006.3", "C007", "C008", "C009", "C011", "C012",
+    "C013", "C014", "C015", "C016", "C017", "C018", "C101",
+    "C102", "C103", "C104", "C105", "C106", "C107", "C108","C109.1","C109.2","C110","C111",
+    "C112", "C113", "C114", "C115", "C116", "C117", "C117","C201","C202","C203","C204","C205",
+    "C206", "C207", "C208", "C209","C210","C211","C212","C213","C214","C215","C216","C217",
+    "C218","C219","C220","C221"
 ]
  
 default_end_time = time(20, 30) 
