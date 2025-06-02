@@ -47,7 +47,7 @@ def check_timetable():
                 print(r_s)
                 try:
                     HA_req.change_temperature(f"input_number.heating_temperature_{r_s}",24)
-                    print("Halloooo")
+                    print(r_s)
                 except :
                     print("mistake")
                 for index in range(current_lesson + 1, len(belegung[room_name])):
