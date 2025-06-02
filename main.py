@@ -17,7 +17,8 @@ def schedule_task():
 if __name__ == "__main__":
     #mqtt_thread = threading.Thread(target=mqtt_com.start_mqtt, daemon=True)
     #mqtt_thread.start()
-    start_mqtt()
+    
+    mqtt_com.start_mqtt()
     # Starte den Scheduler in einem eigenen Thread
     #schedule_task()
     # Starte die Ausführung des Schedulers
