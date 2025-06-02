@@ -216,7 +216,7 @@ def check_timetable():
                     if h == 0:
                         print(f"Raum frei ab Stunde {index }")
                         try:
-                            stunden_ende = HA_req.LESSON_HOURS[index-2]["ende"]
+                            stunden_ende = LESSON_HOURS[index-2]["ende"]
                             room_data["end_time"] = stunden_ende
                             print(f"Ende der Stunde {index }: {stunden_ende.strftime('%H:%M')}")
                         except IndexError:
@@ -226,13 +226,13 @@ def check_timetable():
             print("aktuell keine sutnde")                   
 
         if room_data["state"] == 2 and room_name in belegung:
-            if room_data["end_time"] and HA_req.get_current_time() > room_data["end_time"]:
+            if room_data["end_time"] and get_current_time() > room_data["end_time"]:
                 # Temperatur zurücksetzen
                 print(f"Temperatur in {room_name} wird zurückgesetzt (Zeit ist abgelaufen).")
                 # Hier kannst du z. B. einen Service aufrufen:
                 room_data["state"] = 2
                 try:
-                    HA_req.change_temperature(f"input_number.heating_temperature_{r_s}",17)
+                    change_temperature(f"input_number.heating_temperature_{r_s}",17)
                 except :
                     print("mistake")
     print(lh.rooms_dict)
