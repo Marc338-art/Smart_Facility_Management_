@@ -21,6 +21,11 @@ import threading as thr
 MQTT_PORT = 1883
 
 MQTT_TOPIC2="stundenplan_belegung"
+
+HOME_ASSISTANT_URL = "http://172.30.100.216:8123"
+TOKEN = (
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjMzRjYzM4Y2M4Zjc0Y2VjYTY2ZWE1YTdlYmY5ZTAzMyIsImlhdCI6MTc0ODI0ODU1MiwiZXhwIjoyMDYzNjA4NTUyfQ.76QdyxQOibfPOg-6cFvMSpEWr-nwAl67pzBhzm2zNV8"
+)
 HEADERS = {
     "Authorization": f"Bearer {TOKEN}",
     "Content-Type": "application/json"
