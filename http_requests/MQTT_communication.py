@@ -152,7 +152,7 @@ def on_message(client, userdata, msg):
         main(payload)
         #motion_status_received.set()  # Signalisiere, dass die Antwort angekommen ist
     elif msg.topic== MQTT_TOPIC2:
-        c1.check_timetable()
+        check_timetable()
         
     
 
