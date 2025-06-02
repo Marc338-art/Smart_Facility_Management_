@@ -31,7 +31,7 @@ def check_timetable():
     belegung = data.get("Belegung", {})
     print (current_lesson)
 
-    for room_name, room_data in lh.rooms_dict.items():
+    for room_name, room_data in rooms_dict.items():
         try:
             if room_data["state"] == 1 and room_name in belegung and belegung[room_name][current_lesson]==1 :    ## Funktion fragt stundenplan ab und schaut ob die aktuelle stunde Blegt ist oder nicht. falls ja, schaut sie bis der Raum belegt ist und bestimmt einen Endzeitpunkt. Soll
                 raum_name=room_name.lower() # doppelt sich mit der lower funktion unten
