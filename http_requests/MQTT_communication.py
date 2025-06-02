@@ -228,6 +228,7 @@ def check_timetable():
                 # Temperatur zurücksetzen
                 print(f"Temperatur in {room_name} wird zurückgesetzt (Zeit ist abgelaufen).")
                 # Hier kannst du z. B. einen Service aufrufen:
+                room_data["state"] = 2
                 try:
                     HA_req.change_temperature(f"input_number.heating_temperature_{r_s}",17)
                 except :
