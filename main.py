@@ -1,4 +1,3 @@
-
 import threading
 import time
 import sched
@@ -23,5 +22,7 @@ if __name__ == "__main__":
     schedule_task()
     # Starte die Ausführung des Schedulers
     scheduler.run()
+
+
 
 
