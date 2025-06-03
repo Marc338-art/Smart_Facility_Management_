@@ -209,7 +209,7 @@ def check_timetable():
                 room_name_s=room_name.lower()
                 r_s=room_name_s.replace(".", "_")
                 try:
-                    change_temperature(f"input_number.heating_temperature_{r_s}",24)
+                    change_temperature(f"input_number.heating_temperature_{raum_name}",24)
                     print(r_s)
                 except :
                     print("mistake")
@@ -241,5 +241,3 @@ def check_timetable():
                 except :
                     print("mistake")
     
-
-
