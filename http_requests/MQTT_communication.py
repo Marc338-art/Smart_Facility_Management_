@@ -41,6 +41,7 @@ def start_thread(raum_nr):
     print(f"Thread gestartet für Raum: {raum_nr}")
     room_nr=raum_nr
     room_nrs=room_nr.lower()
+    room_nrs=room_nr.replace(".", "_")
     if rooms_dict[raum_nr]["thread_active"]:
         print(f"Thread für Raum {raum_nr} ist bereits aktiv.")
         return
@@ -197,6 +198,7 @@ def check_timetable():
         try:
             if room_data["state"] == 1 and room_name in belegung and belegung[room_name][current_lesson]==1 :    ## Funktion fragt stundenplan ab und schaut ob die aktuelle stunde Blegt ist oder nicht. falls ja, schaut sie bis der Raum belegt ist und bestimmt einen Endzeitpunkt. Soll
                 raum_name=room_name.lower() # doppelt sich mit der lower funktion unten
+                raum_name=room_name.replace(".", "_")
                 room_data["state"] = 2
                 abfrage_thread2 = thr.Thread(target=check_condition2_thread, args=(raum_name,), daemon=True)
                 rooms_dict[room_name]["thread_active"] = True
