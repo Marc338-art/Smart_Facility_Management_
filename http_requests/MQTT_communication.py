@@ -40,6 +40,8 @@ def start_thread(raum_nr):
 
     print(f"Thread gestartet für Raum: {raum_nr}")
     room_nr=raum_nr
+    room_nrs=room_nr.lower()
+    room_nrs=room_nr.replace(".", "_")
     if rooms_dict[raum_nr]["thread_active"]:
         print(f"Thread für Raum {raum_nr} ist bereits aktiv.")
         return
@@ -52,26 +54,25 @@ def start_thread(raum_nr):
 
 def check_condition1_thread(room_nr):
     acttime = datetime.now()
-    room_name_s=room_name.lower()
-    r_s=room_name_s.replace(".", "_")
+    
     print(f"binary_sensor.{room_nr}")
     while rooms_dict[room_nr]["state"]==1:
         
         
         if datetime.now() - timedelta(minutes=10) > acttime:
 
-            res=get_movement_sensor(f"binary_sensor.bewegungssensor_{r_s}")
+            res=get_movement_sensor(f"binary_sensor.bewegungssensor_{room_nr}")
             if res =="on":
                 print(res)
                 rooms_dict[room_nr]["thread_active"]=False
-                change_temperature(f"input_number.heating_temperature_{r_s}",21)
+                change_temperature(f"input_number.heating_temperature_{room_nr}",21)
                 rooms_dict[room_nr]["state"]=2
                 # hier soll noch das Ende der aktuellen Stunde rein, da dann aufgehört werden soll zu heizen
                 break
 
             elif res =="off":
                 print(res)
-                change_temperature(f"input_number.heating_temperature_{r_s}",17)
+                change_temperature(f"input_number.heating_temperature_{room_nr}",17)
                 rooms_dict[room_nr]["thread_active"]=False
                 break
 
@@ -82,14 +83,12 @@ def check_condition1_thread(room_nr):
 
 def check_condition2_thread(room_nr):
     last_active_time = 0
-    last_check_time = t.time()
-    room_name_s=room_nr.lower()
-    r_s=room_name_s.replace(".", "_") # lieber auch als argument beim start übergeben
+    last_check_time = t.time()  
     
     while True:
         current_time = t.time()
         try:
-            res=get_movement_sensor(f"binary_sensor.bewegungssensor_{r_s}")
+            res=get_movement_sensor(f"binary_sensor.bewegungssensor_{room_nr}")
 
             if res == "on" and (last_active_time <= current_time - 8*60): # nach 8 minuten wird geprüft 
                 last_active_time = current_time  # Aktualisiere die letzte Aktivität
@@ -100,15 +99,15 @@ def check_condition2_thread(room_nr):
             
             
 
-        if  last_check_time <= current_time - 2*60:
-            
+        if  last_check_time <= current_time - 30*60:
+            room_nr=room_nr.upper()
             if last_active_time >= last_check_time:
                 print("Bewegung innerhalb der letzten 30 Minuten erkannt.")
                 rooms_dict[room_nr]["thread_active"]=False
                 break
             else:
                 print("Keine Bewegung innerhalb der letzten 30 Minuten erkannt.")
-                change_temperature(f"input_number.heating_temperature_{r_s}",17)
+                change_temperature(f"input_number.heating_temperature_{room_nr}",17)
                 rooms_dict[room_nr]["thread_active"]=False
                 rooms_dict[room_nr]["state"]=1
                 break
@@ -198,7 +197,8 @@ def check_timetable():
     for room_name, room_data in rooms_dict.items():
         try:
             if room_data["state"] == 1 and room_name in belegung and belegung[room_name][current_lesson]==1 :    ## Funktion fragt stundenplan ab und schaut ob die aktuelle stunde Blegt ist oder nicht. falls ja, schaut sie bis der Raum belegt ist und bestimmt einen Endzeitpunkt. Soll
-                
+                raum_name=room_name.lower() # doppelt sich mit der lower funktion unten
+                raum_name=room_name.replace(".", "_")
                 room_data["state"] = 2
                 abfrage_thread2 = thr.Thread(target=check_condition2_thread, args=(raum_name,), daemon=True)
                 rooms_dict[room_name]["thread_active"] = True
@@ -241,4 +241,5 @@ def check_timetable():
                 except :
                     print("mistake")
     
+
 
