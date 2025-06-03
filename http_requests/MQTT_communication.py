@@ -99,7 +99,7 @@ def check_condition2_thread(room_nr):
             
             
 
-        if  last_check_time <= current_time - 30*60:
+        if  last_check_time <= current_time - 2*60:
             room_nr=room_nr.upper()
             if last_active_time >= last_check_time:
                 print("Bewegung innerhalb der letzten 30 Minuten erkannt.")
