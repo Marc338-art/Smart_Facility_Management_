@@ -68,9 +68,20 @@ def check_condition1_thread(room_nr):
                 change_temperature(f"input_number.heating_temperature_{room_nr}",21)
                 rooms_dict[room_nr]["state"]=2
                 act=get_current_lesson()
-                rooms_dict[room_nr]["end_time"] = LESSON_HOURS[act+1]["ende"]
-                print(rooms_dict)
-                            
+                if act==None:
+                    try:
+                        act=act+60*20
+                        rooms_dict[room_nr]["end_time"] = LESSON_HOURS[act+1]["ende"] ## Was tun
+                        print(rooms_dict)
+                    except:
+                        print("Klappt nicht")
+                else:
+                    try:
+                        
+                        rooms_dict[room_nr]["end_time"] = LESSON_HOURS[act+1]["ende"] ## Was tun
+                        print(rooms_dict)
+                    except:
+                        print("Klappt nicht")         
                 # hier soll noch das Ende der aktuellen Stunde rein, da dann aufgehört werden soll zu heizen
                 break
 
