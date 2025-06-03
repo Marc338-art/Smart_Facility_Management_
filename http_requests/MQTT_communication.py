@@ -44,7 +44,7 @@ def start_thread(raum_nr):
     if rooms_dict[raum_nr]["thread_active"]:
         print(f"Thread für Raum {raum_nr} ist bereits aktiv.")
         return
-    if rooms_dict[raum_nr]["state"]==1:  
+    elif rooms_dict[raum_nr]["state"]==1:  
         
         abfrage_thread1 = threading.Thread(target=check_condition1_thread, args=(room_nr,), daemon=True)
         rooms_dict[room_nr]["thread_active"]=True
