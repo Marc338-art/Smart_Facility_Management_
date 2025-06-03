@@ -206,7 +206,6 @@ def check_timetable():
 
                 room_name_s=room_name.lower()
                 r_s=room_name_s.replace(".", "_")
-                print(r_s)
                 try:
                     change_temperature(f"input_number.heating_temperature_{r_s}",24)
                     print(r_s)
