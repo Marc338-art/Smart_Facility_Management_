@@ -59,7 +59,7 @@ def check_condition1_thread(room_nr):
     while rooms_dict[room_nr]["state"]==1:
         
         
-        if datetime.now() - timedelta(minutes=2) > acttime:
+        if datetime.now() - timedelta(minutes=10) > acttime:
 
             res=get_movement_sensor(f"binary_sensor.bewegungssensor_{room_nr}")
             if res =="on":
@@ -67,6 +67,9 @@ def check_condition1_thread(room_nr):
                 rooms_dict[room_nr]["thread_active"]=False
                 change_temperature(f"input_number.heating_temperature_{room_nr}",21)
                 rooms_dict[room_nr]["state"]=2
+                act=get_current_lesson()
+                rooms_dict[room_nr]["end_time"] = LESSON_HOURS[act]["ende"]
+                            
                 # hier soll noch das Ende der aktuellen Stunde rein, da dann aufgehört werden soll zu heizen
                 break
 
