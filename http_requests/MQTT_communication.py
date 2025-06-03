@@ -71,14 +71,14 @@ def check_condition1_thread(room_nr):
                 if act==None:
                     try:
                         act=act+60*20
-                        rooms_dict[room_nr]["end_time"] = LESSON_HOURS[act+1]["ende"] ## Was tun
+                        rooms_dict[room_nr]["end_time"] = LESSON_HOURS[act]["ende"] ## Was tun
                         print(rooms_dict)
                     except:
                         print("Klappt nicht")
                 else:
                     try:
                         
-                        rooms_dict[room_nr]["end_time"] = LESSON_HOURS[act+1]["ende"] ## Was tun
+                        rooms_dict[room_nr]["end_time"] = LESSON_HOURS[act]["ende"] ## Was tun
                         print(rooms_dict)
                     except:
                         print("Klappt nicht")         
