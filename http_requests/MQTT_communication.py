@@ -229,6 +229,9 @@ def check_timetable():
             if room_data["end_time"] and get_current_time() > room_data["end_time"]:
                 # Temperatur zurücksetzen
                 print(f"Temperatur in {room_name} wird zurückgesetzt (Zeit ist abgelaufen).")
+                room_name_s=room_name.lower()
+                r_s=room_name_s.replace(".", "_")
+
                 # Hier kannst du z. B. einen Service aufrufen:
                 room_data["state"] = 1
                 try:
