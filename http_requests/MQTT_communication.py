@@ -69,6 +69,7 @@ def check_condition1_thread(room_nr):
                 rooms_dict[room_nr]["state"]=2
                 act=get_current_lesson()
                 rooms_dict[room_nr]["end_time"] = LESSON_HOURS[act]["ende"]
+                print(rooms_dict[room_nr]["end_time"])
                             
                 # hier soll noch das Ende der aktuellen Stunde rein, da dann aufgehört werden soll zu heizen
                 break
