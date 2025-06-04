@@ -59,27 +59,23 @@ def check_condition1_thread(room_nr):
     while rooms_dict[room_nr]["state"]==1:
         
         
-        if datetime.now() - timedelta(minutes=1) > acttime:
+        if datetime.now() - timedelta(minutes=8) > acttime:
 
             res=get_movement_sensor(f"binary_sensor.bewegungssensor_{room_nr}")
             if res =="on":
                 print(res)
                 rooms_dict[room_nr]["thread_active"]=False
-                change_temperature(f"input_number.heating_temperature_{room_nr}",21)
-                rooms_dict[room_nr]["state"]=2
                 act=get_current_lesson()
                 if act==None:
                     try:
-                        act=act+60*20
-                        rooms_dict[room_nr]["end_time"] = LESSON_HOURS[act]["ende"] ## Was tun
-                        print(rooms_dict)
+                        break ## wenn aktuell keine stunden ist, soll die Bewegung ignoriert werden
                     except:
                         print("Klappt nicht")
                 else:
                     try:
-                        
-                        #rooms_dict[room_nr]["end_time"] = LESSON_HOURS[act]["ende"] ## Was tun
-                        rooms_dict[room_nr]["end_time"]=time(8, 47, 0)
+                        change_temperature(f"input_number.heating_temperature_{room_nr}",21)
+                        rooms_dict[room_nr]["state"]=2
+                        rooms_dict[room_nr]["end_time"] = LESSON_HOURS[act]["ende"] 
                         print(rooms_dict)
                     except:
                         print("Klappt nicht")         
@@ -115,7 +111,7 @@ def check_condition2_thread(room_nr):
             
             
 
-        if  last_check_time <= current_time - 2*60:
+        if  last_check_time <= current_time - 30*60:
             room_nr=room_nr.upper()
             if last_active_time >= last_check_time:
                 print("Bewegung innerhalb der letzten 30 Minuten erkannt.")
@@ -207,7 +203,6 @@ def check_timetable():
     data = response.json()
     print(data)
     belegung = data.get("Belegung", {})
-    belegung["C005"]=[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
     print (current_lesson)
 
     for room_name, room_data in rooms_dict.items():
