@@ -27,9 +27,9 @@
 
   variables:
     climate_entities_c009: "{{ expand('group.c009') | map(attribute='entity_id') | list }}"
-    climate_entities_modellhaus: "{{ expand('group.modellhaus') | map(attribute='entity_id') | list }}"
+    climate_entities_c005: "{{ expand('group.c005') | map(attribute='entity_id') | list }}"
     temperatur_c009: "{{ states('input_number.heating_temperature_c009') | float }}"
-    temperatur_modellhaus: "{{ states('input_number.heating_temperature_c005') | float }}"
+    temperatur_c005: "{{ states('input_number.heating_temperature_c005') | float }}"
 
   action:
   - choose:
@@ -57,13 +57,13 @@
             state: "off"
         sequence:
           - repeat:
-              for_each: "{{ climate_entities_modellhaus }}"
+              for_each: "{{ climate_entities_c005 }}"
               sequence:
                 - service: climate.set_temperature
                   target:
                     entity_id: "{{ repeat.item }}"
                   data:
-                    temperature: "{{ temperatur_modellhaus }}"
+                    temperature: "{{ temperatur_c005 }}"
 
 
   
@@ -113,7 +113,7 @@
       then:
         - service: climate.set_temperature
           target:
-            entity_id: "{{ state_attr('group.modellhaus', 'entity_id') }}"
+            entity_id: "{{ state_attr('group.c005', 'entity_id') }}"
           data:
             temperature: 17
     - if:
@@ -191,7 +191,7 @@
 
   variables:
     temperature_manual: "{{ states('input_number.manuelle_heiztemperatur') | float }}"
-    climate_entities: "{{ expand('group.alle_heizthermostate') | map(attribute='entity_id') | list }}"
+    climate_entities: "{{ expand('group.cgebaeude') | map(attribute='entity_id') | list }}"
 
   action:
     - repeat:
@@ -203,6 +203,7 @@
             data:
               temperature: "{{ temperature_manual }}"
   mode: restart
+
 
 
 
