@@ -21,7 +21,7 @@ HEADERS = {
 conditionFlag = 1  # Default-Zustand ist 1
 next_lesson = None
 
-def get_current_time(delta_t):
+def get_current_time(delta_t=0):
     """Gibt die aktuelle Uhrzeit zurück."""
     now = datetime.now()
     new_time = now + timedelta(minutes=delta_t)
