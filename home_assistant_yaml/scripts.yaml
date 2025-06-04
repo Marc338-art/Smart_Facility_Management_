@@ -1,32 +1,31 @@
-script:
-  heating:
-    alias: 'Heizung für 90 Minuten - C005'
-    description: 'Setzt die Temperatur C005-Thermostate auf die aktuelle Temperatur des Wandthermostats und hält diese für 90 Minuten'
-    mode: restart  # wichtig, damit neue Aufrufe alte abbrechen
-    fields:
-      temperature:
-        description: 'Zieltemperatur für die Thermostate in C005'
-        example: '21.5'
-    variables:
-      climate_entities_modellhaus: "{{ expand('group.modellhaus') | map(attribute='entity_id') | list }}"
-    sequence:
-      - repeat:
-          for_each: "{{ climate_entities_modellhaus }}"
-          sequence:
-            - service: climate.set_temperature
-              target:
-                entity_id: "{{ repeat.item }}"
-              data:
-                temperature: "{{ temperature | float }}"
-      - delay: '00:90:00'
-      - repeat:
-          for_each: "{{ climate_entities_modellhaus }}"
-          sequence:
-            - service: climate.set_temperature
-              target:
-                entity_id: "{{ repeat.item }}"
-              data:
-                temperature: "{{ states('input_number.heating_temperature_c005') | float }}"
+heating:
+  alias: 'Heizung für 90 Minuten - C005'
+  description: 'Setzt die Temperatur C005-Thermostate auf die aktuelle Temperatur des Wandthermostats und hält diese für 90 Minuten'
+  mode: restart  # wichtig, damit neue Aufrufe alte abbrechen
+  fields:
+    temperature:
+      description: 'Zieltemperatur für die Thermostate in C005'
+      example: '21.5'
+  variables:
+    climate_entities_modellhaus: "{{ expand('group.modellhaus') | map(attribute='entity_id') | list }}"
+  sequence:
+    - repeat:
+        for_each: "{{ climate_entities_modellhaus }}"
+        sequence:
+          - service: climate.set_temperature
+            target:
+              entity_id: "{{ repeat.item }}"
+            data:
+              temperature: "{{ temperature | float }}"
+    - delay: '00:90:00'
+    - repeat:
+        for_each: "{{ climate_entities_modellhaus }}"
+        sequence:
+          - service: climate.set_temperature
+            target:
+              entity_id: "{{ repeat.item }}"
+            data:
+              temperature: "{{ states('input_number.heating_temperature_c005') | float }}"
 
 heizung_manuell_an:
   alias: "Heizung manuell an und andere aus"
