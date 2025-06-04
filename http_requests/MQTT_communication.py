@@ -238,7 +238,7 @@ def check_timetable():
 
         #if room_data["state"] == 2 and room_name in belegung: ## hier kann nich nach belegung abgefragt werden, da state 2 auch durch thread sein kann
         if room_data["state"] == 2:
-            if get_current_time() > room_data["end_time"]:
+            if get_current_time(30) > room_data["end_time"]:
                 # Temperatur zurücksetzen
                 print(f"Temperatur in {room_name} wird zurückgesetzt (Zeit ist abgelaufen).")
                 room_name_s=room_name.lower()
