@@ -28,7 +28,7 @@ def get_current_time():
 
 def get_current_lesson(delta_t=0):
     """Gibt die aktuelle Unterrichtsstunde zurück."""
-    current = get_current_time()+timedelta(minutes=delta_t)
+    current = datetime.now()+timedelta(minutes=delta_t)
     for stunde in LESSON_HOURS:
         if stunde["start"] <= current < stunde["ende"]:
             return stunde["stunde"]
