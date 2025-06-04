@@ -14,9 +14,6 @@ HEADERS = {
     "Content-Type": "application/json"
 }
 
-
-
-
 # Standardwerte
 conditionFlag = 1  # Default-Zustand ist 1
 next_lesson = None
@@ -38,7 +35,6 @@ def get_current_lesson(delta_t=0):
 def change_temperature(entity_id, value=17):
     """Ändert die Temperatur eines Home Assistant Entities."""
     url = f"{HOME_ASSISTANT_URL}/api/services/input_number/set_value"
-    print(TOKEN)
     data = {"entity_id": entity_id, "value": value}
     response = requests.post(url, json=data, headers=HEADERS)
     
