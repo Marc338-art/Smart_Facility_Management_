@@ -6,8 +6,15 @@ c009:
     - climate.heizungsthermostat_c009b
     - climate.heizungsthermostat_c009c
  
-modellhaus:
-  name: Modellhaus
+c005:
+  name: C005
   entities:
     - climate.heizungsthermostat_c005a
     - climate.heizungsthermostat_c005b
+
+cgebaeude:
+  name: C-Gebäude
+  entities:
+    - group.c009
+    - group.c005
+
