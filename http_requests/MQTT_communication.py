@@ -22,9 +22,6 @@ MQTT_PORT = 1883
 
 MQTT_TOPIC2="stundenplan_belegung"
 
-
-
-
 motion_status = None  # Variable, um den Status des Bewegungssensors zu speichern
 motion_status_received = threading.Event()  # Event, um die Antwort zu synchronisieren
 
