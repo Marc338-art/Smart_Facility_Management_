@@ -1,7 +1,7 @@
 import requests
 import json
 import time as t
-from datetime import time, timedelta, datetime
+from datetime import time
 from .lesson_hours import *
 from config import HOME_ASSISTANT_URL, TOKEN
 
@@ -28,11 +28,12 @@ def get_current_time():
 
 def get_current_lesson(delta_t=0):
     """Gibt die aktuelle Unterrichtsstunde zurück."""
-    current = datetime.now()+timedelta(minutes=delta_t)
+    current = get_current_time()+timedelta(minutes=delta_t)
     for stunde in LESSON_HOURS:
         if stunde["start"] <= current < stunde["ende"]:
             return stunde["stunde"]
     return None
+
 
 def change_temperature(entity_id, value=17):
     """Ändert die Temperatur eines Home Assistant Entities."""
