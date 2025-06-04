@@ -7,7 +7,7 @@ from .lesson_hours import *
 from config import HOME_ASSISTANT_URL, TOKEN
 
 HOME_ASSISTANT_URL = "http://172.30.100.216:8123"
-print(TOKEN)
+
 
 HEADERS = {
     "Authorization": f"Bearer {TOKEN}",
@@ -38,6 +38,7 @@ def get_current_lesson(delta_t=0):
 def change_temperature(entity_id, value=17):
     """Ändert die Temperatur eines Home Assistant Entities."""
     url = f"{HOME_ASSISTANT_URL}/api/services/input_number/set_value"
+    print(TOKEN)
     data = {"entity_id": entity_id, "value": value}
     response = requests.post(url, json=data, headers=HEADERS)
     
