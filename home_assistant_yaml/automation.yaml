@@ -19,8 +19,8 @@
   mode: single
 
 
-
-- alias: Stundenplan Steuerung
+- id: "heizung_stundenplan"
+  alias: "Stundenplan Steuerung"
   trigger:
     - platform: time_pattern
       seconds: "/10"
@@ -127,8 +127,6 @@
           data:
             temperature: 17
 
-    
-
   mode: single
 
 
@@ -177,7 +175,7 @@
 
 
 - id: "heizung_manuell"
-  alias: "Heizung: Manuelle Steuerung aktiv"
+  alias: "Manuelle Steuerung der Heizung über Dashboard"
   trigger:
     - platform: state
       entity_id: input_number.manuelle_heiztemperatur
@@ -205,6 +203,42 @@
   mode: restart
 
 
+- id: heizung_zeitgesteuert
+  alias: "Heizung zeitgesteuert"
+  trigger:
+    # Trigger alle 15 Minuten, um die Temperatur zu aktualisieren
+    - platform: time_pattern
+      minutes: "/15"
+    # Trigger zu festen Uhrzeiten, um sofort umzuschalten
+    - platform: time
+      at: "07:00:00"
+    - platform: time
+      at: "15:30:00"
+
+  condition: []
+
+  variables:
+    current_time: "{{ now().time() }}"
+    start_time: "07:00:00"
+    end_time: "15:30:00"
+    target_temp: >
+      {% if start_time <= current_time|string <= end_time %}
+        21
+      {% else %}
+        17
+      {% endif %}
+    climate_entities: "{{ expand('group.cgebaeude') | map(attribute='entity_id') | list }}"
+
+  action:
+    - repeat:
+        for_each: "{{ climate_entities }}"
+        sequence:
+          - service: climate.set_temperature
+            target:
+              entity_id: "{{ repeat.item }}"
+            data:
+              temperature: "{{ target_temp | float }}"
+  mode: single
 
 
 
