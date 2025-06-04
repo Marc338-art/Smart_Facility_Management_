@@ -18,7 +18,7 @@ http:
 
 
 automation: !include automations.yaml
-#script: !include scripts.yaml
+script: !include scripts.yaml
 scene: !include scenes.yaml
 
 group: !include group.yaml
@@ -422,43 +422,5 @@ input_select:
       - zeitgesteuert
       - manuell
     initial: stundenplan
-
-
-
-
-
-script:
-  heating:
-    alias: 'Heizung für 30 Minuten'
-    description: 'Setzt die Temperatur der Modellhaus-Thermostate auf die aktuelle Temperatur des Wandthermostats und hält diese für 30 Minuten'
-    mode: restart  # wichtig, damit neue Aufrufe alte abbrechen
-    fields:
-      temperature:
-        description: 'Zieltemperatur für die Thermostate im Modellhaus'
-        example: '21.5'
-    variables:
-      climate_entities_modellhaus: "{{ expand('group.modellhaus') | map(attribute='entity_id') | list }}"
-    sequence:
-      - repeat:
-          for_each: "{{ climate_entities_modellhaus }}"
-          sequence:
-            - service: climate.set_temperature
-              target:
-                entity_id: "{{ repeat.item }}"
-              data:
-                temperature: "{{ temperature | float }}"
-      - delay: '00:90:00'
-      - repeat:
-          for_each: "{{ climate_entities_modellhaus }}"
-          sequence:
-            - service: climate.set_temperature
-              target:
-                entity_id: "{{ repeat.item }}"
-              data:
-                temperature: "{{ states('input_number.heating_temperature_c005') | float }}"
-
-
-
-
 
 
