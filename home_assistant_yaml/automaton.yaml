@@ -133,8 +133,8 @@
 
 
 - id: 'mqtt_stundenankuendigung_fixed_times'
-  alias: MQTT 30 Min vor Stunde (feste Zeiten)
-  trigger:
+  alias: MQTT 30 Min vor Stunde (feste Zeiten)  # immer eine 30min vor Stunden beginn
+  trigger: 
     - platform: time
       at: "07:00:00"
     - platform: time
@@ -169,7 +169,8 @@
   action:
     - service: mqtt.publish
       data:
-        topic: "schule/stunde_vorankuendigung"
+        topic: "stundenplan_belegung"
         payload: >
-          Stunde beginnt in 30 Minuten – aktuelle Zeit: {{ now().strftime('%H:%M') }}
+          Stunde beginnt in 30 Minuten 
         retain: false
+  mode: single
