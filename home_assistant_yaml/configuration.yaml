@@ -447,7 +447,7 @@ script:
                 entity_id: "{{ repeat.item }}"
               data:
                 temperature: "{{ temperature | float }}"
-      - delay: '00:01:00'
+      - delay: '00:90:00'
       - repeat:
           for_each: "{{ climate_entities_modellhaus }}"
           sequence:
