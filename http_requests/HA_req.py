@@ -2,6 +2,7 @@ import requests
 import json
 import time as t
 from datetime import time
+from datetime import datetime, timedelta, time
 from .lesson_hours import *
 from config import HOME_ASSISTANT_URL, TOKEN
 
@@ -19,14 +20,15 @@ HEADERS = {
 conditionFlag = 1  # Default-Zustand ist 1
 next_lesson = None
 
-def get_current_time():
+def get_current_time(delta_t):
     """Gibt die aktuelle Uhrzeit zurück."""
-    now = t.localtime()
-    return time(now.tm_hour, now.tm_min)
+    now = datetime.now()
+    new_time = now + timedelta(minutes=delta_t)
+    return time(new_time.hour, new_time.minute)
 
 def get_current_lesson(delta_t=0):
     """Gibt die aktuelle Unterrichtsstunde zurück."""
-    current = get_current_time()
+    current = get_current_time(delta_t)
     for stunde in LESSON_HOURS:
         if stunde["start"] <= current < stunde["ende"]:
             return stunde["stunde"]
