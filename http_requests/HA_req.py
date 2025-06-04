@@ -7,6 +7,9 @@ from .lesson_hours import *
 from config import HOME_ASSISTANT_URL, TOKEN
 
 HOME_ASSISTANT_URL = "http://172.30.100.216:8123"
+TOKEN = (
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI3ZGMyMDkwMmQ1Mzg0ODE3OTgyZTMyMzc0MDJhNDUzOSIsImlhdCI6MTc0ODkzMDk3OCwiZXhwIjoyMDY0MjkwOTc4fQ.5arpkQnXBm_678tJHsLPzBTLnCe5RT-ZkK2AGwGYtzo"
+)
 
 HEADERS = {
     "Authorization": f"Bearer {TOKEN}",
