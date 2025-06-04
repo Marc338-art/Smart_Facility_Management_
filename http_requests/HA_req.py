@@ -23,12 +23,14 @@ next_lesson = None
 
 def get_current_time():
     """Gibt die aktuelle Uhrzeit zurück."""
-    now = t.localtime()
-    return time(now.tm_hour, now.tm_min)
+    now = datetime.now()
+    new_time = now + timedelta(minutes=delta_t)
+    return time(new_time.hour, new_time.minute)
+
 
 def get_current_lesson(delta_t=0):
     """Gibt die aktuelle Unterrichtsstunde zurück."""
-    current = get_current_time()
+    current = get_current_time(delta_d)
     for stunde in LESSON_HOURS:
         if stunde["start"] <= current < stunde["ende"]:
             return stunde["stunde"]
