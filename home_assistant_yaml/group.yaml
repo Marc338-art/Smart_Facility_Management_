@@ -1,0 +1,13 @@
+# group.yaml
+c009:
+  name: C009
+  entities:
+    - climate.heizungsthermostat_c009a
+    - climate.heizungsthermostat_c009b
+    - climate.heizungsthermostat_c009c
+ 
+modellhaus:
+  name: Modellhaus
+  entities:
+    - climate.heizungsthermostat_c005a
+    - climate.heizungsthermostat_c005b
