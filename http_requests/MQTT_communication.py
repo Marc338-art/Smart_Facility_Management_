@@ -191,6 +191,7 @@ def check_timetable():
     data = response.json()
     print(data)
     belegung = data.get("Belegung", {})
+    belegung["C005"]=[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
     print (current_lesson)
 
     for room_name, room_data in rooms_dict.items():
