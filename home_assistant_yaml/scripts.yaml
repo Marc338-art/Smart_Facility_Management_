@@ -40,3 +40,29 @@ heizung_manuell_an:
           - automation.heizung_stundenplan
           - automation.heizung_zeitgesteuert
   mode: single
+
+heizung_stundenplan_an:
+  alias: "Heizung Stundenplan an und andere aus"
+  sequence:
+    - service: automation.turn_on
+      target:
+        entity_id: automation.heizung_stundenplan
+    - service: automation.turn_off
+      target:
+        entity_id:
+          - automation.heizung_manuell
+          - automation.heizung_zeitgesteuert
+  mode: single
+
+heizung_zeitgesteuert_an:
+  alias: "Heizung zeitgesteuert an und andere aus"
+  sequence:
+    - service: automation.turn_on
+      target:
+        entity_id: automation.heizung_zeitgesteuert
+    - service: automation.turn_off
+      target:
+        entity_id:
+          - automation.heizung_manuell
+          - automation.heizung_stundenplan
+  mode: single
