@@ -414,6 +414,14 @@ input_number:
     max: 30
     step: 0.5
 
+input_select:
+  heating_mode:
+    name: Heizungsmodus
+    options:
+      - stundenplan
+      - zeitgesteuert
+      - manuell
+    initial: stundenplan
 
 
 
