@@ -27,3 +27,16 @@ script:
                 entity_id: "{{ repeat.item }}"
               data:
                 temperature: "{{ states('input_number.heating_temperature_c005') | float }}"
+
+heizung_manuell_an:
+  alias: "Heizung manuell an und andere aus"
+  sequence:
+    - service: automation.turn_on
+      target:
+        entity_id: automation.heizung_manuell
+    - service: automation.turn_off
+      target:
+        entity_id:
+          - automation.heizung_stundenplan
+          - automation.heizung_zeitgesteuert
+  mode: single
