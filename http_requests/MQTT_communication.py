@@ -8,7 +8,7 @@ from .HA_req import *
 from . import condition1 as c1
 import sched
 import re
-from config import MQTT_USER, MQTT_PASS,MQTT_BROKER, MQTT_TOPIC, THESECRET,USERNAME, PASSWORD, BASE_URL
+from config import MQTT_USER, MQTT_PASS,MQTT_BROKER, MQTT_TOPIC, THESECRET,USERNAME, PASSWORD
 
 
 from . import HA_req
@@ -182,9 +182,7 @@ move_act = "off"
 
 
 def check_timetable():
-    print("BASE_URL:", repr(BASE_URL))
-    print("USERNAME:", repr(USERNAME))
-    print("PASSWORD:", repr(PASSWORD))
+    
     base_url1 = "https://www.Virtueller-Stundenplan.de/Reservierung/"
 # ✅ 1. KeyPhrase holen
     today = datetime.today().strftime("%Y-%m-%d")
