@@ -78,7 +78,8 @@ def check_condition1_thread(room_nr):
                 else:
                     try:
                         
-                        rooms_dict[room_nr]["end_time"] = LESSON_HOURS[act]["ende"] ## Was tun
+                        #rooms_dict[room_nr]["end_time"] = LESSON_HOURS[act]["ende"] ## Was tun
+                        rooms_dict[room_nr]["end_time"]=time(8, 17, 0)
                         print(rooms_dict)
                     except:
                         print("Klappt nicht")         
