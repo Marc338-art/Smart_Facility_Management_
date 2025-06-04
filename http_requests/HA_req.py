@@ -1,7 +1,7 @@
 import requests
 import json
 import time as t
-from datetime import time, timedelta
+from datetime import time, timedelta, datetime
 from .lesson_hours import *
 from config import HOME_ASSISTANT_URL, TOKEN
 
