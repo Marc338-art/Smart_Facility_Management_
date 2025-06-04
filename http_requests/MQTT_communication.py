@@ -243,7 +243,7 @@ def check_timetable():
             print("aktuell keine sutnde")                   
 
         if room_data["state"] == 2 and room_name in belegung:
-            if room_data["end_time"] and get_current_time() > room_data["end_time"]:
+            if get_current_time() > room_data["end_time"]:
                 # Temperatur zurücksetzen
                 print(f"Temperatur in {room_name} wird zurückgesetzt (Zeit ist abgelaufen).")
                 room_name_s=room_name.lower()
