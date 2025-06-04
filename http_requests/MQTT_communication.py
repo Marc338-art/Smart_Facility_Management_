@@ -8,7 +8,7 @@ from .HA_req import *
 from . import condition1 as c1
 import sched
 import re
-from config import MQTT_USER, MQTT_PASS, TOKEN, HOME_ASSISTANT_URL, MQTT_BROKER, MQTT_TOPIC, THESECRET,USERNAME, PASSWORD, BASE_URL
+from config import MQTT_USER, MQTT_PASS,MQTT_BROKER, MQTT_TOPIC, THESECRET,USERNAME, PASSWORD, BASE_URL
 
 
 from . import HA_req
@@ -22,12 +22,7 @@ MQTT_PORT = 1883
 
 MQTT_TOPIC2="stundenplan_belegung"
 
-HOME_ASSISTANT_URL = "http://172.30.100.216:8123"
 
-HEADERS = {
-    "Authorization": f"Bearer {TOKEN}",
-    "Content-Type": "application/json"
-}
 
 
 motion_status = None  # Variable, um den Status des Bewegungssensors zu speichern
