@@ -20,7 +20,7 @@
 
 
 
-- alias: Temperatur auf alle Geräte in Gruppen C009 und Modellhaus anwenden
+- alias: Stundenplan Steuerung
   trigger:
     - platform: time_pattern
       seconds: "/10"
