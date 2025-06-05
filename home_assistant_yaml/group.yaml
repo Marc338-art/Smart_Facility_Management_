@@ -1,4 +1,5 @@
-c009:
+# group.yaml
+heizung_c009:
   name: C009
   entities:
     - climate.heizungsthermostat_c009a
@@ -6,7 +7,7 @@ c009:
     - climate.heizungsthermostat_c009c
     - climate.heizungsthermostat_c009d 
 
-c005:
+heizung_c005:
   name: C005
   entities:
     - climate.heizungsthermostat_c005a
@@ -15,6 +16,15 @@ c005:
 cgebaeude:
   name: C-Gebäude
   entities:
-    - group.c009
-    - group.c005
+    - group.heizung_c009
+    - group.heizung_c005
 
+fensterkontakt_C009:
+  name: Fensterkontakte C009
+  entities:
+    - binary_sensor.fensterkontakt_c009
+
+fensterkontakt_C005:
+  name: Fensterkontakte C005
+  entities:
+    - binary_sensor.fensterkontakt_c005
