@@ -175,7 +175,7 @@
 
 
 - id: "heizung_manuell"
-  alias: "Manuelle Steuerung der Heizung über Dashboard"
+  alias: "Heizung Manuell"
   trigger:
     - platform: state
       entity_id: input_number.manuelle_heiztemperatur
@@ -208,7 +208,7 @@
   trigger:
     # Trigger alle 15 Minuten, um die Temperatur zu aktualisieren
     - platform: time_pattern
-      minutes: "/15"
+      minutes: "/1"
     # Trigger zu festen Uhrzeiten, um sofort umzuschalten
     - platform: time
       at: "07:00:00"
@@ -240,6 +240,3 @@
               temperature: "{{ target_temp | float }}"
   mode: single
 
-
-
-  
