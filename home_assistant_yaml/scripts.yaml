@@ -38,6 +38,11 @@ heizung_manuell_an:
         entity_id:
           - automation.stundenplan_steuerung
           - automation.heizung_zeitgesteuert
+    - service: input_select.select_option
+      target:
+        entity_id: input_select.heiz_modus
+      data:
+        option: "manuell"
   mode: single
 
 heizung_stundenplan_an:
@@ -51,6 +56,11 @@ heizung_stundenplan_an:
         entity_id:
           - automation.heizung_manuell
           - automation.heizung_zeitgesteuert
+    - service: input_select.select_option
+      target:
+        entity_id: input_select.heiz_modus
+      data:
+        option: "stundenplan"
   mode: single
 
 heizung_zeitgesteuert_an:
@@ -64,4 +74,10 @@ heizung_zeitgesteuert_an:
         entity_id:
           - automation.heizung_manuell
           - automation.stundenplan_steuerung
+    - service: input_select.select_option
+      target:
+        entity_id: input_select.heiz_modus
+      data:
+        option: "zeitgesteuert"
   mode: single
+
