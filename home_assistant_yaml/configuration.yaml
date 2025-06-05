@@ -389,12 +389,6 @@ input_number:
     min: 10
     max: 30
     step: 0.5
-  heating_temperature_c218:
-    name: HeiztemperaturC218
-    initial: 17
-    min: 10
-    max: 30
-    step: 0.5
   heating_temperature_c219:
     name: HeiztemperaturC219
     initial: 17
@@ -418,3 +412,29 @@ input_number:
     min: 15
     max: 30
     step: 0.5
+ 
+sensor:
+  - platform: template
+    sensors:
+      wunschtemperatur_zeitgesteuert:
+        friendly_name: "Wunschtemperatur Zeitgesteuert"
+        unit_of_measurement: "°C"
+        value_template: >
+          {% set current_time = now().strftime('%H:%M:%S') %}
+          {% if '07:00:00' <= current_time <= '15:30:00' %}
+            21
+          {% else %}
+            17
+          {% endif %}
+
+input_select:
+  heiz_modus:
+    name: Heizmodus
+    options:
+      - zeitgesteuert
+      - stundenplan
+      - manuell
+    initial: stundenplan
+
+
+
