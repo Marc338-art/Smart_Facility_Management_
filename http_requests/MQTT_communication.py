@@ -223,8 +223,8 @@ def check_timetable():
     url = base_url1 + f"RESTHeatRaumStundenplan.php?Raum=C%&Datum={today}"
 
     # Abruf der Belegungsdaten mit Authentifizierung
-    response = HA_req.requests.get(url, auth=(USERNAME, PASSWORD), verify=False)
-    current_lesson = HA_req.get_current_lesson(30)  # Prüfung mit 30 Minuten Vorlaufzeit
+    response = requests.get(url, auth=(USERNAME, PASSWORD), verify=False)
+    current_lesson = get_current_lesson(30)  # Prüfung mit 30 Minuten Vorlaufzeit
     data = response.json()
     print("Stundenplandaten:", data)
 
