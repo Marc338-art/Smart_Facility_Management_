@@ -95,7 +95,7 @@ def check_condition2_thread(room_nr):
     Überwacht Bewegung über längeren Zeitraum (30 Minuten).
     - Setzt die Temperatur zurück, wenn keine Bewegung in den letzten 30 Minuten erkannt wurde.
     """
-    t.sleep(1 * 60)  # 10 Minuten warten
+    t.sleep(30 * 60)  # 10 Minuten warten
     last_active_time = 0
     last_check_time = t.time()
 
