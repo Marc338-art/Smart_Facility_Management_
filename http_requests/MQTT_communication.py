@@ -5,7 +5,6 @@ import time as t
 from datetime import datetime, timedelta
 from .lesson_hours import *
 from .HA_req import *
-from . import condition1 as c1
 import sched
 import re
 from config import MQTT_USER, MQTT_PASS,MQTT_BROKER, MQTT_TOPIC, THESECRET,USERNAME, PASSWORD
@@ -241,4 +240,5 @@ def check_timetable():
                     change_temperature(f"input_number.heating_temperature_{r_s}",17)
                 except :
                     print("mistake")
+    print(rooms_dict) # nur zum debuggen
     
