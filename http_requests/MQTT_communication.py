@@ -229,6 +229,7 @@ def check_timetable():
     print("Stundenplandaten:", data)
 
     belegung = data.get("Belegung", {})
+    belegung["C005"]=[1,1,1,1,1,1,1,1,1,1,1,1,1]
 
     print("Aktuelle Stunde:", current_lesson)
 
