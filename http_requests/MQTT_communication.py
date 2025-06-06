@@ -195,7 +195,7 @@ def check_timetable():
                 raum_name=room_name.lower() # doppelt sich mit der lower funktion unten
                 raum_name=room_name.replace(".", "_")
                 room_data["state"] = 2
-                abfrage_thread2 = thr.Thread(target=check_condition2_thread, args=(raum_name,), daemon=True)
+                abfrage_thread2 = threading.Thread(target=check_condition2_thread, args=(raum_name,), daemon=True)
                 rooms_dict[room_name]["thread_active"] = True
                 abfrage_thread2.start()
               
