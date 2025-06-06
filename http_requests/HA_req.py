@@ -14,9 +14,7 @@ HEADERS = {
     "Content-Type": "application/json"
 }
 
-# Standardwerte
-conditionFlag = 1  # Default-Zustand (z.B. Zustand 1 = inaktiv)
-next_lesson = None  # Variable zur Speicherung der nächsten Stunde (optional)
+
 
 def get_current_time(delta_t=0):
     """
