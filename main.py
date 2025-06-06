@@ -2,7 +2,7 @@ import threading
 import time
 import sched
 import http_requests.MQTT_communication as mqtt_com
-import http_requests.condition1 as req
+
 
 scheduler = sched.scheduler(time.time, time.sleep)
 def schedule_task():
