@@ -10,10 +10,6 @@ import re
 from config import MQTT_USER, MQTT_PASS,MQTT_BROKER, MQTT_TOPIC, THESECRET,USERNAME, PASSWORD
 
 
-from . import HA_req
-from . import lesson_hours as lh
-import main as sat
-import threading as thr
 
 
 
@@ -185,8 +181,8 @@ def check_timetable():
     print("Heutiges Datum:", today)
     url = base_url1 + f"RESTHeatRaumStundenplan.php?Raum=C%&Datum={today}"
     #url = BASE_URL + "RESTHeatRaumStundenplan.php?Raum=C0%&Datum=2025-04-02"
-    response = HA_req.requests.get(url, auth=(USERNAME, PASSWORD), verify=False)
-    current_lesson =HA_req.get_current_lesson(30) # gibt nur einen Wert wenn keine pause ist. (einbauen das geprüft wird falls None) ## es soll aber immer 30 Minuten vorher geschaut werden, welche Stunde in 30 Minuten ist
+    response = requests.get(url, auth=(USERNAME, PASSWORD), verify=False)
+    current_lesson =get_current_lesson(30) # gibt nur einen Wert wenn keine pause ist. (einbauen das geprüft wird falls None) ## es soll aber immer 30 Minuten vorher geschaut werden, welche Stunde in 30 Minuten ist
     data = response.json()
     print(data)
     belegung = data.get("Belegung", {})
