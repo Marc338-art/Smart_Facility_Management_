@@ -1,0 +1,7 @@
+heiz_modus:
+  name: Heizmodus
+  options:
+    - zeitgesteuert
+    - stundenplan
+    - manuell
+  initial: stundenplan
