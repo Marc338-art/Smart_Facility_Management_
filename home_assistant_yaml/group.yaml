@@ -28,3 +28,9 @@ fensterkontakt_C005:
   name: Fensterkontakte C005
   entities:
     - binary_sensor.fensterkontakt_c005
+
+wandthermostate:
+  name: Alle Wandthermostate
+  entities:
+    - climate.wandthermostat_c005
+    - climate.wandthermostat_c009
