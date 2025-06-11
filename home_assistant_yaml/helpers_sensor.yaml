@@ -1,0 +1,12 @@
+- sensor:
+    - name: "Wunschtemperatur Zeitgesteuert"
+      unit_of_measurement: "°C"
+      state: >
+        {% set current_time = now().strftime('%H:%M:%S') %}
+        {% set current_weekday = now().weekday() %}
+        {% if current_weekday >= 0 and current_weekday <= 4 and '07:00:00' <= current_time <= '15:30:00' %}
+          21
+        {% else %}
+          17
+        {% endif %}
+
