@@ -1,0 +1,365 @@
+heating_temperature_c001:
+  name: HeiztemperaturC001
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c002:
+  name: HeiztemperaturC002
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c003_1:
+  name: HeiztemperaturC003.1
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c003_2:
+  name: HeiztemperaturC003.2
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c003_3:
+  name: HeiztemperaturC003.3
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c003_4:
+  name: HeiztemperaturC003.4
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c004:
+  name: HeiztemperaturC004
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c005:
+  name: HeiztemperaturC005
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c006_1:
+  name: HeiztemperaturC006.1
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c006_2:
+  name: HeiztemperaturC006.2
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c006_3:
+  name: HeiztemperaturC006.3
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c007:
+  name: HeiztemperaturC007
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c008:
+  name: HeiztemperaturC008
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c009:
+  name: HeiztemperaturC009
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c011:
+  name: HeiztemperaturC011
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c012:
+  name: HeiztemperaturC012
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c013:
+  name: HeiztemperaturC013
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c014:
+  name: HeiztemperaturC014
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c015:
+  name: HeiztemperaturC015
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c016:
+  name: HeiztemperaturC016
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c017:
+  name: HeiztemperaturC017
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c018:
+  name: HeiztemperaturC018
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c101:
+  name: HeiztemperaturC101
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c102:
+  name: HeiztemperaturC102
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c103:
+  name: HeiztemperaturC103
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c104:
+  name: HeiztemperaturC104
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c105:
+  name: HeiztemperaturC105
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c106:
+  name: HeiztemperaturC106
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c107:
+  name: HeiztemperaturC107
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c108:
+  name: HeiztemperaturC108
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c109_1:
+  name: HeiztemperaturC109.1
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c109_2:
+  name: HeiztemperaturC109.2
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c111:
+  name: HeiztemperaturC111
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c112:
+  name: HeiztemperaturC112
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c113:
+  name: HeiztemperaturC113
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c114:
+  name: HeiztemperaturC114
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c115:
+  name: HeiztemperaturC115
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c116:
+  name: HeiztemperaturC116
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c117:
+  name: HeiztemperaturC117
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c201:
+  name: HeiztemperaturC201
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c202:
+  name: HeiztemperaturC202
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c203:
+  name: HeiztemperaturC203
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c204:
+  name: HeiztemperaturC204
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c205:
+  name: HeiztemperaturC205
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c206:
+  name: HeiztemperaturC206
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c208:
+  name: HeiztemperaturC208
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c209:
+  name: HeiztemperaturC209
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c110_1:
+  name: HeiztemperaturC110.1
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c110_2:
+  name: HeiztemperaturC110.2
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c211:
+  name: HeiztemperaturC211
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c212:
+  name: HeiztemperaturC212
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c213:
+  name: HeiztemperaturC213
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c214:
+  name: HeiztemperaturC214
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c215:
+  name: HeiztemperaturC215
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c216:
+  name: HeiztemperaturC216
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c217:
+  name: HeiztemperaturC217
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c218:
+  name: HeiztemperaturC218
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c219:
+  name: HeiztemperaturC219
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c220:
+  name: HeiztemperaturC220
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5
+heating_temperature_c221:
+  name: HeiztemperaturC221
+  initial: 17
+  min: 10
+  max: 30
+  step: 0.5  
+manuelle_heiztemperatur:
+  name: Manuelle Heiztemperatur
+  min: 15
+  max: 30
+  step: 0.5
