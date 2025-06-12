@@ -274,19 +274,9 @@ def check_timetable():
                     except Exception as e:
                         print("Fehler beim Temperatursetzen:", e)
 
-                # Nächsten freien Zeitraum finden, um Endzeit zu setzen
-                    for index in range(current_lesson + 1, len(belegung[room_name])):
-                        belegung_status = belegung[room_name][index]
-                        if belegung_status == 0:
-                            print(f"Raum frei ab Stunde {index}")
-                            try:
-                                stunden_ende = LESSON_HOURS[index - 2]["ende"]
-                                room_data["end_time"] = stunden_ende
-                                print(f"Ende der Stunde {index}: {stunden_ende.strftime('%H:%M')}")
-                            except IndexError:
-                                print(f"Kein Eintrag in LESSON_HOURS für Index {index}")
-                            break
-                elif belegung[room_name][current_lesson] ==0 and not rooms_dict[raum_nr]["thread_active"]:
+                
+                elif belegung[room_name][current_lesson] :
+                    print("Keine Belegung in der nächsten Stunde")
                     try:
                         change_temperature(f"input_number.heating_temperature_{room_name}", 17)
                     except Exception as e:
@@ -296,16 +286,6 @@ def check_timetable():
         except Exception:
             print("Keine aktuelle Stunde oder Fehler bei Raumprüfung")
 
-        # Temperatur zurücksetzen, wenn Zeit abgelaufen ist und Zustand 2
-        if room_data["state"] == 2:
-            if get_current_time(30) > room_data["end_time"]:
-                print(f"Temperatur in {room_name} wird zurückgesetzt (Zeit abgelaufen).")
-                r_s = room_name.lower().replace(".", "_")
-                room_data["state"] = 1
-                try:
-                    change_temperature(f"input_number.heating_temperature_{r_s}", 17)
-                except Exception as e:
-                    print("Fehler beim Zurücksetzen der Temperatur:", e)
 
     print("Aktueller Zustand der Räume:", rooms_dict)  # Debugging
 
