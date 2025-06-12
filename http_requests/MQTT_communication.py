@@ -231,7 +231,7 @@ def check_timetable():
     tz = pytz.timezone('Europe/Berlin')
     timestamp = datetime.now(tz).strftime("%Y-%m-%d %H:%M:%S")
     print("⏰ Timestamp:", timestamp)
-    string_to_encrypt = f"{timestamp} {thesecret} {user}"
+    string_to_encrypt = f"{timestamp} {THESECRET} {USERNAME}"
     # ✅ 3. Verschlüsseln
     encrypted = encrypt(string_to_encrypt, my_key)
     url_encoded_key = requests.utils.quote(encrypted)
