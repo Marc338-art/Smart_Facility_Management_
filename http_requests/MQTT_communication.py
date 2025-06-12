@@ -247,17 +247,15 @@ def check_timetable():
     print("Stundenplandaten:", data)
 
     belegung = data.get("Belegung", {})
-    belegung["C005"]=[1,1,1,1,1,1,1,1,1,0,1,1,0,0,0,1,1]
+    belegung["C005"]=[0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1]
 
     print("Aktuelle Stunde:", current_lesson)
 
     for room_name, room_data in rooms_dict.items():
         try:
             # Raum ist im Zustand 1 (inaktiv) und aktuell belegt?
-            if (
-                room_data["state"] == 1
-                and room_name in belegung
-            ):
+            if ( room_name in belegung):
+
                 raum_name_lower = room_name.lower().replace(".", "_")
 
                 if belegung[room_name][current_lesson] == 1:
@@ -275,8 +273,9 @@ def check_timetable():
                         print("Fehler beim Temperatursetzen:", e)
 
                 
-                elif belegung[room_name][current_lesson] :
+                elif belegung[room_name][current_lesson]==0 :
                     print("Keine Belegung in der nächsten Stunde")
+                    room_data["state"] == 1
                     try:
                         change_temperature(f"input_number.heating_temperature_{room_name}", 17)
                     except Exception as e:
