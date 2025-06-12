@@ -286,9 +286,9 @@ def check_timetable():
                             except IndexError:
                                 print(f"Kein Eintrag in LESSON_HOURS für Index {index}")
                             break
-                elif belegung[room_name][current_lesson] ==0:
+                elif belegung[room_name][current_lesson] ==0 and not rooms_dict[raum_nr]["thread_active"]:
                     try:
-                        change_temperature(f"input_number.heating_temperature_{room_name}", 24)
+                        change_temperature(f"input_number.heating_temperature_{room_name}", 17)
                     except Exception as e:
                         print("Fehler beim Temperatursetzen:", e)
 
