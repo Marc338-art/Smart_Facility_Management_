@@ -257,34 +257,41 @@ def check_timetable():
             if (
                 room_data["state"] == 1
                 and room_name in belegung
-                and belegung[room_name][current_lesson] == 1
             ):
                 raum_name_lower = room_name.lower().replace(".", "_")
-                room_data["state"] = 2
 
-                # Thread für Überwachung starten
-                abfrage_thread2 = threading.Thread(target=check_condition2_thread, args=(raum_name_lower,), daemon=True)
-                rooms_dict[room_name]["thread_active"] = True
-                abfrage_thread2.start()
+                if belegung[room_name][current_lesson] == 1:
+                    room_data["state"] = 2
 
-                # Temperatur erhöhen
-                try:
-                    change_temperature(f"input_number.heating_temperature_{room_name}", 24)
-                except Exception as e:
-                    print("Fehler beim Temperatursetzen:", e)
+                    # Thread für Überwachung starten
+                    abfrage_thread2 = threading.Thread(target=check_condition2_thread, args=(raum_name_lower,), daemon=True)
+                    rooms_dict[room_name]["thread_active"] = True
+                    abfrage_thread2.start()
+
+                    # Temperatur erhöhen
+                    try:
+                        change_temperature(f"input_number.heating_temperature_{room_name}", 24)
+                    except Exception as e:
+                        print("Fehler beim Temperatursetzen:", e)
 
                 # Nächsten freien Zeitraum finden, um Endzeit zu setzen
-                for index in range(current_lesson + 1, len(belegung[room_name])):
-                    belegung_status = belegung[room_name][index]
-                    if belegung_status == 0:
-                        print(f"Raum frei ab Stunde {index}")
-                        try:
-                            stunden_ende = LESSON_HOURS[index - 2]["ende"]
-                            room_data["end_time"] = stunden_ende
-                            print(f"Ende der Stunde {index}: {stunden_ende.strftime('%H:%M')}")
-                        except IndexError:
-                            print(f"Kein Eintrag in LESSON_HOURS für Index {index}")
-                        break
+                    for index in range(current_lesson + 1, len(belegung[room_name])):
+                        belegung_status = belegung[room_name][index]
+                        if belegung_status == 0:
+                            print(f"Raum frei ab Stunde {index}")
+                            try:
+                                stunden_ende = LESSON_HOURS[index - 2]["ende"]
+                                room_data["end_time"] = stunden_ende
+                                print(f"Ende der Stunde {index}: {stunden_ende.strftime('%H:%M')}")
+                            except IndexError:
+                                print(f"Kein Eintrag in LESSON_HOURS für Index {index}")
+                            break
+                elif belegung[room_name][current_lesson] ==0:
+                    try:
+                        change_temperature(f"input_number.heating_temperature_{room_name}", 24)
+                    except Exception as e:
+                        print("Fehler beim Temperatursetzen:", e)
+
 
         except Exception:
             print("Keine aktuelle Stunde oder Fehler bei Raumprüfung")
