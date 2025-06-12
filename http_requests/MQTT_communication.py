@@ -5,11 +5,15 @@ import time as t
 from datetime import datetime, timedelta
 import re
 import sched
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+import base64
+import hashlib
+import pytz
 
 # Lokale Module / Pakete
 from .lesson_hours import *
 from .HA_req import *
-
+from .URL_encoding import *
 
 # Konfiguration / Konstanten
 from config import MQTT_USER, MQTT_PASS, MQTT_BROKER, MQTT_TOPIC, THESECRET, USERNAME, PASSWORD
@@ -220,7 +224,21 @@ def check_timetable():
     today = datetime.today().strftime("%Y-%m-%d")
     print("Heutiges Datum:", today)
 
-    url = base_url1 + f"RESTHeatRaumStundenplan.php?Raum=C%&Datum={today}"
+    keyphrase_url="RESTHeatGetKeyphrase.php"
+    response = requests.get(keyphrase_url,auth=(USERNAME,PASSWORD), verify=False)
+    keyphrase_data=response.json()
+    my_key=keyphrase_data.get("KeyPhrase")
+    tz = pytz.timezone('Europe/Berlin')
+    timestamp = datetime.now(tz).strftime("%Y-%m-%d %H:%M:%S")
+    print("⏰ Timestamp:", timestamp)
+    string_to_encrypt = f"{timestamp} {thesecret} {user}"
+    # ✅ 3. Verschlüsseln
+    encrypted = encrypt(string_to_encrypt, my_key)
+    url_encoded_key = requests.utils.quote(encrypted)
+# ✅ 4. URL für Raumliste
+    today = datetime.today().strftime("%Y-%m-%d")
+    url = f"{base_url1}RESTHeatRaumStundenplan.php?key={url_encoded_key}&Raum=C%25&Datum={today}
+    #url = base_url1 + f"RESTHeatRaumStundenplan.php?Raum=C%&Datum={today}"
 
     # Abruf der Belegungsdaten mit Authentifizierung
     response = requests.get(url, auth=(USERNAME, PASSWORD), verify=False)
