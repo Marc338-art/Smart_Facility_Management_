@@ -237,7 +237,7 @@ def check_timetable():
     url_encoded_key = requests.utils.quote(encrypted)
 # ✅ 4. URL für Raumliste
     today = datetime.today().strftime("%Y-%m-%d")
-    url = f"{base_url1}RESTHeatRaumStundenplan.php?key={url_encoded_key}&Raum=C%25&Datum={today}
+    url = f"{base_url1}RESTHeatRaumStundenplan.php?key={url_encoded_key}&Raum=C%25&Datum={today}"
     #url = base_url1 + f"RESTHeatRaumStundenplan.php?Raum=C%&Datum={today}"
 
     # Abruf der Belegungsdaten mit Authentifizierung
