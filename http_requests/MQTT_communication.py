@@ -224,7 +224,7 @@ def check_timetable():
     today = datetime.today().strftime("%Y-%m-%d")
     print("Heutiges Datum:", today)
 
-    keyphrase_url="RESTHeatGetKeyphrase.php"
+    keyphrase_url=base_url1+"RESTHeatGetKeyphrase.php"
     response = requests.get(keyphrase_url,auth=(USERNAME,PASSWORD), verify=False)
     keyphrase_data=response.json()
     my_key=keyphrase_data.get("KeyPhrase")
