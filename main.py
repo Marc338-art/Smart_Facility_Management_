@@ -24,8 +24,8 @@ if __name__ == "__main__":
     # Starte die Ausführung des Schedulers
     #scheduler.run()
     
-    with open("/home/raspberry/smart_facility_management/cron.log", "a") as f:
-    f.write("main.py läuft um " + __import__('datetime').datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\n")
+    '''with open("/home/raspberry/smart_facility_management/cron.log", "a") as f:
+    f.write("main.py läuft um " + __import__('datetime').datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\n")'''
 
 
 
