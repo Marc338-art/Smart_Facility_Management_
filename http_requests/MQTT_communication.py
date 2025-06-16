@@ -117,8 +117,8 @@ def check_condition2_thread(room_nr):
 
         # Nach 30 Minuten prüfen, ob Bewegung vorhanden war
         if last_check_time <= current_time - 30 * 60:
-            room_nr_upper = room_nr.upper()
-
+            room_nrs = room_nr.upper()
+            room_nr_upper = room_nrs.replace("_", ".")
             if last_active_time >= last_check_time:
                 print("Bewegung innerhalb der letzten 30 Minuten erkannt.")
                 rooms_dict[room_nr_upper]["thread_active"] = False
