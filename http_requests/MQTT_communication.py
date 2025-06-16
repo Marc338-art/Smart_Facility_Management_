@@ -35,16 +35,14 @@ def start_thread(raum_nr):
     wenn noch kein Thread aktiv ist und der Raum im Zustand 1 (inaktiv) ist.
     """
     print(f"Thread gestartet für Raum: {raum_nr}")
-    room_nr = raum_nr
-    room_nrs = room_nr.lower()
-    room_nrs = room_nr.replace(".", "_")
+    
 
     if rooms_dict[raum_nr]["thread_active"]:
         print(f"Thread für Raum {raum_nr} ist bereits aktiv.")
         return
 
     if rooms_dict[raum_nr]["state"] == 1:
-        abfrage_thread1 = threading.Thread(target=check_condition1_thread, args=(room_nrs,), daemon=True)
+        abfrage_thread1 = threading.Thread(target=check_condition1_thread, args=(raum_nr,), daemon=True)
         rooms_dict[raum_nr]["thread_active"] = True
         abfrage_thread1.start()
 
@@ -56,13 +54,16 @@ def check_condition1_thread(room_nr):
     - Bei Bewegung wird Temperatur auf 21 gesetzt und Zustand auf 2 geändert.
     - Ohne Bewegung wird Temperatur auf 17 gesetzt.
     """
+    
+    
+    room_nrs = room_nr.lower().replace(".", "_")
     acttime = datetime.now()
     print(f"Überwache Bewegungssensor: binary_sensor.{room_nr}")
 
     while rooms_dict[room_nr]["state"] == 1:
         # Wartezeit von 8 Minuten abwarten
         if datetime.now() - timedelta(minutes=8) > acttime:
-            res = get_movement_sensor(f"binary_sensor.bewegungssensor_{room_nr}")
+            res = get_movement_sensor(f"binary_sensor.bewegungssensor_{room_nrs}")
 
             if res == "on":
                 print("Bewegung erkannt:", res)
@@ -74,7 +75,7 @@ def check_condition1_thread(room_nr):
                     break
                 else:
                     try:
-                        change_temperature(f"input_number.heating_temperature_{room_nr}", 21)
+                        change_temperature(f"input_number.heating_temperature_{room_nrs}", 21)
                         rooms_dict[room_nr]["state"] = 2
                         rooms_dict[room_nr]["end_time"] = LESSON_HOURS[act]["ende"]
                         print("Raumstatus aktualisiert:", rooms_dict)
@@ -84,7 +85,7 @@ def check_condition1_thread(room_nr):
 
             elif res == "off":
                 print("Keine Bewegung:", res)
-                change_temperature(f"input_number.heating_temperature_{room_nr}", 17)
+                change_temperature(f"input_number.heating_temperature_{room_nrs}", 17)
                 rooms_dict[room_nr]["thread_active"] = False
                 break
 
