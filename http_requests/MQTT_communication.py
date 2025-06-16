@@ -268,7 +268,7 @@ def check_timetable():
 
                     # Temperatur erhöhen
                     try:
-                        change_temperature(f"input_number.heating_temperature_{room_name}", 24)
+                        change_temperature(f"input_number.heating_temperature_{raum_name_lower}", 24)
                     except Exception as e:
                         print("Fehler beim Temperatursetzen:", e)
 
@@ -277,7 +277,7 @@ def check_timetable():
                     print("Keine Belegung in der nächsten Stunde")
                     room_data["state"] == 1
                     try:
-                        change_temperature(f"input_number.heating_temperature_{room_name}", 17)
+                        change_temperature(f"input_number.heating_temperature_{raum_name_lower}", 17)
                     except Exception as e:
                         print("Fehler beim Temperatursetzen:", e)
 
