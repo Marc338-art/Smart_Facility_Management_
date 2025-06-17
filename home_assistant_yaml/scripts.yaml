@@ -1,83 +1,67 @@
 heating:
-  alias: 'Heizung für 90 Minuten - C005'
-  description: 'Setzt die Temperatur C005-Thermostate auf die aktuelle Temperatur des Wandthermostats und hält diese für 90 Minuten'
-  mode: restart  # wichtig, damit neue Aufrufe alte abbrechen
+  alias: Heizung für 90 Minuten - C005
+  description: Setzt die Temperatur C005-Thermostate auf die aktuelle Temperatur des
+    Wandthermostats und hält diese für 90 Minuten
+  mode: restart
   fields:
     temperature:
-      description: 'Zieltemperatur für die Thermostate in C005'
+      description: Zieltemperatur für die Thermostate in C005
       example: '21.5'
   variables:
-    climate_entities_modellhaus: "{{ expand('group.modellhaus') | map(attribute='entity_id') | list }}"
+    climate_entities_modellhaus: '{{ expand(''group.modellhaus'') | map(attribute=''entity_id'')
+      | list }}'
   sequence:
-    - repeat:
-        for_each: "{{ climate_entities_modellhaus }}"
-        sequence:
-          - service: climate.set_temperature
-            target:
-              entity_id: "{{ repeat.item }}"
-            data:
-              temperature: "{{ temperature | float }}"
-    - delay: '00:90:00'
-    - repeat:
-        for_each: "{{ climate_entities_modellhaus }}"
-        sequence:
-          - service: climate.set_temperature
-            target:
-              entity_id: "{{ repeat.item }}"
-            data:
-              temperature: "{{ states('input_number.heating_temperature_c005') | float }}"
-
+  - repeat:
+      for_each: '{{ climate_entities_modellhaus }}'
+      sequence:
+      - service: climate.set_temperature
+        target:
+          entity_id: '{{ repeat.item }}'
+        data:
+          temperature: '{{ temperature | float }}'
+  - delay: 00:90:00
+  - repeat:
+      for_each: '{{ climate_entities_modellhaus }}'
+      sequence:
+      - service: climate.set_temperature
+        target:
+          entity_id: '{{ repeat.item }}'
+        data:
+          temperature: '{{ states(''input_number.heating_temperature_c005'') | float
+            }}'
 heizung_manuell_an:
-  alias: "Heizung manuell an und andere aus"
+  alias: Heizung manuell an und andere aus
   sequence:
-    - service: automation.turn_on
-      target:
-        entity_id: automation.heizung_manuell
-    - service: automation.turn_off
-      target:
-        entity_id:
-          - automation.stundenplan_steuerung
-          - automation.heizung_zeitgesteuert
-    - service: input_select.select_option
-      target:
-        entity_id: input_select.heiz_modus
-      data:
-        option: "manuell"
+  - target:
+      entity_id: automation.heizung_manuell
+    action: automation.turn_on
+    data: {}
+  - target:
+      entity_id:
+      - automation.stundenplan_steuerung
+    action: automation.turn_off
+    data:
+      stop_actions: true
+  - target:
+      entity_id: input_select.heiz_modus
+    data:
+      option: manuell
+    action: input_select.select_option
   mode: single
-
+  description: ''
 heizung_stundenplan_an:
-  alias: "Heizung Stundenplan an und andere aus"
+  alias: Heizung Stundenplan an und andere aus
   sequence:
-    - service: automation.turn_on
-      target:
-        entity_id: automation.stundenplan_steuerung
-    - service: automation.turn_off
-      target:
-        entity_id:
-          - automation.heizung_manuell
-          - automation.heizung_zeitgesteuert
-    - service: input_select.select_option
-      target:
-        entity_id: input_select.heiz_modus
-      data:
-        option: "stundenplan"
+  - service: automation.turn_on
+    target:
+      entity_id: automation.stundenplan_steuerung
+  - service: automation.turn_off
+    target:
+      entity_id:
+      - automation.heizung_manuell
+  - service: input_select.select_option
+    target:
+      entity_id: input_select.heiz_modus
+    data:
+      option: stundenplan
   mode: single
-
-heizung_zeitgesteuert_an:
-  alias: "Heizung zeitgesteuert an und andere aus"
-  sequence:
-    - service: automation.turn_on
-      target:
-        entity_id: automation.heizung_zeitgesteuert
-    - service: automation.turn_off
-      target:
-        entity_id:
-          - automation.heizung_manuell
-          - automation.stundenplan_steuerung
-    - service: input_select.select_option
-      target:
-        entity_id: input_select.heiz_modus
-      data:
-        option: "zeitgesteuert"
-  mode: single
-
