@@ -2,19 +2,20 @@
   alias: Heiztemperatur per MQTT senden
   description: Sendet den aktuellen Wert von input_number.heating_temperature_c005
     über MQTT
-  trigger:
-  - platform: state
-    entity_id:
+  triggers:
+  - entity_id:
     - binary_sensor.bewegungssensor_c005
+    - binary_sensor.bewegungssensor_c009
     from: 'off'
     to: 'on'
-  condition: []
-  action:
-  - service: mqtt.publish
-    data:
+    trigger: state
+  conditions: []
+  actions:
+  - data:
       topic: ha_main
       payload: '{{ state_attr(trigger.entity_id, ''friendly_name'') }}'
       retain: false
+    action: mqtt.publish
   mode: single
 - id: heizung_neu_starten_bei_temp_aenderung
   alias: Heizung bei Änderung am Wandthermostat starten
@@ -37,13 +38,13 @@
   triggers:
   - at: 07:01:00
     trigger: time
-  - at: 08:51:00
+  - at: '11:17:00'
     trigger: time
   - at: '10:41:00'
     trigger: time
   - at: '12:31:00'
     trigger: time
-  - at: '14:11:00'
+  - at: '14:24:00'
     trigger: time
   - at: '16:01:00'
     trigger: time
@@ -62,19 +63,21 @@
   mode: single
 - id: heizung_stundenplan
   alias: Stundenplan Steuerung
-  trigger:
-  - platform: time_pattern
-    seconds: /10
-  variables:
-    climate_entities_c009: '{{ expand(''group.heizung_c009'') | map(attribute=''entity_id'')
-      | list }}'
-    climate_entities_c005: '{{ expand(''group.heizung_c005'') | map(attribute=''entity_id'')
-      | list }}'
-    temperatur_c009: '{{ states(''input_number.heating_temperature_c009'') | float
-      }}'
-    temperatur_c005: '{{ states(''input_number.heating_temperature_c005'') | float
-      }}'
-  action:
+  triggers:
+  - seconds: /10
+    trigger: time_pattern
+  conditions:
+  - condition: time
+    after: 07:00:00
+    before: '20:30:00'
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+    - sat
+  actions:
   - choose:
     - conditions:
       - condition: state
@@ -84,11 +87,11 @@
       - repeat:
           for_each: '{{ climate_entities_c009 }}'
           sequence:
-          - service: climate.set_temperature
-            target:
+          - target:
               entity_id: '{{ repeat.item }}'
             data:
               temperature: '{{ temperatur_c009 }}'
+            action: climate.set_temperature
   - choose:
     - conditions:
       - condition: state
@@ -98,11 +101,20 @@
       - repeat:
           for_each: '{{ climate_entities_c005 }}'
           sequence:
-          - service: climate.set_temperature
-            target:
+          - target:
               entity_id: '{{ repeat.item }}'
             data:
               temperature: '{{ temperatur_c005 }}'
+            action: climate.set_temperature
+  variables:
+    climate_entities_c009: '{{ expand(''group.heizung_c009'') | map(attribute=''entity_id'')
+      | list }}'
+    climate_entities_c005: '{{ expand(''group.heizung_c005'') | map(attribute=''entity_id'')
+      | list }}'
+    temperatur_c009: '{{ states(''input_number.heating_temperature_c009'') | float
+      }}'
+    temperatur_c005: '{{ states(''input_number.heating_temperature_c005'') | float
+      }}'
   mode: restart
 - id: heizung_manuell
   alias: Heizung Manuell (mit Fensterprüfung)
@@ -136,88 +148,3 @@
             data:
               temperature: '{{ temperature_manual }}'
   mode: restart
-- id: heizung_zeitgesteuert
-  alias: Heizung zeitgesteuert (mit Fensterprüfung)
-  trigger:
-  - platform: time_pattern
-    seconds: /10
-  - platform: time
-    at: 07:00:00
-  - platform: time
-    at: '15:30:00'
-  variables:
-    raeume: '{{ expand(''group.cgebaeude'') | map(attribute=''entity_id'') | map(''regex_replace'',
-      ''^climate\.heizungsthermostat_'', '''') | map(''regex_replace'', ''[a-z]$'',
-      '''') | unique() | list }}'
-    target_temp: '{{ states(''sensor.wunschtemperatur_zeitgesteuert'') | float }}'
-  action:
-  - repeat:
-      for_each: '{{ raeume }}'
-      sequence:
-      - variables:
-          heiz_gruppe: group.heizung_{{ repeat.item }}
-          fenster_gruppe: group.fensterkontakt_{{ repeat.item }}
-      - condition: template
-        value_template: '{{ is_state(fenster_gruppe, ''off'') }}'
-      - repeat:
-          for_each: '{{ expand(heiz_gruppe) | map(attribute=''entity_id'') | list
-            }}'
-          sequence:
-          - service: climate.set_temperature
-            target:
-              entity_id: '{{ repeat.item }}'
-            data:
-              temperature: '{{ target_temp }}'
-  mode: restart
-- id: fenstersteuerung_heizung
-  alias: Fenster offen - Heizung absenken pro Raum
-  trigger:
-  - platform: state
-    entity_id:
-    - group.fensterkontakt_c009
-    - group.fensterkontakt_c005
-  variables:
-    raeume: '{{ expand(''group.cgebaeude'') | map(attribute=''entity_id'') | map(''regex_replace'',
-      ''^climate\.heizungsthermostat_'', '''') | map(''regex_replace'', ''[a-z]$'',
-      '''') | unique() | list }}'
-    modus: '{{ states(''input_select.heiz_modus'') }}'
-  action:
-  - repeat:
-      for_each: '{{ raeume }}'
-      sequence:
-      - variables:
-          fenster_gruppe: group.fensterkontakt_{{ repeat.item }}
-          heiz_gruppe: group.heizung_{{ repeat.item }}
-          temperatur_soll: "{% if modus == 'manuell' %}\n  {{ states('input_number.manuelle_heiztemperatur')
-            | float }}\n{% elif modus == 'stundenplan' %}\n  {{ states('input_number.heating_temperature_'
-            ~ repeat.item) | float }}\n{% elif modus == 'zeitgesteuert' %}\n  {{ states('sensor.wunschtemperatur_zeitgesteuert')
-            | float }}\n{% else %}\n  17\n{% endif %}\n"
-          fenster_status: '{{ states(fenster_gruppe) }}'
-      - choose:
-        - conditions:
-          - condition: template
-            value_template: '{{ is_state(fenster_gruppe, ''on'') }}'
-          sequence:
-          - repeat:
-              for_each: '{{ expand(heiz_gruppe) | map(attribute=''entity_id'') | list
-                }}'
-              sequence:
-              - service: climate.set_temperature
-                target:
-                  entity_id: '{{ repeat.item }}'
-                data:
-                  temperature: 17
-        - conditions:
-          - condition: template
-            value_template: '{{ is_state(fenster_gruppe, ''off'') }}'
-          sequence:
-          - repeat:
-              for_each: '{{ expand(heiz_gruppe) | map(attribute=''entity_id'') | list
-                }}'
-              sequence:
-              - service: climate.set_temperature
-                target:
-                  entity_id: '{{ repeat.item }}'
-                data:
-                  temperature: '{{ temperatur_soll }}'
-  mode: single
