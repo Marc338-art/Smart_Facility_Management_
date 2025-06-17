@@ -1,36 +1,9 @@
 # group.yaml
-heizung_c009:
-  name: C009
-  entities:
-    - climate.heizungsthermostat_c009a
-    - climate.heizungsthermostat_c009b
-    - climate.heizungsthermostat_c009c
-    - climate.heizungsthermostat_c009d 
-
-heizung_c005:
-  name: C005
-  entities:
-    - climate.heizungsthermostat_c005a
-    - climate.heizungsthermostat_c005b
-
 cgebaeude:
   name: C-Gebäude
   entities:
-    - group.heizung_c009
-    - group.heizung_c005
+    - climate.c009_int0000002
+    - climate.c005_int0000001
 
-fensterkontakt_C009:
-  name: Fensterkontakte C009
-  entities:
-    - binary_sensor.fensterkontakt_c009
 
-fensterkontakt_C005:
-  name: Fensterkontakte C005
-  entities:
-    - binary_sensor.fensterkontakt_c005
 
-wandthermostate:
-  name: Alle Wandthermostate
-  entities:
-    - climate.wandthermostat_c005
-    - climate.wandthermostat_c009
