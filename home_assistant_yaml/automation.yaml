@@ -118,6 +118,7 @@
   mode: restart
 - id: heizung_manuell
   alias: Heizung Manuell (Priorität über Wochenprofil)
+  mode: restart
   trigger:
     - platform: state
       entity_id: input_number.manuelle_heiztemperatur
@@ -138,11 +139,11 @@
             target:
               entity_id: "{{ repeat.item }}"
             data:
-              hvac_mode: "heat"  # oder "manual" je nach Thermostat-Modell
+              hvac_mode: "heat"  
           - service: climate.set_temperature
             target:
               entity_id: "{{ repeat.item }}"
             data:
               temperature: "{{ temperature_manual }}"
-  mode: restart
+
 
