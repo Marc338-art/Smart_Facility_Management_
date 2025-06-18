@@ -78,7 +78,7 @@ def check_condition1_thread(room_nr):
                     try:
                         change_temperature(f"input_number.heating_temperature_{room_nrs}", 21)
                         rooms_dict[room_nr]["state"] = 2
-                        rooms_dict[room_nr]["end_time"] = LESSON_HOURS[act]["ende"]
+                        
                         print("Raumstatus aktualisiert:", rooms_dict)
                     except Exception as e:
                         print("Fehler beim Ändern der Temperatur:", e)
