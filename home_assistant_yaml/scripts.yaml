@@ -69,3 +69,24 @@ heizung_stundenplan_an:
     data:
       option: stundenplan
   mode: single
+
+ferienmodus:
+  alias: Ferienmodus an und andere aus 
+  sequence: 
+    - service: automation.turn_off
+      target:
+        entity_id: automation.stundenplan_steuerung
+      data:
+        stop_actions: true
+
+    - service: automation.turn_off
+      target:
+        entity_id: automation.heizung_manuell
+      data:
+        stop_actions: true
+
+    - service: scene.turn_on
+      target:
+        entity_id: scene.ferien
+  mode: single
+  description: ''
