@@ -135,15 +135,11 @@
     - repeat:
         for_each: "{{ climate_entities }}"
         sequence:
-          - service: climate.set_hvac_mode
-            target:
-              entity_id: "{{ repeat.item }}"
-            data:
-              hvac_mode: "heat"  
           - service: climate.set_temperature
             target:
               entity_id: "{{ repeat.item }}"
             data:
               temperature: "{{ temperature_manual }}"
+
 
 
