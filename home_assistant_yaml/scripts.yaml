@@ -88,5 +88,11 @@ ferienmodus:
     - service: scene.turn_on
       target:
         entity_id: scene.ferien
+
+    - service: input_select.select_option
+      target:
+        entity_id: input_select.heiz_modus
+      data:
+        option: ferienmodus
   mode: single
   description: ''
