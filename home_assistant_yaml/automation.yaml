@@ -117,12 +117,16 @@
       }}'
   mode: restart
 - id: heizung_manuell
-  alias: Heizung Manuell 
+  alias: Heizung Manuell (Priorität über Wochenprofil)
   trigger:
     - platform: state
       entity_id: input_number.manuelle_heiztemperatur
     - platform: time_pattern
       seconds: "/10"
+  condition:
+    - condition: state
+      entity_id: input_select.heiz_modus
+      state: "manuell"
   variables:
     temperature_manual: "{{ states('input_number.manuelle_heiztemperatur') | float }}"
     climate_entities: "{{ state_attr('group.cgebaeude', 'entity_id') }}"
@@ -130,9 +134,15 @@
     - repeat:
         for_each: "{{ climate_entities }}"
         sequence:
+          - service: climate.set_hvac_mode
+            target:
+              entity_id: "{{ repeat.item }}"
+            data:
+              hvac_mode: "heat"  # oder "manual" je nach Thermostat-Modell
           - service: climate.set_temperature
             target:
               entity_id: "{{ repeat.item }}"
             data:
               temperature: "{{ temperature_manual }}"
   mode: restart
+
