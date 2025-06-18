@@ -35,5 +35,5 @@ rooms_dict = {
     }
     for name in rooms
 }
-rooms = [{"name": name, "state": 1} for name in rooms]
+
 
