@@ -58,7 +58,10 @@ def change_temperature(entity_id, value=17):
     """
     #url = f"{HOME_ASSISTANT_URL}/api/services/input_number/set_value"
     url = f"{HOME_ASSISTANT_URL}/api/services/climate/set_temperature"
-    data = {"entity_id": entity_id, "value": value}
+    data = {
+        "entity_id": entity_id,
+        "temperature": value  # Wichtig: der Schlüssel muss "temperature" heißen, nicht "value"
+    }
 
     try:
         response = requests.post(url, json=data, headers=HEADERS)
