@@ -56,7 +56,8 @@ def change_temperature(entity_id, value=17):
         entity_id (str): Entity-ID des input_number (z.B. "input_number.heating_temperature_C001").
         value (float/int): Neuer Wert für das Entity (Standard 17).
     """
-    url = f"{HOME_ASSISTANT_URL}/api/services/input_number/set_value"
+    #url = f"{HOME_ASSISTANT_URL}/api/services/input_number/set_value"
+    url = f"{HOME_ASSISTANT_URL}/api/services/climate/set_temperature
     data = {"entity_id": entity_id, "value": value}
 
     try:
