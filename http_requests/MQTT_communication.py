@@ -76,7 +76,7 @@ def check_condition1_thread(room_nr):
                     break
                 else:
                     try:
-                        change_temperature(f"input_number.heating_temperature_{room_nrs}", 21)
+                        change_temperature(f"climate.wandthermostat_{raum_name_lower}", 21)
                         rooms_dict[room_nr]["state"] = 2
                         
                         print("Raumstatus aktualisiert:", rooms_dict)
@@ -86,7 +86,7 @@ def check_condition1_thread(room_nr):
 
             elif res == "off":
                 print("Keine Bewegung:", res)
-                change_temperature(f"input_number.heating_temperature_{room_nrs}", 17)
+                change_temperature(f"climate.wandthermostat_{raum_name_lower}", 17)
                 rooms_dict[room_nr]["thread_active"] = False
                 break
 
@@ -127,7 +127,7 @@ def check_condition2_thread(room_nr):
                 break
             else:
                 print("Keine Bewegung innerhalb der letzten 30 Minuten erkannt.")
-                change_temperature(f"input_number.heating_temperature_{room_nr}", 17)
+                change_temperature(f"climate.wandthermostat_{raum_name_lower}", 17)
                 rooms_dict[room_nr_upper]["thread_active"] = False
                 rooms_dict[room_nr_upper]["state"] = 1
                 break
@@ -270,7 +270,7 @@ def check_timetable():
 
                     # Temperatur erhöhen
                     try:
-                        change_temperature(f"climate.wandthermostat_{raum_name_lower}", 24)
+                        change_temperature(f"climate.wandthermostat_{raum_name_lower}", 21)
                     except Exception as e:
                         print("Fehler beim Temperatursetzen:", e)
 
