@@ -1,10 +1,9 @@
 import requests
 import paho.mqtt.client as mqtt
 import threading
-import time as t
+import time as t ## das soll noch entfernt werden und alles über datetime laufen
 from datetime import datetime, timedelta
 import re
-import sched
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 import base64
 import hashlib
