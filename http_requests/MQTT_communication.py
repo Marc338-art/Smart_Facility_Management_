@@ -138,6 +138,7 @@ def check_condition2_thread(room_nr):
 def check_wandthermostat (payload):
     name_part, temp_part = payload.split(":", 1)
     name = name_part.strip()
+    print (name)
     match = re.match(r"Wandthermostat_([A-Z]\d{3})(?:_(\d+))?_", name)
     if match:
         raum_nr = match.group(1)
