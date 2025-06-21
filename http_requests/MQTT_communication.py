@@ -135,6 +135,8 @@ def check_condition2_thread(room_nr):
 
         print("Thread aktiv")
         t.sleep(5)
+
+
 def check_wandthermostat (payload):
     name_part, temp_part = payload.split(":", 1)
     name = name_part.strip()
@@ -144,8 +146,10 @@ def check_wandthermostat (payload):
     if match:
         raum_nr = match.group(1)     # z. B. C003
         instanz_nr = match.group(2)  # z. B. 1
-
-        entity_id = f"input_number.heating_temperature_{raum_nr.lower()}_{instanz_nr}"
+        if instanz_nr!=None:
+            entity_id = f"input_number.heating_temperature_{raum_nr.lower()}_{instanz_nr}"
+        else:
+            entity_id = f"input_number.heating_temperature_{raum_nr.lower()}"
     else:
         print("Kein Match für Raum und Instanz.")
         # Temperatur extrahieren und °C entfernen
