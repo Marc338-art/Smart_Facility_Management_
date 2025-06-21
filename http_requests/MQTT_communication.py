@@ -30,14 +30,17 @@ motion_status_received = threading.Event()  # Event zur Synchronisation
 # Funktionen zur Thread-Steuerung für Raumsensoren und Temperaturregelung
 # -----------------------------------------------------------------------------------
 
-def start_thread(raum_nr):
+def start_thread(raum_nr, instanz_nr):
     """
     Startet einen Überwachungsthread für den gegebenen Raum,
     wenn noch kein Thread aktiv ist und der Raum im Zustand 1 (inaktiv) ist.
     """
     print(f"Thread gestartet für Raum: {raum_nr}")
     
-
+    if instanz_nr:
+        raum_nr =f"{raum_nr}_{instanznummer}"
+        raum_nr=raum_nr.replace("_",".")
+    
     if rooms_dict[raum_nr]["thread_active"]:
         print(f"Thread für Raum {raum_nr} ist bereits aktiv.")
         return
@@ -170,12 +173,12 @@ def main(payload):
     """
     print(f"Empfangener Payload: {payload}")
 
-    match = re.match(r"Bewegungssensor_([A-Z]\d{3})_", payload)
+    match = re.match(r"Wandthermostat_([A-Z]\d{3})(?:_(\d+))?_", name)
 
     if match:
-        print("Raumnummer extrahiert")
-        raum_nr = match.group(1)
-        start_thread(raum_nr)
+        raum_nr = match.group(1).lower()
+        instanz_nr = match.group(2)
+        start_thread(raum_nr, instanz_nr)
     else:
         print("Unbekannter Payload!")
 
