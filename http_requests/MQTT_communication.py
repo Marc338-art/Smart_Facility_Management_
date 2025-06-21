@@ -135,6 +135,14 @@ def check_condition2_thread(room_nr):
 
         print("Thread aktiv")
         t.sleep(5)
+def check_wandthermostat (payload):
+    name_part, temp_part = payload.split(":", 1)
+    name = name_part.strip()
+        # Temperatur extrahieren und °C entfernen
+    temp_str = temp_part.strip().replace("°C", "").strip()
+    temperature = float(temp_str)
+    print (temperature)
+    print(name)
 
 
 # -----------------------------------------------------------------------------------
@@ -192,6 +200,7 @@ def on_message(client, userdata, msg):
         check_timetable()
 
     elif msg.topic == MQTT_TOPIC3:
+        check_wandthermostat(payload)
         print("Das ist das neue Topic")
 
 
