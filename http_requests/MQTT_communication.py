@@ -138,8 +138,11 @@ def check_condition2_thread(room_nr):
 def check_wandthermostat (payload):
     name_part, temp_part = payload.split(":", 1)
     name = name_part.strip()
-    match = re.match(r"Wandthermostat_([A-Z]\d{3})_", name)
-    raum_nr = match.group(1)
+    match = re.match(r"Wandthermostat_([A-Z]\d{3})(?:_(\d+))?_", name)
+    if match:
+        raum_nr = match.group(1)
+    else:
+        raum_nr="Kein Raum"
         # Temperatur extrahieren und °C entfernen
     temp_str = temp_part.strip().replace("°C", "").strip()
     temperature = float(temp_str)
