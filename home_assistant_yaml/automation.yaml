@@ -1,11 +1,10 @@
 - id: '876213876321'
-  alias: Heiztemperatur per MQTT senden
-  description: Sendet den aktuellen Wert von input_number.heating_temperature_c005
+  alias: Bewegungssensor per MQTT senden
+  description: Sendet den aktuellen Wert vom Bewegungssensor des jeweiligen Raumes
     über MQTT
   triggers:
   - entity_id:
     - binary_sensor.bewegungssensor_c005
-    - binary_sensor.bewegungssensor_c009
     from: 'off'
     to: 'on'
     trigger: state
@@ -17,30 +16,14 @@
       retain: false
     action: mqtt.publish
   mode: single
-- id: heizung_neu_starten_bei_temp_aenderung
-  alias: Heizung bei Änderung am Wandthermostat starten
-  trigger:
-  - platform: state
-    entity_id: climate.wandthermostat_c005
-    attribute: temperature
-  condition:
-  - condition: template
-    value_template: '{{ trigger.to_state.attributes.temperature != trigger.from_state.attributes.temperature
-      }}'
-  action:
-  - service: script.heating
-    data:
-      temperature: '{{ state_attr(''climate.wandthermostat_c005'', ''temperature'')
-        | float }}'
-  mode: restart
 - id: mqtt_stundenankuendigung_fixed_times
   alias: MQTT 30 Min vor Stunde (feste Zeiten)
   triggers:
   - at: 07:01:00
     trigger: time
-  - at: '11:17:00'
+  - at: '11:19:00'
     trigger: time
-  - at: '10:41:00'
+  - at: '11:21:00'
     trigger: time
   - at: '12:31:00'
     trigger: time
@@ -61,85 +44,69 @@
       retain: false
     action: mqtt.publish
   mode: single
-- id: heizung_stundenplan
-  alias: Stundenplan Steuerung
-  triggers:
-  - seconds: /10
-    trigger: time_pattern
-  conditions:
-  - condition: time
-    after: 07:00:00
-    before: '20:30:00'
-    weekday:
-    - mon
-    - tue
-    - wed
-    - thu
-    - fri
-    - sat
-  actions:
-  - choose:
-    - conditions:
-      - condition: state
-        entity_id: binary_sensor.fensterkontakt_c009
-        state: 'off'
-      sequence:
-      - repeat:
-          for_each: '{{ climate_entities_c009 }}'
-          sequence:
-          - target:
-              entity_id: '{{ repeat.item }}'
-            data:
-              temperature: '{{ temperatur_c009 }}'
-            action: climate.set_temperature
-  - choose:
-    - conditions:
-      - condition: state
-        entity_id: binary_sensor.fensterkontakt_c005
-        state: 'off'
-      sequence:
-      - repeat:
-          for_each: '{{ climate_entities_c005 }}'
-          sequence:
-          - target:
-              entity_id: '{{ repeat.item }}'
-            data:
-              temperature: '{{ temperatur_c005 }}'
-            action: climate.set_temperature
-  variables:
-    climate_entities_c009: '{{ expand(''group.heizung_c009'') | map(attribute=''entity_id'')
-      | list }}'
-    climate_entities_c005: '{{ expand(''group.heizung_c005'') | map(attribute=''entity_id'')
-      | list }}'
-    temperatur_c009: '{{ states(''input_number.heating_temperature_c009'') | float
-      }}'
-    temperatur_c005: '{{ states(''input_number.heating_temperature_c005'') | float
-      }}'
-  mode: restart
 - id: heizung_manuell
   alias: Heizung Manuell (Priorität über Wochenprofil)
   mode: restart
   trigger:
-    - platform: state
-      entity_id: input_number.manuelle_heiztemperatur
-    - platform: time_pattern
-      seconds: "/10"
+  - platform: state
+    entity_id: input_number.manuelle_heiztemperatur
+  - platform: time_pattern
+    seconds: /10
   condition:
-    - condition: state
-      entity_id: input_select.heiz_modus
-      state: "manuell"
+  - condition: state
+    entity_id: input_select.heiz_modus
+    state: manuell
   variables:
-    temperature_manual: "{{ states('input_number.manuelle_heiztemperatur') | float }}"
-    climate_entities: "{{ state_attr('group.cgebaeude', 'entity_id') }}"
+    temperature_manual: '{{ states(''input_number.manuelle_heiztemperatur'') | float
+      }}'
+    climate_entities: '{{ expand(''group.cgebaeude'') | map(attribute=''entity_id'')
+      | list }}
+
+      '
   action:
-    - repeat:
-        for_each: "{{ climate_entities }}"
-        sequence:
-          - service: climate.set_temperature
-            target:
-              entity_id: "{{ repeat.item }}"
-            data:
-              temperature: "{{ temperature_manual }}"
+  - repeat:
+      for_each: '{{ climate_entities }}'
+      sequence:
+      - service: climate.set_temperature
+        target:
+          entity_id: '{{ repeat.item }}'
+        data:
+          temperature: '{{ temperature_manual }}'
+- id: '8762'
+  alias: Wandthermostat per MQTT senden
+  description: Sendet den Friendly Name und die aktuelle Temperatur eines Wandthermostats
+    per MQTT
+  trigger:
+  - platform: state
+    entity_id: climate.wandthermostat_c005
+  condition: []
+  action:
+  - service: mqtt.publish
+    data:
+      topic: wandthermostat_aenderung
+      payload: '{{ state_attr(trigger.entity_id, ''friendly_name'') }}: {{ state_attr(trigger.entity_id,
+        ''temperature'') }}°C
 
-
+        '
+      retain: false
+  mode: single
+- alias: Heiztemperaturen zyklisch setzen
+  id: d0519adf61e7437fa08d3da1a2828beb
+  trigger:
+    - platform: time_pattern
+      seconds: /10
+  condition:
+    - condition: time
+      weekday:
+        - mon
+        - tue
+        - wed
+        - thu
+        - fri
+        - sat
+      after: "07:00:00"
+      before: "20:00:00"
+  action:
+    - service: script.set_heating_temperatures
+  mode: single
 
