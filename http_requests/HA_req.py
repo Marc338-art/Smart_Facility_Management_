@@ -56,12 +56,8 @@ def change_temperature(entity_id, value=17):
         entity_id (str): Entity-ID des input_number (z.B. "input_number.heating_temperature_C001").
         value (float/int): Neuer Wert für das Entity (Standard 17).
     """
-    #url = f"{HOME_ASSISTANT_URL}/api/services/input_number/set_value"
-    url = f"{HOME_ASSISTANT_URL}/api/services/climate/set_temperature"
-    data = {
-        "entity_id": entity_id,
-        "temperature": value  # Wichtig: der Schlüssel muss "temperature" heißen, nicht "value"
-    }
+    url = f"{HOME_ASSISTANT_URL}/api/services/input_number/set_value"
+    data = {"entity_id": entity_id, "value": value}
 
     try:
         response = requests.post(url, json=data, headers=HEADERS)
@@ -71,6 +67,7 @@ def change_temperature(entity_id, value=17):
             print(f"Fehler beim Setzen der Temperatur ({response.status_code}): {response.text}")
     except requests.exceptions.RequestException as e:
         print(f"Exception beim HTTP-Request: {e}")
+
 
 
 def get_movement_sensor(entity_id):
