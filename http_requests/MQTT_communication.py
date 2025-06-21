@@ -156,11 +156,14 @@ def check_wandthermostat (payload):
     else:
         print("Kein gültiger Wandthermostat-Name.")
         return
-    temp_str = temp_part.strip().replace("°C", "").strip()
-    temperature = float(temp_str)
-    
-    change_temperature(entity_id, temperature) # hier muss noch ein try und except hin
-    
+
+    try:
+        temp_str = temp_part.strip().replace("°C", "").strip()
+        temperature = float(temp_str)
+        
+        change_temperature(entity_id, temperature) # hier muss noch ein try und except hin
+    except Exception:
+        print("Wandthermostat_failture")
 
 
 # -----------------------------------------------------------------------------------
