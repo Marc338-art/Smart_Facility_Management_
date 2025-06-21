@@ -139,16 +139,20 @@ def check_wandthermostat (payload):
     name_part, temp_part = payload.split(":", 1)
     name = name_part.strip()
     print (name)
-    match = re.match(r"Wandthermostat_([A-Z]\d{3})(?:_(\d+))?_", name)
-    if match:
-        raum_nr = match.group(1)
-    else:
-        raum_nr="Kein Raum"
+    match = re.match(r"Wandthermostat_([A-Z]\d{3})_(\d+)_", name)
+
+        if match:
+            raum_nr = match.group(1)     # z. B. C003
+            instanz_nr = match.group(2)  # z. B. 1
+
+            entity_id = f"input_number.heating_temperature_{raum_nr.lower()}_{instanz_nr}"
+        else:
+            print("Kein Match für Raum und Instanz.")
         # Temperatur extrahieren und °C entfernen
     temp_str = temp_part.strip().replace("°C", "").strip()
     temperature = float(temp_str)
-    raum_nr=raum_nr.lower()
-    change_temperature(f"input_number.heating_temperature_{raum_nr}", temperature)
+    
+    change_temperature(entity_id, temperature)
     
 
 
