@@ -63,7 +63,7 @@ def check_condition1_thread(room_nr):
     room_nrs = room_nr.lower()
     room_nrs=room_nrs.replace(".", "_")
     acttime = datetime.now()
-    print(f"Überwache Bewegungssensor: binary_sensor.{room_nrs}")
+    print(f"Überwache Bewegungssensor: binary_sensor.bewegungssensor_{room_nrs}")
 
     while rooms_dict[room_nr]["state"] == 1:
         # Wartezeit von 8 Minuten abwarten
