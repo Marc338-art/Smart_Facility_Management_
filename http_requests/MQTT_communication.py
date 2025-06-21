@@ -148,7 +148,7 @@ def check_wandthermostat (payload):
     temp_str = temp_part.strip().replace("°C", "").strip()
     temperature = float(temp_str)
     raum_nr=raum_nr.lower()
-    change_temperature(f"input_number.heating_temperature_{room_nrs}", temperature)
+    change_temperature(f"input_number.heating_temperature_{room_nr}", temperature)
     
 
 
