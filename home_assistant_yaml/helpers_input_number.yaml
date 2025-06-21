@@ -363,3 +363,6 @@ manuelle_heiztemperatur:
   min: 15
   max: 30
   step: 0.5
+
+ 
+
