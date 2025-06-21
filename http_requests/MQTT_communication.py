@@ -1,9 +1,10 @@
 import requests
 import paho.mqtt.client as mqtt
 import threading
-import time as t ## das soll noch entfernt werden und alles über datetime laufen
+import time as t
 from datetime import datetime, timedelta
 import re
+import sched
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 import base64
 import hashlib
@@ -75,7 +76,7 @@ def check_condition1_thread(room_nr):
                     break
                 else:
                     try:
-                        change_temperature(f"climate.wandthermostat_{raum_name_lower}", 21)
+                        change_temperature(f"input_number.heating_temperature_{room_nrs}", 21)
                         rooms_dict[room_nr]["state"] = 2
                         
                         print("Raumstatus aktualisiert:", rooms_dict)
@@ -85,7 +86,7 @@ def check_condition1_thread(room_nr):
 
             elif res == "off":
                 print("Keine Bewegung:", res)
-                change_temperature(f"climate.wandthermostat_{raum_name_lower}", 17)
+                change_temperature(f"input_number.heating_temperature_{room_nrs}", 17)
                 rooms_dict[room_nr]["thread_active"] = False
                 break
 
@@ -126,7 +127,7 @@ def check_condition2_thread(room_nr):
                 break
             else:
                 print("Keine Bewegung innerhalb der letzten 30 Minuten erkannt.")
-                change_temperature(f"climate.wandthermostat_{raum_name_lower}", 17)
+                change_temperature(f"input_number.heating_temperature_{room_nr}", 17)
                 rooms_dict[room_nr_upper]["thread_active"] = False
                 rooms_dict[room_nr_upper]["state"] = 1
                 break
@@ -248,7 +249,7 @@ def check_timetable():
     print("Stundenplandaten:", data)
 
     belegung = data.get("Belegung", {})
-    belegung["C005"]=[0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1]
+    #belegung["C005"]=[0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1]
 
     print("Aktuelle Stunde:", current_lesson)
 
@@ -269,7 +270,7 @@ def check_timetable():
 
                     # Temperatur erhöhen
                     try:
-                        change_temperature(f"climate.wandthermostat_{raum_name_lower}", 21)
+                        change_temperature(f"input_number.heating_temperature_{raum_name_lower}", 24)
                     except Exception as e:
                         print("Fehler beim Temperatursetzen:", e)
 
@@ -278,7 +279,7 @@ def check_timetable():
                     print("Keine Belegung in der nächsten Stunde")
                     room_data["state"] == 1
                     try:
-                        change_temperature(f"climate.wandthermostat_{raum_name_lower}", 17)
+                        change_temperature(f"input_number.heating_temperature_{raum_name_lower}", 17)
                     except Exception as e:
                         print("Fehler beim Temperatursetzen:", e)
 
@@ -290,5 +291,7 @@ def check_timetable():
     print("Aktueller Zustand der Räume:", rooms_dict)  # Debugging
 
 
+
+    
 
     
