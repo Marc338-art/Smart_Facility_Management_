@@ -20,6 +20,7 @@ from config import MQTT_USER, MQTT_PASS, MQTT_BROKER, MQTT_TOPIC, THESECRET, USE
 
 MQTT_PORT = 1883
 MQTT_TOPIC2 = "stundenplan_belegung"
+MQTT_TOPIC3 ="wandthermostat_aenderung"  # entweder alle topics in config oder keine
 
 # Globale Variablen
 motion_status = None  # Status des Bewegungssensors
@@ -169,6 +170,7 @@ def on_connect(client, userdata, flags, rc):
     if rc == 0:
         client.subscribe(MQTT_TOPIC)   # Haupt-Topic
         client.subscribe(MQTT_TOPIC2)  # Stundenplan-Topic
+        client.subscribe(MQTT_TOPIC3)  #abfrage der wandthermostat temperatur
     else:
         print("Fehler beim Verbinden – Code:", rc)
 
@@ -188,6 +190,9 @@ def on_message(client, userdata, msg):
         # motion_status_received.set()
     elif msg.topic == MQTT_TOPIC2:
         check_timetable()
+
+    elif msg.topic == MQTT_TOPIC3:
+        print("Das ist das neue Topic")
 
 
 def start_mqtt():
