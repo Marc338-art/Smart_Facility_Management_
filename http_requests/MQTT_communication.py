@@ -38,8 +38,8 @@ def start_thread(raum_nr, instanz_nr):
     print(f"Thread gestartet für Raum: {raum_nr}")
     
     if instanz_nr:
-        raum_nr =f"{raum_nr}_{instanznummer}"
-        raum_nr=raum_nr.replace("_",".")
+        raum_nr =f"{raum_nr}.{instanznummer}"
+        
     
     if rooms_dict[raum_nr]["thread_active"]:
         print(f"Thread für Raum {raum_nr} ist bereits aktiv.")
@@ -176,7 +176,7 @@ def main(payload):
     match = re.match(r"Bewegungsmelder_([A-Z]\d{3})(?:_(\d+))?_", payload)
 
     if match:
-        raum_nr = match.group(1).lower()
+        raum_nr = match.group(1)
         instanz_nr = match.group(2)
         start_thread(raum_nr, instanz_nr)
     else:
