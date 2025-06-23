@@ -39,6 +39,7 @@ def start_thread(raum_nr, instanz_nr):
     
     if instanz_nr:
         raum_nr =f"{raum_nr}.{instanz_nr}"
+        print(raum_nr)
         
     
     if rooms_dict[raum_nr]["thread_active"]:
