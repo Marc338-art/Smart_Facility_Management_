@@ -4,7 +4,15 @@
     über MQTT
   triggers:
   - entity_id:
+    - binary_sensor.bewegungssensor_c001
+    - binary_sensor.bewegungssensor_c002
+    - binary_sensor.bewegungssensor_c003_1
+    - binary_sensor.bewegungssensor_c003_3
+    - binary_sensor.bewegungssensor_c004
     - binary_sensor.bewegungssensor_c005
+    - binary_sensor.bewegungssensor_c011
+    - binary_sensor.bewegungssensor_c016
+    - binary_sensor.bewegungssensor_c017
     from: 'off'
     to: 'on'
     trigger: state
@@ -21,7 +29,7 @@
   triggers:
   - at: 07:01:00
     trigger: time
-  - at: '11:19:00'
+  - at: 08:17:00
     trigger: time
   - at: '11:21:00'
     trigger: time
@@ -78,7 +86,16 @@
     per MQTT
   trigger:
   - platform: state
-    entity_id: climate.wandthermostat_c005
+    entity_id: 
+    - climate.wandthermostat_c001
+    - climate.wandthermostat_c002
+    - climate.wandthermostat_c003_1
+    - climate.wandthermostat_c003_3
+    - climate.wandthermostat_c004
+    - climate.wandthermostat_c005
+    - climate.wandthermostat_c011
+    - climate.hmip_bwth_000ca2699c47dd
+    - climate.wandthermostat_c017 
   condition: []
   action:
   - service: mqtt.publish
@@ -90,23 +107,22 @@
         '
       retain: false
   mode: single
-- alias: Heiztemperaturen zyklisch setzen
+- alias: Heiztemperaturen_zyklisch_setzen
   id: d0519adf61e7437fa08d3da1a2828beb
   trigger:
-    - platform: time_pattern
-      seconds: /10
+  - platform: time_pattern
+    seconds: /10
   condition:
-    - condition: time
-      weekday:
-        - mon
-        - tue
-        - wed
-        - thu
-        - fri
-        - sat
-      after: "07:00:00"
-      before: "20:00:00"
+  - condition: time
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+    - sat
+    after: 07:00:00
+    before: '20:00:00'
   action:
-    - service: script.set_heating_temperatures
+  - service: script.set_heating_temperatures
   mode: single
-
