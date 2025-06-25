@@ -14,7 +14,7 @@ import pytz
 from .lesson_hours import *
 from .HA_req import *
 from .URL_encoding import *
-
+from .thread_management.py import *
 # Konfiguration / Konstanten
 from config import MQTT_USER, MQTT_PASS, MQTT_BROKER, MQTT_TOPIC, THESECRET, USERNAME, PASSWORD
 
