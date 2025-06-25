@@ -7,6 +7,8 @@ import pytz
 
 
 from .lesson_hours import *
+from config import  TOKEN, THESECRET, USERNAME, PASSWORD
+
 
 def encrypt(string, secret_key):
     key = hashlib.sha256(secret_key.encode()).digest()[:32]
