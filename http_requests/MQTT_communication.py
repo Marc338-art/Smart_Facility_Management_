@@ -1,14 +1,10 @@
 import requests
 import paho.mqtt.client as mqtt
-import threading
+
 import time as t
 from datetime import datetime, timedelta
 import re
-import sched
-from cryptography.hazmat.primitives.ciphers.aead import AESGCM
-import base64
-import hashlib
-import pytz
+
 
 # Lokale Module / Pakete
 from .lesson_hours import *
@@ -16,23 +12,18 @@ from .HA_req import *
 from .URL_encoding import check_timetable
 from .thread_management import *
 # Konfiguration / Konstanten
-from config import MQTT_USER, MQTT_PASS, MQTT_BROKER, MQTT_TOPIC, THESECRET, USERNAME, PASSWORD
+from config import MQTT_USER, MQTT_PASS, MQTT_BROKER, MQTT_TOPIC
 
 MQTT_PORT = 1883
 MQTT_TOPIC1="ha_main"
 MQTT_TOPIC2 = "stundenplan_belegung"
 MQTT_TOPIC3 ="wandthermostat_aenderung"  # entweder alle topics in config oder keine
 
-# Globale Variablen
-motion_status = None  # Status des Bewegungssensors
-motion_status_received = threading.Event()  # Event zur Synchronisation
 
 
 
-# Globale Hilfsvariablen
-acttime = 0
-movement_list = []
-move_act = "off"
+
+
 
 # -----------------------------------------------------------------------------------
 # MQTT Callbacks und Client-Setup
