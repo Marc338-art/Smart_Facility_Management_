@@ -10,7 +10,7 @@ import pytz
 
 # Lokale Module / Pakete
 from .lesson_hours import *
-from .URL_encoding import *
+
 
 from config import  TOKEN, THESECRET, USERNAME, PASSWORD
 # Basis-URL für Home Assistant API (kann auch aus config geladen werden)
