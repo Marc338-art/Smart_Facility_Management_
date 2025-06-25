@@ -5,7 +5,7 @@ from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from datetime import datetime
 import pytz
 
-
+from .HA_req import *
 from .lesson_hours import *
 from config import  TOKEN, THESECRET, USERNAME, PASSWORD
 
