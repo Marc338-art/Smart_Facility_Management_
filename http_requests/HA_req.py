@@ -2,16 +2,16 @@ import requests
 import time as t
 from datetime import datetime, timedelta, time
 from .lesson_hours import *
-from config import  TOKEN
 import re
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 import base64
 import hashlib
 import pytz
+
 # Lokale Module / Pakete
 from .lesson_hours import *
 from .URL_encoding import *
-
+from config import  TOKEN, THESECRET, USERNAME, PASSWORD
 # Basis-URL für Home Assistant API (kann auch aus config geladen werden)
 HOME_ASSISTANT_URL = "http://172.30.100.216:8123"
 
@@ -20,8 +20,6 @@ HEADERS = {
     "Authorization": f"Bearer {TOKEN}",
     "Content-Type": "application/json"
 }
-
-
 
 def get_current_time(delta_t=0):
     """
