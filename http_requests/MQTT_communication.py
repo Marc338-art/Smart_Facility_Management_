@@ -29,11 +29,11 @@ motion_status_received = threading.Event()  # Event zur Synchronisation
 
 # MQTT-Dispatcher Tabelle mit den passenden Funktionen je nach Payload
 
- MQTT_functioms = {
-        MQTT_TOPIC1: thread_manager,
-        MQTT_TOPIC2: lambda _: check_timetable(), # Lambda um Payload zu ignorieren
-        MQTT_TOPIC3: check_wandthermostat,
-    }
+MQTT_functions = {
+    MQTT_TOPIC1: thread_manager,
+    MQTT_TOPIC2: lambda _: check_timetable(), # Lambda um Payload zu ignorieren
+    MQTT_TOPIC3: check_wandthermostat,
+}
 
 # -----------------------------------------------------------------------------------
 # Funktionen zur Thread-Steuerung für Raumsensoren und Temperaturregelung
@@ -220,7 +220,7 @@ def on_message(client, userdata, msg):
     payload = msg.payload.decode()
     print(f"MQTT Nachricht empfangen: {msg.topic} → {payload}")
 
-    func = MQTT_functioms.get(msg.topic)
+    func = MQTT_functions.get(msg.topic)
     if func:
         func(payload)
     else:
