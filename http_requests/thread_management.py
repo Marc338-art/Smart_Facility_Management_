@@ -56,7 +56,7 @@ def check_condition1_thread(room_nr):
 
     while rooms_dict[room_nr]["state"] == 1:
         # Wartezeit von 8 Minuten abwarten
-        if datetime.now() - timedelta(minutes=2) > acttime:
+        if datetime.now() - timedelta(minutes=8) > acttime:
             res = get_movement_sensor(f"binary_sensor.bewegungssensor_{room_nrs}")
 
             if res == "on":
