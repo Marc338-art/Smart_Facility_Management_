@@ -7,6 +7,7 @@ import pytz
 
 from .HA_req import *
 from .lesson_hours import *
+from .thread_management import *
 from config import  TOKEN, THESECRET, USERNAME, PASSWORD
 
 
