@@ -19,12 +19,21 @@ from .URL_encoding import *
 from config import MQTT_USER, MQTT_PASS, MQTT_BROKER, MQTT_TOPIC, THESECRET, USERNAME, PASSWORD
 
 MQTT_PORT = 1883
+MQTT_TOPIC1="ha_main"
 MQTT_TOPIC2 = "stundenplan_belegung"
 MQTT_TOPIC3 ="wandthermostat_aenderung"  # entweder alle topics in config oder keine
 
 # Globale Variablen
 motion_status = None  # Status des Bewegungssensors
 motion_status_received = threading.Event()  # Event zur Synchronisation
+
+# MQTT-Dispatcher Tabelle mit den passenden Funktionen je nach Payload
+
+ MQTT_functioms = {
+        MQTT_TOPIC1: thread_manager,
+        MQTT_TOPIC2: lambda _: check_timetable(), # Lambda um Payload zu ignorieren
+        MQTT_TOPIC3: check_wandthermostat,
+    }
 
 # -----------------------------------------------------------------------------------
 # Funktionen zur Thread-Steuerung für Raumsensoren und Temperaturregelung
@@ -171,7 +180,7 @@ def check_wandthermostat (payload):
 # Hauptfunktion zur Verarbeitung von MQTT-Payloads
 # -----------------------------------------------------------------------------------
 
-def main(payload):
+def thread_manager(payload):
     """
     Verarbeitet empfangene MQTT-Payloads und startet ggf. den Überwachungsthread.
     """
@@ -208,24 +217,14 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, msg):
-    """
-    Callback für empfangene MQTT-Nachrichten.
-    Verarbeitet Nachrichten je nach Topic.
-    """
-    global motion_status
-
     payload = msg.payload.decode()
     print(f"MQTT Nachricht empfangen: {msg.topic} → {payload}")
 
-    if msg.topic == "ha_main":
-        main(payload)
-        # motion_status_received.set()
-    elif msg.topic == MQTT_TOPIC2:
-        check_timetable()
-
-    elif msg.topic == MQTT_TOPIC3:
-        check_wandthermostat(payload)
-        print("Das ist das neue Topic")
+    func = MQTT_functioms.get(msg.topic)
+    if func:
+        func(payload)
+    else:
+        print(f"Kein Handler für Topic {msg.topic} gefunden.")
 
 
 def start_mqtt():
