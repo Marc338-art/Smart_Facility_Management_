@@ -13,7 +13,7 @@ import pytz
 # Lokale Module / Pakete
 from .lesson_hours import *
 from .HA_req import *
-from .URL_encoding import *
+from .URL_encoding import check_timetable
 from .thread_management import *
 # Konfiguration / Konstanten
 from config import MQTT_USER, MQTT_PASS, MQTT_BROKER, MQTT_TOPIC, THESECRET, USERNAME, PASSWORD
