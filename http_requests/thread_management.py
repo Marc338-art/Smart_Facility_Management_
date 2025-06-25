@@ -1,4 +1,3 @@
-
 import threading
 import time as t
 from datetime import datetime, timedelta
@@ -9,9 +8,23 @@ from .lesson_hours import *
 from .HA_req import get_movement_sensor, change_temperature, get_current_lesson
 
 
+# -----------------------------------------------------------------------------------
+# Konfiguration & Konstanten
+# -----------------------------------------------------------------------------------
+
+WAIT_TIME_MINUTES = 8         # Zeit für Bewegungssensorprüfung in Minuten
+CHECK_INTERVAL_SECONDS = 5    # Intervall zwischen Threadprüfungen
+NO_MOTION_TEMP = 17           # Temperatur bei keiner Bewegung
+MOTION_TEMP = 21              # Temperatur bei Bewegung
+LESSON_START_DELAY = 30 * 60  # Wartezeit vor Stundenbeginn in Sekunden
+
+
+# -----------------------------------------------------------------------------------
 # Globale Variablen
-motion_status = None  # Status des Bewegungssensors
-motion_status_received = threading.Event()  # Event zur Synchronisation
+# -----------------------------------------------------------------------------------
+
+motion_status = None
+motion_status_received = threading.Event()
 
 
 # -----------------------------------------------------------------------------------
@@ -26,10 +39,9 @@ def start_thread(raum_nr, instanz_nr):
     print(f"Thread gestartet für Raum: {raum_nr}")
     
     if instanz_nr:
-        raum_nr =f"{raum_nr}.{instanz_nr}"
+        raum_nr = f"{raum_nr}.{instanz_nr}"
         print(raum_nr)
-        
-    
+
     if rooms_dict[raum_nr]["thread_active"]:
         print(f"Thread für Raum {raum_nr} ist bereits aktiv.")
         return
@@ -43,20 +55,16 @@ def start_thread(raum_nr, instanz_nr):
 def check_condition1_thread(room_nr):
     """
     Überwacht den Bewegungssensor für den Raum.
-    Nach 8 Minuten Wartezeit prüft er Bewegung:
-    - Bei Bewegung wird Temperatur auf 21 gesetzt und Zustand auf 2 geändert.
-    - Ohne Bewegung wird Temperatur auf 17 gesetzt.
+    Nach WAIT_TIME_MINUTES prüft er Bewegung:
+    - Bei Bewegung wird Temperatur auf MOTION_TEMP gesetzt und Zustand auf 2 geändert.
+    - Ohne Bewegung wird Temperatur auf NO_MOTION_TEMP gesetzt.
     """
-    
-    
-    room_nrs = room_nr.lower()
-    room_nrs=room_nrs.replace(".", "_")
+    room_nrs = room_nr.lower().replace(".", "_")
     acttime = datetime.now()
     print(f"Überwache Bewegungssensor: binary_sensor.bewegungssensor_{room_nrs}")
 
     while rooms_dict[room_nr]["state"] == 1:
-        # Wartezeit von 8 Minuten abwarten
-        if datetime.now() - timedelta(minutes=8) > acttime:
+        if datetime.now() - timedelta(minutes=WAIT_TIME_MINUTES) > acttime:
             res = get_movement_sensor(f"binary_sensor.bewegungssensor_{room_nrs}")
 
             if res == "on":
@@ -65,36 +73,33 @@ def check_condition1_thread(room_nr):
                 act = get_current_lesson()
 
                 if act is None:
-                    # Keine aktuelle Stunde, Bewegung ignorieren
-                    break
-                else:
-                    try:
-                        change_temperature(f"input_number.heating_temperature_{room_nrs}", 21)
-                        rooms_dict[room_nr]["state"] = 2
-                        
-                        print("Raumstatus aktualisiert:", rooms_dict)
-                    except Exception as e:
-                        print("Fehler beim Ändern der Temperatur:", e)
+                    break  # Keine aktuelle Stunde, Bewegung ignorieren
+                try:
+                    change_temperature(f"input_number.heating_temperature_{room_nrs}", MOTION_TEMP)
+                    rooms_dict[room_nr]["state"] = 2
+                    print("Raumstatus aktualisiert:", rooms_dict)
+                except Exception as e:
+                    print("Fehler beim Ändern der Temperatur:", e)
                 break
 
             elif res == "off":
                 print("Keine Bewegung:", res)
-                change_temperature(f"input_number.heating_temperature_{room_nrs}", 17)
+                change_temperature(f"input_number.heating_temperature_{room_nrs}", NO_MOTION_TEMP)
                 rooms_dict[room_nr]["thread_active"] = False
                 break
 
-            print("8 Minuten Wartezeit abgelaufen")
+            print(f"{WAIT_TIME_MINUTES} Minuten Wartezeit abgelaufen")
 
-        t.sleep(5)
+        t.sleep(CHECK_INTERVAL_SECONDS)
         print("Thread läuft noch...")
 
 
 def check_condition2_thread(room_nr):
     """
     Überwacht Bewegung über längeren Zeitraum (30 Minuten).
-    - Setzt die Temperatur zurück, wenn keine Bewegung in den letzten 30 Minuten erkannt wurde.
+    - Setzt die Temperatur zurück, wenn keine Bewegung erkannt wurde.
     """
-    t.sleep(30 * 60)  # 30 Minuten warten, bis zum Stundenbeginn
+    t.sleep(LESSON_START_DELAY)
     last_active_time = 0
     last_check_time = t.time()
 
@@ -102,32 +107,28 @@ def check_condition2_thread(room_nr):
         current_time = t.time()
         try:
             res = get_movement_sensor(f"binary_sensor.bewegungssensor_{room_nr}")
-
-            if res == "on" and (last_active_time <= current_time - 8 * 60):
+            if res == "on" and (last_active_time <= current_time - WAIT_TIME_MINUTES * 60):
                 last_active_time = current_time
                 print("Bewegung erkannt")
-
         except Exception as e:
             print("Exception beim Lesen des Bewegungssensors:", e)
 
-        # Nach 30 Minuten prüfen, ob Bewegung vorhanden war
-        if last_check_time <= current_time - 30 * 60:
+        if last_check_time <= current_time - LESSON_START_DELAY:
             room_nrs = room_nr.upper()
             room_nr_upper = room_nrs.replace("_", ".")
+
             if last_active_time >= last_check_time:
                 print("Bewegung innerhalb der letzten 30 Minuten erkannt.")
                 rooms_dict[room_nr_upper]["thread_active"] = False
-                break
             else:
                 print("Keine Bewegung innerhalb der letzten 30 Minuten erkannt.")
-                change_temperature(f"input_number.heating_temperature_{room_nr}", 17)
+                change_temperature(f"input_number.heating_temperature_{room_nr}", NO_MOTION_TEMP)
                 rooms_dict[room_nr_upper]["thread_active"] = False
                 rooms_dict[room_nr_upper]["state"] = 1
-                break
+            break
 
         print("Thread aktiv")
-        t.sleep(5)
-
+        t.sleep(CHECK_INTERVAL_SECONDS)
 
 
 # -----------------------------------------------------------------------------------
@@ -145,9 +146,8 @@ def thread_manager(payload):
     if match:
         raum_nr = match.group(1)
         instanz_nr = match.group(2)
-        print("Instanznummer " + str(instanz_nr))
+        print("Instanznummer:", instanz_nr)
 
         start_thread(raum_nr, instanz_nr)
     else:
         print("Unbekannter Payload!")
-
