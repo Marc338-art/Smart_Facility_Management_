@@ -143,31 +143,6 @@ def check_condition2_thread(room_nr):
         t.sleep(5)
 
 
-def check_wandthermostat (payload):
-    name_part, temp_part = payload.split(":", 1)
-    name = name_part.strip()
-    print (name)
-    match = re.match(r"Wandthermostat_([A-Z]\d{3})(?:_(\d+))?_", name)
-
-    if match:
-        raum_nr = match.group(1).lower()
-        instanz_nr = match.group(2)
-        if instanz_nr:
-                entity_id = f"input_number.heating_temperature_{raum_nr}_{instanz_nr}"
-        else:
-                entity_id = f"input_number.heating_temperature_{raum_nr}"
-    else:
-        print("Kein gültiger Wandthermostat-Name.")
-        return
-
-    try:
-        temp_str = temp_part.strip().replace("°C", "").strip()
-        temperature = float(temp_str)
-        
-        change_temperature(entity_id, temperature) # hier muss noch ein try und except hin
-    except Exception:
-        print("Wandthermostat_failture")
-
 
 # -----------------------------------------------------------------------------------
 # Hauptfunktion zur Verarbeitung von MQTT-Payloads
