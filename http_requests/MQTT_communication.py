@@ -299,7 +299,7 @@ def check_timetable():
                 raum_name_lower = room_name.lower().replace(".", "_")
 
                 if belegung[room_name][current_lesson] == 1:
-                    room_data["state"] = 2
+                    rooms_dict[room_name]["state"] = 2
 
                     # Thread für Überwachung starten
                     abfrage_thread2 = threading.Thread(target=check_condition2_thread, args=(raum_name_lower,), daemon=True)
@@ -315,7 +315,7 @@ def check_timetable():
                 
                 elif belegung[room_name][current_lesson]==0 :
                     print("Keine Belegung in der nächsten Stunde")
-                    room_data["state"] == 1
+                    rooms_dict[room_name]["state"] = 1
                     try:
                         change_temperature(f"input_number.heating_temperature_{raum_name_lower}", 17)
                     except Exception as e:
