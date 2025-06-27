@@ -141,7 +141,7 @@ def thread_manager(payload):
     """
     print(f"Empfangener Payload: {payload}")
 
-    match = re.match(r"Bewegungssensor_([A-Z]\d{3})(?:_(\d+))?_", payload)
+    match = re.match(r"Bewegungssensor_([A-Z]\d{3})(?:_(\d+))?", payload)
 
     if match:
         raum_nr = match.group(1)
