@@ -1,7 +1,7 @@
 import threading
 import time
 import sched
-import http_requests.MQTT_communication as mqtt_com
+from http_requests.MQTT_communication import start_mqtt
 
 
 scheduler = sched.scheduler(time.time, time.sleep)
@@ -10,7 +10,7 @@ scheduler = sched.scheduler(time.time, time.sleep)
 if __name__ == "__main__":
     
     # startet den MQTT-Client
-    mqtt_com.start_mqtt()
+    start_mqtt()
  
 
 
