@@ -6,7 +6,7 @@ import re
 
 # Lokale Module / Pakete
 from .lesson_hours import *
-from .HA_req import *
+from .http_req import *
 from .URL_encoding import check_timetable
 from .thread_management import *
 
