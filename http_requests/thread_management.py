@@ -147,7 +147,9 @@ def thread_manager(payload):
         raum_nr = match.group(1)
         instanz_nr = match.group(2)
         print("Instanznummer:", instanz_nr)
-
-        start_thread(raum_nr, instanz_nr)
+        try:
+            start_thread(raum_nr, instanz_nr)
+        except Exception as e:
+            print("Fehler beim start des Threads")
     else:
         print("Unbekannter Payload!")
