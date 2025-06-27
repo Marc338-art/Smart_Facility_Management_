@@ -5,7 +5,7 @@ import re
 
 # Lokale Module / Pakete
 from .lesson_hours import *
-from .HA_req import get_movement_sensor, change_temperature, get_current_lesson
+from .http_req import get_movement_sensor, change_temperature, get_current_lesson
 
 
 # -----------------------------------------------------------------------------------
