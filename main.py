@@ -1,7 +1,7 @@
 import threading
 import time
 import sched
-import src.MQTT_communication as mqtt_com
+import http_requests.MQTT_communication as mqtt_com
 
 
 scheduler = sched.scheduler(time.time, time.sleep)
