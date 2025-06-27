@@ -7,7 +7,7 @@ import pytz
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
 # Lokale Module / Pakete
-from .HA_req import *
+from .http_req import *
 from .lesson_hours import *
 from .thread_management import *
 from config import TOKEN, THESECRET, USERNAME, PASSWORD
