@@ -96,7 +96,7 @@ def check_wandthermostat(payload):
     name = name_part.strip()
     print(name)
 
-    match = re.match(r"Wandthermostat_([A-Z]\d{3})(?:_(\d+))?_", name)
+    match = re.match(r"Wandthermostat_([A-Z]\d{3})(?:_(\d+))?", name)
     if match:
         raum_nr = match.group(1).lower()
         instanz_nr = match.group(2)
