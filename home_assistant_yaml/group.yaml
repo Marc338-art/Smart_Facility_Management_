@@ -8,7 +8,6 @@ cgebaeude:
     - climate.c003_2_int0000006
     - climate.c003_3_int0000008
     - climate.c003_4_int0000009
-    - climate.c003_5_int0000010
     - climate.c004_int0000011
     - climate.c005_int0000001
     - climate.c006_1_int0000012
@@ -25,7 +24,39 @@ cgebaeude:
     - climate.c016_int0000022
     - climate.c017_int0000023
     - climate.c018_int0000024
-
+    - climate.c101_102_int0000001
+    - climate.c103_int0000002
+    - climate.c104_int0000003
+    - climate.c105_int0000004
+    - climate.c106_int0000005
+    - climate.c107_int0000006
+    - climate.c108_int0000007
+    - climate.c109_1_int0000008
+    - climate.c109_2_int0000009
+    - climate.c110_int0000010
+    - climate.c111_int0000011
+    - climate.c112_int0000012
+    - climate.c113_int0000013
+    - climate.c114_1_int0000014
+    - climate.c114_2_int0000015
+    - climate.c115_int0000016
+    - climate.c116_int0000017
+    - climate.c117_int0000018
+    - climate.c201_int0000001
+    - climate.c202_int0000002
+    - climate.c205_int0000005
+    - climate.c206_int0000006
+    - climate.c208_int0000007
+    - climate.c209_int0000008
+    - climate.c211_int0000011
+    - climate.c215_int0000014
+    - climate.c216_int0000015
+    - climate.c218_int0000017
+    - climate.c219_int0000018
+    - climate.c220_int0000019
+    - climate.c221_int0000020
+    
+    
 
 
 
