@@ -6,7 +6,7 @@ Das Projekt bildet die zentrale Steuereinheit eines smarten Raumsteuerungssystem
 
 Das Projekt ist in mehrere Module unterteilt:
 
-- ``\
+- `lesson_hours.py`  
   Initialisiert Raumzustände basierend auf Stundenplandaten. Jeder Raum erhält einen Default-Zustand mit `state = 1` (nicht belegt) und `thread_active = False`.
 
 - ``\
