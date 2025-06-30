@@ -1,3 +1,4 @@
+import logging
 import requests
 import paho.mqtt.client as mqtt
 import time as t
@@ -32,14 +33,15 @@ def on_connect(client, userdata, flags, rc):
     Callback bei erfolgreicher Verbindung mit MQTT-Broker.
     Abonniert relevante Topics.
     """
-    print("MQTT verbunden mit Code:", str(rc))
+    logging.info(f"MQTT verbunden mit Code: {rc}")
     
     if rc == 0:
         client.subscribe(MQTT_TOPIC)    # Haupt-Topic
         client.subscribe(MQTT_TOPIC2)   # Stundenplan-Updates
         client.subscribe(MQTT_TOPIC3)   # Wandthermostat-Änderungen
+        logging.info(f"Abonniere Topics: {MQTT_TOPIC}, {MQTT_TOPIC2}, {MQTT_TOPIC3}")
     else:
-        print("Fehler beim Verbinden – Code:", rc)
+        logging.error(f"Fehler beim Verbinden – Code: {rc}")
 
 
 # Dispatcher-Tabelle für eingehende Nachrichten
@@ -56,13 +58,13 @@ def on_message(client, userdata, msg):
     Leitet je nach Topic an die passende Funktion weiter.
     """
     payload = msg.payload.decode()
-    print(f"MQTT Nachricht empfangen: {msg.topic} → {payload}")
+    
 
     func = MQTT_functions.get(msg.topic)
     if func:
         func(payload)
     else:
-        print(f"Kein Handler für Topic {msg.topic} gefunden.")
+        logging.warning(f"Kein Handler für Topic {msg.topic} gefunden.")
 
 
 # -----------------------------------------------------------------------------------
@@ -82,3 +84,4 @@ def start_mqtt():
 
     client.connect(MQTT_BROKER, MQTT_PORT, MQTT_KEEPALIVE)
     client.loop_forever()
+
