@@ -1,3 +1,4 @@
+import logging
 import base64
 import hashlib
 import requests
@@ -56,18 +57,20 @@ def check_timetable():
 
     # Heutiges Datum
     today = datetime.today().strftime("%Y-%m-%d")
-    print("Heutiges Datum:", today)
-
-    # Keyphrase abrufen
-    keyphrase_url = BASE_URL + KEYPHRASE_ENDPOINT
-    response = requests.get(keyphrase_url, auth=(USERNAME, PASSWORD), verify=False)
-    keyphrase_data = response.json()
-    my_key = keyphrase_data.get("KeyPhrase")
+    
+    try:
+        # Keyphrase abrufen
+        keyphrase_url = BASE_URL + KEYPHRASE_ENDPOINT
+        response = requests.get(keyphrase_url, auth=(USERNAME, PASSWORD), verify=False)
+        keyphrase_data = response.json()
+        my_key = keyphrase_data.get("KeyPhrase")
+    except Exception as e:
+        logging.error(f"Fehler beim Abrufen der Keyphrase: {e}")
 
     # Zeitstempel für Signatur
     tz = pytz.timezone(TIMEZONE)
     timestamp = datetime.now(tz).strftime("%Y-%m-%d %H:%M:%S")
-    print("⏰ Timestamp:", timestamp)
+    
 
     string_to_encrypt = f"{timestamp} {THESECRET} {USERNAME}"
     encrypted = encrypt(string_to_encrypt, my_key)
@@ -80,14 +83,18 @@ def check_timetable():
     )
 
     # Belegungsdaten abrufen
-    response = requests.get(timetable_url, auth=(USERNAME, PASSWORD), verify=False)
-    data = response.json()
-    belegung = data.get("Belegung", {})
-    print("Stundenplandaten:", data)
+    try:
+        response = requests.get(timetable_url, auth=(USERNAME, PASSWORD), verify=False)
+        data = response.json()
+        belegung = data.get("Belegung", {})
+    except Exception as e:
+        logging.error(f"Fehler beim Abrufen des Stundenplans: {e}")
+        return
+    
 
     # Aktuelle Stunde mit Vorlauf
     current_lesson = get_current_lesson(LESSON_LOOKAHEAD_MIN)
-    print("Aktuelle Stunde:", current_lesson)
+    
 
     for room_name, room_data in rooms_dict.items():
         try:
@@ -111,7 +118,7 @@ def check_timetable():
                             ACTIVE_TEMP
                         )
                     except Exception as e:
-                        print("Fehler beim Temperatursetzen:", e)
+                         logging.error(f"Fehler beim Temperatursetzen (inaktiv): {e}")
 
                 elif belegung[room_name][current_lesson] == 0:
                     print("Keine Belegung in der nächsten Stunde")
@@ -123,9 +130,9 @@ def check_timetable():
                             DEFAULT_TEMP
                         )
                     except Exception as e:
-                        print("Fehler beim Temperatursetzen:", e)
+                         logging.error(f"Fehler beim Temperatursetzen (inaktiv): {e}")
 
         except Exception:
-            print("Keine aktuelle Stunde oder Fehler bei Raumprüfung")
+            logging.warning(f"Fehler bei der Prüfung von {room_name}: {e}")
 
-    print("Aktueller Zustand der Räume:", rooms_dict)
+    
