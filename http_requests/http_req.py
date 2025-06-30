@@ -63,7 +63,7 @@ def change_temperature(entity_id, value=DEFAULT_TEMPERATURE):
     try:
         response = requests.post(url, json=data, headers=HEADERS)
         if response.status_code == 200:
-            
+            logging.info(f"{entity_id}: Temperatur erfolgreich auf {value}°C gesetzt.")
         else:
             logging.error(f"Fehler beim Setzen der Temperatur ({response.status_code}): {response.text}")
     except requests.exceptions.RequestException as e:
