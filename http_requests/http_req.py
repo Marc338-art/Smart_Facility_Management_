@@ -113,5 +113,5 @@ def check_wandthermostat(payload):
         temp_str = temp_part.strip().replace("°C", "").strip()
         temperature = float(temp_str)
         change_temperature(entity_id, temperature)
-    except Exception:
+    except Exception as e:
         logging.error(f"Wandthermostat-Verarbeitung fehlgeschlagen: {e}")
