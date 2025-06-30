@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 import re
 
 # Lokale Module / Pakete
-from .lesson_hours import *
+from .lesson_hours import *  
 from .http_req import *
 from .URL_encoding import check_timetable
 from .thread_management import *
