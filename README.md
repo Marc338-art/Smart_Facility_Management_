@@ -9,16 +9,16 @@ Das Projekt ist in mehrere Module unterteilt:
 - `lesson_hours.py`  
   Initialisiert Raumzustände basierend auf Stundenplandaten. Jeder Raum erhält einen Default-Zustand mit `state = 1` (nicht belegt) und `thread_active = False`.
 
-- ``\
+- `http_req.py`
   Enthält Funktionen zur Kommunikation mit Home Assistant über HTTP. Hierüber können z. B. Bewegungssensoren abgefragt oder Raumtemperaturen gesetzt werden.
 
-- ``\
+- `URL_encoding.py` 
   Beinhaltet die Funktion `check_timetable()`, welche mit AES-GCM verschlüsselte Anfragen an die Stundenplandatenbank stellt. Erkennt sie bevorstehenden Unterricht, wird die Temperatur auf 21 °C gesetzt und ein Überprüfungsthread gestartet.
 
-- ``\
+- `MQTT_communication.py`  
   Verwaltet die MQTT-Verbindung und implementiert eine dispatcher-basierte Steuerung je nach empfangenem Topic.
 
-- ``\
+- `thread_management.py`
   Enthält die Logik zur Steuerung paralleler Threads, etwa zur Prüfung von Bewegungen vor und während des Unterrichts. Reagiert auf reale Raumbelegung und passt die Temperatur an.
 
 ## ✨ Installation
