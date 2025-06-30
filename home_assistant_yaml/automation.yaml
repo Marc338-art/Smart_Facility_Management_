@@ -13,6 +13,16 @@
     - binary_sensor.bewegungssensor_c011
     - binary_sensor.bewegungssensor_c016
     - binary_sensor.bewegungssensor_c017
+    - binary_sensor.bewegungssensor_c101
+    - binary_sensor.bewegungssensor_c104
+    - binary_sensor.bewegungssensor_c106
+    - binary_sensor.bewegungssensor_c005
+    - binary_sensor.bewegungssensor_c109_1
+    - binary_sensor.bewegungssensor_c110
+    - binary_sensor.bewegungssensor_c111
+    - binary_sensor.bewegungssensor_c112
+    - binary_sensor.bewegungssensor_c115
+    - binary_sensor.bewegungssensor_c116
     from: 'off'
     to: 'on'
     trigger: state
@@ -29,9 +39,9 @@
   triggers:
   - at: 07:01:00
     trigger: time
-  - at: 08:17:00
+  - at: '11:49:00'
     trigger: time
-  - at: '11:21:00'
+  - at: '14:58:00'
     trigger: time
   - at: '12:31:00'
     trigger: time
@@ -54,16 +64,26 @@
   mode: single
 - id: heizung_manuell
   alias: Heizung Manuell (Priorität über Wochenprofil)
-  mode: restart
-  trigger:
-  - platform: state
-    entity_id: input_number.manuelle_heiztemperatur
-  - platform: time_pattern
-    seconds: /10
-  condition:
+  triggers:
+  - entity_id: input_number.manuelle_heiztemperatur
+    trigger: state
+  - trigger: time_pattern
+    minutes: /7
+  conditions:
   - condition: state
     entity_id: input_select.heiz_modus
     state: manuell
+  actions:
+  - repeat:
+      for_each: '{{ climate_entities }}'
+      sequence:
+      - target:
+          entity_id: '{{ repeat.item }}'
+        data:
+          temperature: '{{ temperature_manual }}'
+        action: climate.set_temperature
+      - delay: 00:00:05
+  mode: restart
   variables:
     temperature_manual: '{{ states(''input_number.manuelle_heiztemperatur'') | float
       }}'
@@ -71,22 +91,13 @@
       | list }}
 
       '
-  action:
-  - repeat:
-      for_each: '{{ climate_entities }}'
-      sequence:
-      - service: climate.set_temperature
-        target:
-          entity_id: '{{ repeat.item }}'
-        data:
-          temperature: '{{ temperature_manual }}'
 - id: '8762'
   alias: Wandthermostat per MQTT senden
   description: Sendet den Friendly Name und die aktuelle Temperatur eines Wandthermostats
     per MQTT
   trigger:
   - platform: state
-    entity_id: 
+    entity_id:
     - climate.wandthermostat_c001
     - climate.wandthermostat_c002
     - climate.wandthermostat_c003_1
@@ -95,7 +106,14 @@
     - climate.wandthermostat_c005
     - climate.wandthermostat_c011
     - climate.hmip_bwth_000ca2699c47dd
-    - climate.wandthermostat_c017 
+    - climate.wandthermostat_c101
+    - climate.wandthermostat_c104
+    - climate.wandthermostat_c106
+    - climate.wandthermostat_c109_1
+    - climate.wandthermostat_c111
+    - climate.wandthermostat_c112
+    - climate.wandthermostat_c115
+    - climate.wandthermostat_c116
   condition: []
   action:
   - service: mqtt.publish
