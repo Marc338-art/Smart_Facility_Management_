@@ -50,4 +50,5 @@ Das Projekt ist in mehrere Module unterteilt:
    ```bash
    python main.py
    ```
-
+##📄 Lizenz
+Dieses Projekt wurde im Rahmen eines studentischen Vorhabens zu Lehr- und Demonstrationszwecken entwickelt. Es ist nicht für den produktiven Einsatz vorgesehen. Die Nutzung des Codes erfolgt auf eigene Verantwortung. Eine kommerzielle Weiterverwendung ist ohne Rücksprache mit den Autoren nicht gestattet.
