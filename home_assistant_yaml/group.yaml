@@ -2,8 +2,30 @@
 cgebaeude:
   name: C-Gebäude
   entities:
-    - climate.c009_int0000002
+    - climate.c001_int0000003
+    - climate.c002_int0000004
+    - climate.c003_1_int0000005
+    - climate.c003_2_int0000006
+    - climate.c003_3_int0000008
+    - climate.c003_4_int0000009
+    - climate.c003_5_int0000010
+    - climate.c004_int0000011
     - climate.c005_int0000001
+    - climate.c006_1_int0000012
+    - climate.c006_2_int0000013
+    - climate.c006_3_int0000014
+    - climate.c007_int0000015
+    - climate.c008_int0000016
+    - climate.c009_int0000026
+    - climate.c011_int0000017
+    - climate.c012_int0000018
+    - climate.c013_int0000019
+    - climate.c014_int0000020
+    - climate.c015_int0000021
+    - climate.c016_int0000022
+    - climate.c017_int0000023
+    - climate.c018_int0000024
+
 
 
 
