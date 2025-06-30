@@ -52,4 +52,5 @@ Das Projekt ist in mehrere Module unterteilt:
    ```
    ## 📄 Lizenz
 
-   Dieses Projekt wurde im Rahmen eines studentischen Vorhabens zu Lehr- und Demonstrationszwecken entwickelt. Es ist nicht für den produktiven Einsatz vorgesehen. Die Nutzung des     Codes erfolgt auf eigene Verantwortung. Eine kommerzielle Weiterverwendung ist ohne Rücksprache mit den Autoren nicht gestattet.
+   Dieses Projekt wurde im Rahmen eines studentischen Projekts erstellt und dient ausschließlich zu Lern- und Demonstrationszwecken. Eine kommerzielle Nutzung ist nicht vorgesehen.    Es wird keine Garantie für Funktionalität, Sicherheit oder Vollständigkeit übernommen.
+   Wenn Sie dieses Projekt verwenden oder weiterentwickeln möchten, geben Sie bitte die ursprünglichen Urheber an.
