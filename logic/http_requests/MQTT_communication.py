@@ -29,7 +29,7 @@ MQTT_TOPIC3 = "wandthermostat_aenderung"  # Entweder alle Topics in config oder 
 # -----------------------------------------------------------------------------------
 
 def on_connect(client, userdata, flags, rc):
-    """
+    """  
     Callback bei erfolgreicher Verbindung mit MQTT-Broker.
     Abonniert relevante Topics.
     """
