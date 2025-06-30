@@ -1,3 +1,4 @@
+import logging
 import requests
 import time as t
 from datetime import datetime, timedelta, time
@@ -62,11 +63,11 @@ def change_temperature(entity_id, value=DEFAULT_TEMPERATURE):
     try:
         response = requests.post(url, json=data, headers=HEADERS)
         if response.status_code == 200:
-            print(f"{entity_id} Temperatur erfolgreich auf {value} gesetzt!")
+            
         else:
-            print(f"Fehler beim Setzen der Temperatur ({response.status_code}): {response.text}")
+            logging.error(f"Fehler beim Setzen der Temperatur ({response.status_code}): {response.text}")
     except requests.exceptions.RequestException as e:
-        print(f"Exception beim HTTP-Request: {e}")
+        logging.error(f"Exception beim HTTP-Request: {e}")
 
 
 def get_movement_sensor(entity_id):
@@ -80,7 +81,7 @@ def get_movement_sensor(entity_id):
         response.raise_for_status()
         return response.json().get('state')
     except requests.exceptions.RequestException as e:
-        print(f"Fehler beim Abrufen des Sensorstatus: {e}")
+        logging.error(f"Fehler beim Abrufen des Sensorstatus: {e}")
         return None
 
 # -----------------------------------------------------------------------------------
@@ -94,7 +95,7 @@ def check_wandthermostat(payload):
     """
     name_part, temp_part = payload.split(":", 1)
     name = name_part.strip()
-    print(name)
+    
 
     match = re.match(r"Wandthermostat_([A-Z]\d{3})(?:_(\d+))?", name)
     if match:
@@ -105,7 +106,7 @@ def check_wandthermostat(payload):
         else:
             entity_id = f"input_number.heating_temperature_{raum_nr}"
     else:
-        print("Kein gültiger Wandthermostat-Name.")
+        logging.warning("Kein gültiger Wandthermostat-Name im Payload.")
         return
 
     try:
@@ -113,4 +114,4 @@ def check_wandthermostat(payload):
         temperature = float(temp_str)
         change_temperature(entity_id, temperature)
     except Exception:
-        print("Wandthermostat_failture")
+        logging.error(f"Wandthermostat-Verarbeitung fehlgeschlagen: {e}")
