@@ -1,35 +1,10 @@
-heating:
-  alias: Heizung für 90 Minuten - C005
-  description: Setzt die Temperatur C005-Thermostate auf die aktuelle Temperatur des Wandthermostats und hält diese für 90 Minuten
-  mode: restart
-  fields:
-    temperature:
-      description: Zieltemperatur für die Thermostate in C005
-      example: '21.5'
-  variables:
-    climate_entities_modellhaus: "{{ expand('group.modellhaus') | map(attribute='entity_id') | list }}"
-  sequence:
-    - repeat:
-        for_each: "{{ climate_entities_modellhaus }}"
-        sequence:
-          - service: climate.set_temperature
-            target:
-              entity_id: "{{ repeat.item }}"
-            data:
-              temperature: "{{ temperature | float }}"
-    - delay: "00:90:00"
-    - repeat:
-        for_each: "{{ climate_entities_modellhaus }}"
-        sequence:
-          - service: climate.set_temperature
-            target:
-              entity_id: "{{ repeat.item }}"
-            data:
-              temperature: "{{ states('input_number.heating_temperature_c005') | float }}"
-
 heizung_manuell_an:
   alias: Heizung manuell an und andere aus
   sequence:
+    - service: timer.start
+      target: 
+        entity_id: timer.modus_wechsel_timer
+
     - service: automation.turn_on
       target:
         entity_id: automation.heizung_manuell
@@ -41,6 +16,13 @@ heizung_manuell_an:
     - service: scene.turn_on
       target:
         entity_id: scene.unterricht
+
+    - service: button.press
+      target:
+        entity_id:
+          - button.hmip_rcv_50_hmip_rcv_1_press_long_ch1_ch1
+          - button.hmip_rcv_50_hmip_rcv_1_press_long_ch1_ch1_2
+          - button.hmip_rcv_50_hmip_rcv_1_press_long_ch1_ch1_3
 
     - service: input_select.select_option
       target:
@@ -52,6 +34,10 @@ heizung_manuell_an:
 heizung_stundenplan_an:
   alias: Heizung Stundenplan an und andere aus
   sequence:
+    - service: timer.start
+      target: 
+        entity_id: timer.modus_wechsel_timer
+
     - service: automation.turn_on
       target:
         entity_id: automation.Heiztemperaturen_zyklisch_setzen
@@ -64,6 +50,13 @@ heizung_stundenplan_an:
       target:
         entity_id: scene.unterricht
 
+    - service: button.press
+      target:
+        entity_id:
+          - button.hmip_rcv_50_hmip_rcv_1_press_long_ch1_ch1
+          - button.hmip_rcv_50_hmip_rcv_1_press_long_ch1_ch1_2
+          - button.hmip_rcv_50_hmip_rcv_1_press_long_ch1_ch1_3
+
     - service: input_select.select_option
       target:
         entity_id: input_select.heiz_modus
@@ -74,6 +67,10 @@ heizung_stundenplan_an:
 ferienmodus:
   alias: Ferienmodus an und andere aus
   sequence:
+    - service: timer.start
+      target: 
+        entity_id: timer.modus_wechsel_timer
+
     - service: automation.turn_off
       target:
         entity_id: automation.Heiztemperaturen_zyklisch_setzen
@@ -82,9 +79,12 @@ ferienmodus:
       target:
         entity_id: automation.heizung_manuell
 
-    - service: scene.turn_on
+    - service: button.press
       target:
-        entity_id: scene.ferien
+        entity_id:
+          - button.hmip_rcv_50_hmip_rcv_1_press_short_ch1_ch1
+          - button.hmip_rcv_50_hmip_rcv_1_press_short_ch1_ch1_2
+          - button.hmip_rcv_50_hmip_rcv_1_press_short_ch1_ch1_3
 
     - service: input_select.select_option
       target:
@@ -99,29 +99,63 @@ set_heating_temperatures:
     - variables:
         raumliste:
           - raumcode: "c001"
-            climate_entity: "climate.c001_int0000003"
+            climate_entity: "climate.wandthermostat_c001"
           - raumcode: "c002"
-            climate_entity: "climate.c002_int0000004"
+            climate_entity: "climate.wandthermostat_c002"
           - raumcode: "c003_1"
-            climate_entity: "climate.c003_1_int0000005"
+            climate_entity: "climate.wandthermostat_c003_1"
           - raumcode: "c003_3"
-            climate_entity: "climate.c003_3_int0000008"
+            climate_entity: "climate.wandthermostat_c003_3"
           - raumcode: "c004"
-            climate_entity: "climate.c004_int0000011"
+            climate_entity: "climate.wandthermostat_c004"
           - raumcode: "c005"
-            climate_entity: "climate.c005_int0000001"
+            climate_entity: "climate.wandthermostat_c005"
           - raumcode: "c011"
-            climate_entity: "climate.c011_int0000017"
+            climate_entity: "climate.wandthermostat_c011"
           - raumcode: "c016"
-            climate_entity: "climate.c016_int0000022"
+            climate_entity: "climate.wandthermostat_c016"
           - raumcode: "c017"
-            climate_entity: "climate.c017_int0000023"
+            climate_entity: "climate.wandthermostat_c017"
+          - raumcode: "c101"
+            climate_entity: "climate.wandthermostat_c101"
+          - raumcode: "c104"
+            climate_entity: "climate.wandthermostat_c104"
+          - raumcode: "c106"
+            climate_entity: "climate.wandthermostat_c106"
+          - raumcode: "c109_1"
+            climate_entity: "climate.wandthermostat_c109_1"
+          - raumcode: "c110"
+            climate_entity: "climate.wandthermostat_c110"
+          - raumcode: "c111"
+            climate_entity: "climate.wandthermostat_c111"
+          - raumcode: "c112"
+            climate_entity: "climate.wandthermostat_c112"
+          - raumcode: "c115"
+            climate_entity: "climate.wandthermostat_c115"
+          - raumcode: "c116"
+            climate_entity: "climate.wandthermostat_c116"
+          - raumcode: "c201"
+            climate_entity: "climate.wandthermostat_c201"
+          - raumcode: "c202"
+            climate_entity: "climate.wandthermostat_c202"
+          - raumcode: "c205"
+            climate_entity: "climate.wandthermostat_c205"
+          - raumcode: "c208"
+            climate_entity: "climate.wandthermostat_c208"
+          - raumcode: "c209"
+            climate_entity: "climate.wandthermostat_c209"
+          - raumcode: "c212"
+            climate_entity: "climate.wandthermostat_c212"
+          - raumcode: "c219"
+            climate_entity: "climate.wandthermostat_c219"
+          - raumcode: "c220"
+            climate_entity: "climate.wandthermostat_c220"
+
     - repeat:
         for_each: "{{ raumliste }}"
         sequence:
           - variables:
-              input_entity: >
-                {{ 'input_number.heating_temperature_' ~ repeat.item.raumcode }}
+              input_entity: "{{ 'input_number.heating_temperature_' ~ repeat.item.raumcode }}"
               temperature: "{{ states(input_entity) | float }}"
           - service: climate.set_temperature
             data:
@@ -133,3 +167,4 @@ set_heating_temperatures:
               message: >
                 Temperatur {{ temperature }}°C gesetzt für {{ repeat.item.climate_entity }} (Wert aus {{ input_entity }})
               level: info
+          - delay: "00:00:05"
