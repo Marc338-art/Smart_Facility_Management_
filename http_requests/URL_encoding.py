@@ -56,7 +56,7 @@ def check_timetable():
 
     # Heutiges Datum
     today = datetime.today().strftime("%Y-%m-%d")
-    print("Heutiges Datum:", today)
+    
 
     # Keyphrase abrufen
     keyphrase_url = BASE_URL + KEYPHRASE_ENDPOINT
@@ -67,7 +67,7 @@ def check_timetable():
     # Zeitstempel für Signatur
     tz = pytz.timezone(TIMEZONE)
     timestamp = datetime.now(tz).strftime("%Y-%m-%d %H:%M:%S")
-    print("⏰ Timestamp:", timestamp)
+    
 
     string_to_encrypt = f"{timestamp} {THESECRET} {USERNAME}"
     encrypted = encrypt(string_to_encrypt, my_key)
@@ -83,11 +83,11 @@ def check_timetable():
     response = requests.get(timetable_url, auth=(USERNAME, PASSWORD), verify=False)
     data = response.json()
     belegung = data.get("Belegung", {})
-    print("Stundenplandaten:", data)
+    
 
     # Aktuelle Stunde mit Vorlauf
     current_lesson = get_current_lesson(LESSON_LOOKAHEAD_MIN)
-    print("Aktuelle Stunde:", current_lesson)
+    
 
     for room_name, room_data in rooms_dict.items():
         try:
@@ -111,10 +111,10 @@ def check_timetable():
                             ACTIVE_TEMP
                         )
                     except Exception as e:
-                        print("Fehler beim Temperatursetzen:", e)
+                        logging.error(f"Fehler beim Temperatursetzen: {e}")
 
                 elif belegung[room_name][current_lesson] == 0:
-                    print("Keine Belegung in der nächsten Stunde")
+                    
                     rooms_dict[room_name]["state"] = 1
 
                     try:
@@ -123,9 +123,9 @@ def check_timetable():
                             DEFAULT_TEMP
                         )
                     except Exception as e:
-                        print("Fehler beim Temperatursetzen:", e)
+                        logging.error(f"Fehler beim Temperatursetzen: {e}")
 
         except Exception:
-            print("Keine aktuelle Stunde oder Fehler bei Raumprüfung")
+            logging.exception("Keine aktuelle Stunde oder Fehler bei Raumprüfung")
 
-    print("Aktueller Zustand der Räume:", rooms_dict)
+   
