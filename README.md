@@ -1,6 +1,6 @@
 # Smart Facility Management
 
-Das Projekt bildet die zentrale Steuereinheit eines smarten Raumsteuerungssystems. Über MQTT-Nachrichten und HTTP-Requests werden Informationen ausgetauscht, um auf Basis von Stundenplänen, Sensorwerten und Belegungsdaten die Temperatur in Räumen automatisch zu regulieren. Der Raspberry Pi fungiert hierbei als Kommunikationszentrale zwischen Home Assistant, Stundenplandatenbank und Raumhardware.
+Das Projekt bildet die zentrale Steuereinheit eines smarten Raumsteuerungssystems. Über MQTT-Nachrichten und HTTP-Requests werden Informationen ausgetauscht, um auf Basis von Stundenplänen, Sensorwerten und Belegungsdaten die Temperatur in Räumen automatisch zu regulieren. Der Raspberry Pi fungiert hierbei als Kommunikationszentrale zwischen Home Assistant, Stundenplandatenbank und Smart-Home Geräten.
 
 ## 🔧 Projektstruktur
 
@@ -21,21 +21,12 @@ Das Projekt ist in mehrere Module unterteilt:
 - ``\
   Enthält die Logik zur Steuerung paralleler Threads, etwa zur Prüfung von Bewegungen vor und während des Unterrichts. Reagiert auf reale Raumbelegung und passt die Temperatur an.
 
-## 💡 Ziel
-
-Energieeffiziente, belegungsabhängige Steuerung von Raumtemperaturen mithilfe von Planungs- und Sensordaten – ohne übermäßige Zusatzhardware wie Fensterkontakte oder Bewegungsmelder.
-
-## 📌 Hinweis
-
-Das Repository ist erreichbar unter:\
-**[Link zum GitLab-Repo einfügen]**
-
 ## ✨ Installation
 
 1. Repository klonen:
 
    ```bash
-   git clone https://gitlab.gwdg.de/m.schroeder07/smart_facility_management.git
+   git clone [https://gitlab.gwdg.de/m.schroeder07/smart_facility_management.git](https://github.com/Marc338-art/Smart_Facility_Management_.git)
    cd smart_facility_management
    ```
 
